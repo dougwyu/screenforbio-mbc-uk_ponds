@@ -31,11 +31,13 @@ Steps and associated scripts:
 Pipeline tested on Mac OSX (10.13) and Scientific Linux release 6.9 (Carbon).
 
 Mac OSX should have GNU grep, awk and sed prioritised over BSD versions. These can be installed with homebrew.
+# linuxify (see unix_command_history_V1.txt)
 
 - Processing of raw reads only
   - bcl2fastq (v2.18)
   - AdapterRemoval (v2.1.7)
   - cutadapt (v1.14)
+  brew install cutadapt
   - usearch (v8.1.1861)
 - Building databases and PROTAX
   - R (v3.5.0)
