@@ -45,11 +45,11 @@ conda install -c bioconda adapterremoval
   - cutadapt (v1.14)
 brew install cutadapt
   - usearch (v8.1.1861)
-# downloaded from drive5.com and moved to /usr/local/bin, symlinked usearch -> usearch8, usearch11 -> usearch 11
+# binary downloaded from drive5.com and moved to /usr/local/bin, symlinked usearch -> usearch8, usearch11 -> usearch 11
 
 - Building databases and PROTAX
   - R (v3.5.0)
-# installed
+# installed from binary downloaded from https://cran.rstudio.com
   - tabtk (r19)
 cd ~/src/; git clone https://github.com/lh3/tabtk.git; cd tabtk; make; mv tabtk /usr/local/bin/tabtk
   - seqtk (v1.2-r94 and v1.2-r102-dirty)
@@ -59,15 +59,15 @@ brew install seqkit
   - Entrez Direct (v6.00 and v8.30)
 # https://www.ncbi.nlm.nih.gov/books/NBK179288/
   - usearch (v8.1.1861 and v10.0.240)
-# installed
+# installed from binary downloaded from drive5.com
   - blast (v2.2.29 and v2.7.1)
-# installed
+# brew install blast
   - mafft (v7.305b and v7.313)
 brew install mafft
   - sativa (v0.9-57-g8a99328)
 cd ~/src; git clone https://github.com/amkozlov/sativa
 ./install.sh --no-avx
-echo 'export PATH="/Users/Negorashi2011/src/sativa:${PATH}"' > ~/.bash_profile
+echo 'export PATH="/Users/Negorashi2011/src/sativa:${PATH}"' >> ~/.bash_profile
 # source ~/.bash_profile
 
   - seqbuddy (v1.3.0)
@@ -78,14 +78,14 @@ seqbuddy -h
   - last (926)
 brew install brewsci/bio/last
   - perl (v5.10.1 and v5.26.1)
-# perl 5.28 installed
+# brew install perl # perl 5.28 installed
 
 *get_sequences.sh* also requires MIDORI databases for mitochondrial target genes [Machida *et al.*, 2017](https://www.nature.com/articles/sdata201727). Download relevant MIDORI_UNIQUE FASTAs in RDP format from the [website](http://www.reference-midori.info/download.php). Manuscript used MIDORI_UNIQUE_1.1 versions of COI, Cytb, lrRNA and srRNA. Unzipped FASTAs should be placed in working directory.
 
 *get_sequences.sh*  also requires collapsetypes_v4.6.pl to be in the ***screenforbio-mbc*** directory. Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).
-
 chmod 755 ~/Downloads/collapsetypes_v4.6.pl
 mv ~/Downloads/collapsetypes_v4.6.pl /usr/local/bin
+cp /usr/local/bin/collapsetypes_v4.6.pl ~/src/screenforbio-mbc-dougwyu/
 
 
 *PROTAX* scripts are reposted here with the kind permission of Panu Somervuo. These are in the *protaxscripts* subdirectory of ***screenforbio-mbc***. This version of *PROTAX* is from [Rodgers *et al.,* 2017](https://doi.org/10.1111/1755-0998.12701), scripts were originally posted on [Dryad](https://datadryad.org/resource/doi:10.5061/dryad.bj5k0).

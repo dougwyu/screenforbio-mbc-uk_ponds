@@ -20,7 +20,7 @@ exec 2> >(tee -a get_sequences_module-${3}.`date +%Y-%m-%d`.log >&2)
 # where:
 # extras is 'yes' or 'no', indicating whether to add local FASTA format sequences. if 'yes', files must be in present directory labelled "extra_12S.fa", "extra_16S.fa", "extra_Cytb.fa", "extra_COI.fa", with headers in format Genus_species_uniqueID.
 # gap-fill is 'no' or a tab-delimited text file of species names to be targeted for gap-filling from NCBI, in format Genus_species.
-# module is 'one', 'two', 'three' or 'four' indicating whether the script is starting from scratch ('one'), restarting after checking the output of the mafft alignment ('two'), restarting after manual correction of failed taxonomy lookups ('three'), or restartinh after manual checks of SATIVA output ('four'). see end of module messages for any requirements for the next module."
+# module is 'one', 'two', 'three' or 'four' indicating whether the script is starting from scratch ('one'), restarting after checking the output of the mafft alignment ('two'), restarting after manual correction of failed taxonomy lookups ('three'), or restarting after manual checks of SATIVA output ('four'). see end of module messages for any requirements for the next module."
 # taxon is the taxon for which the taxonomy was downloaded with get_taxonomy.sh, e.g. Mammalia or Tetrapoda (all outputs should be in present directory).
 # screenforbio is the path to the screenforbio-mbc directory
 
