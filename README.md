@@ -54,7 +54,9 @@ brew install cutadapt
   - R (v3.5.0)
      * installed from binary downloaded from [CRAN] (https://cran.rstudio.com)
   - tabtk (r19)
-     'cd ~/src/; git clone https://github.com/lh3/tabtk.git; cd tabtk; make; mv tabtk /usr/local/bin/tabtk'
+````
+     cd ~/src/; git clone https://github.com/lh3/tabtk.git; cd tabtk; make; mv tabtk /usr/local/bin/tabtk
+````
   - seqtk (v1.2-r94 and v1.2-r102-dirty)
      'brew install seqtk'
   - seqkit (v0.7.2 and seqkit v0.8.0)
