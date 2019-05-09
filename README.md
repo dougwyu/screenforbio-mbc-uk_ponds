@@ -38,13 +38,15 @@ Mac OSX should have GNU grep, awk and sed prioritised over BSD versions. These c
   - AdapterRemoval (v2.1.7)
      * install miniconda:  [anaconda] (https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.pkg)  
 ````
-    brew update; brew upgrade; brew cleanup  
-    brew install python # installs python3  
-    conda update -n base conda  
-    conda install -c bioconda adapterremoval  
+brew update; brew upgrade; brew cleanup  
+brew install python # installs python3  
+conda update -n base conda  
+conda install -c bioconda adapterremoval  
 ````
   - cutadapt (v1.14)
-     'brew install cutadapt'
+````
+brew install cutadapt
+````
   - usearch (v8.1.1861)
      * binary downloaded from [drive5] (drive5.com) and moved to /usr/local/bin, symlinked usearch -> usearch8, usearch11 -> usearch 11
 
