@@ -74,11 +74,12 @@ brew install cutadapt
   - mafft (v7.305b and v7.313)  
      `brew install mafft`  
   - sativa (v0.9-57-g8a99328)  
-     `cd ~/src; git clone https://github.com/amkozlov/sativa`  
-     `./install.sh --no-avx`  
-     `echo 'export PATH="/Users/Negorashi2011/src/sativa:${PATH}"' >> ~/.bash_profile`  
-     `# source ~/.bash_profile # if you want to run immediately`  
-
+````
+     cd ~/src; git clone https://github.com/amkozlov/sativa  
+     ./install.sh --no-avx  
+     echo 'export PATH="/Users/Negorashi2011/src/sativa:${PATH}"' >> ~/.bash_profile  
+     # source ~/.bash_profile # if you want to run immediately  
+````
   - seqbuddy (v1.3.0)  
      `pip3 install buddysuite # installs a bunch of software`  
      `buddysuite -setup`  
@@ -104,9 +105,10 @@ Change the headers and change the filenames to this format: `MIDORI_UNIQUE_1.2_s
 ````
 
 *get_sequences.sh*  also requires collapsetypes_v4.6.pl to be in the ***screenforbio-mbc*** directory. Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).  
-     `chmod 755 ~/Downloads/collapsetypes_v4.6.pl`  
-     `mv ~/Downloads/collapsetypes_v4.6.pl ~/src/screenforbio-mbc-dougwyu/`  
-
+````
+     chmod 755 ~/Downloads/collapsetypes_v4.6.pl  
+     mv ~/Downloads/collapsetypes_v4.6.pl ~/src/screenforbio-mbc-dougwyu/  
+````
 
 *PROTAX* scripts are reposted here with the kind permission of Panu Somervuo. These are in the *protaxscripts* subdirectory of ***screenforbio-mbc***. This version of *PROTAX* is from [Rodgers *et al.,* 2017](https://doi.org/10.1111/1755-0998.12701), scripts were originally posted on [Dryad](https://datadryad.org/resource/doi:10.5061/dryad.bj5k0).  
 
