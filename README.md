@@ -43,10 +43,8 @@ brew install python # installs python3
 conda update -n base conda  
 conda install -c bioconda adapterremoval  
 ````
-  - cutadapt (v1.14)
-````
-brew install cutadapt  
-````
+  - cutadapt (v1.14)  
+  `brew install cutadapt`  
   - usearch (v8.1.1861)  
      * binary downloaded from [drive5] (drive5.com) and moved to /usr/local/bin, symlinked usearch -> usearch8, usearch11 -> usearch 11
 
@@ -81,9 +79,11 @@ brew install cutadapt
      # source ~/.bash_profile # if you want to run immediately  
 ````
   - seqbuddy (v1.3.0)  
-     `pip3 install buddysuite # installs a bunch of software`  
-     `buddysuite -setup`  
-     `seqbuddy -h`  
+  ````
+     pip3 install buddysuite # installs a bunch of software  
+     buddysuite -setup  
+     seqbuddy -h  
+````
 
   - last (926)  
      `brew install brewsci/bio/last`
