@@ -58,32 +58,32 @@ brew install cutadapt
      cd ~/src/; git clone https://github.com/lh3/tabtk.git; cd tabtk; make; mv tabtk /usr/local/bin/tabtk
 ````
   - seqtk (v1.2-r94 and v1.2-r102-dirty)
-     'brew install seqtk'
+     `brew install seqtk`
   - seqkit (v0.7.2 and seqkit v0.8.0)
-     'brew install seqkit'
+     `brew install seqkit`
   - Entrez Direct (v6.00 and v8.30)
      * see installation instructions on [NIH] (https://www.ncbi.nlm.nih.gov/books/NBK179288/)
   - usearch (v8.1.1861 and v10.0.240)
      * installed from binaries downloaded from drive5.com
   - blast (v2.2.29 and v2.7.1)
-     'brew install blast'
+     `brew install blast`
   - mafft (v7.305b and v7.313)
-     'brew install mafft'
+     `brew install mafft`
   - sativa (v0.9-57-g8a99328)
-     'cd ~/src; git clone https://github.com/amkozlov/sativa'
-     './install.sh --no-avx'
-     'echo 'export PATH="/Users/Negorashi2011/src/sativa:${PATH}"' >> ~/.bash_profile'
-     '# source ~/.bash_profile' # if you want to run immediately
+     `cd ~/src; git clone https://github.com/amkozlov/sativa`
+     `./install.sh --no-avx`
+     `echo 'export PATH="/Users/Negorashi2011/src/sativa:${PATH}"' >> ~/.bash_profile`
+     `# source ~/.bash_profile` # if you want to run immediately
 
   - seqbuddy (v1.3.0)
-     'pip3 install buddysuite # installs a bunch of software'
-     'buddysuite -setup'
-     'seqbuddy -h'
+     `pip3 install buddysuite # installs a bunch of software`
+     `buddysuite -setup`
+     `seqbuddy -h`
 
   - last (926)
-     'brew install brewsci/bio/last'
+     `brew install brewsci/bio/last`
   - perl (v5.10.1 and v5.26.1)
-     'brew install perl # perl 5.28 installed'
+     `brew install perl # perl 5.28 installed`
 
 *get_sequences.sh* also requires MIDORI databases for mitochondrial target genes [Machida *et al.*, 2017](https://www.nature.com/articles/sdata201727). Download relevant MIDORI_UNIQUE FASTAs in RDP format from the [website](http://www.reference-midori.info/download.php). The manuscript used MIDORI_UNIQUE_1.1 versions of COI, Cytb, lrRNA and srRNA. The unzipped FASTAs should be *copied* to the working directory (because the script removes the working MIDORI fasta files after it finishes module one).
 
@@ -91,16 +91,16 @@ The 20180221 versions of MIDORI have more complex headers, which interfere with 
 * Version 1.1:  >AF382008	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
 * Version 20180221:  >AF382008.3.649.1602	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
 
-Change the headers and change the filenames to this format: 'MIDORI_UNIQUE_1.2_srRNA_RDP.fasta'  
-     'cd ~/src/screenforbio-mbc-dougwyu/'
-     '. ~/.linuxify; grep --help # use GNU sed, not BSD sed'
-     'sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_srRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz'
-     'sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_lrRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz'
+Change the headers and change the filenames to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`  
+     `cd ~/src/screenforbio-mbc-dougwyu/`
+     `. ~/.linuxify; grep --help # use GNU sed, not BSD sed`
+     `sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_srRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz`
+     `sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_lrRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz`
 
 
 *get_sequences.sh*  also requires collapsetypes_v4.6.pl to be in the ***screenforbio-mbc*** directory. Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).
-     'chmod 755 ~/Downloads/collapsetypes_v4.6.pl'
-     'mv ~/Downloads/collapsetypes_v4.6.pl ~/src/screenforbio-mbc-dougwyu/'
+     `chmod 755 ~/Downloads/collapsetypes_v4.6.pl`
+     `mv ~/Downloads/collapsetypes_v4.6.pl ~/src/screenforbio-mbc-dougwyu/`
 
 
 *PROTAX* scripts are reposted here with the kind permission of Panu Somervuo. These are in the *protaxscripts* subdirectory of ***screenforbio-mbc***. This version of *PROTAX* is from [Rodgers *et al.,* 2017](https://doi.org/10.1111/1755-0998.12701), scripts were originally posted on [Dryad](https://datadryad.org/resource/doi:10.5061/dryad.bj5k0).
