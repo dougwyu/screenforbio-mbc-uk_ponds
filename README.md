@@ -55,11 +55,11 @@ brew install cutadapt
      * installed from binary downloaded from [CRAN] (https://cran.rstudio.com)
   - tabtk (r19)  
 ````
-cd ~/src/  
-git clone https://github.com/lh3/tabtk.git  
-cd tabtk  
-make  
-mv tabtk /usr/local/bin/tabtk  
+     cd ~/src/  
+     git clone https://github.com/lh3/tabtk.git  
+     cd tabtk  
+     make  
+     mv tabtk /usr/local/bin/tabtk  
 ````
   - seqtk (v1.2-r94 and v1.2-r102-dirty)  
      `brew install seqtk`  
@@ -77,16 +77,16 @@ mv tabtk /usr/local/bin/tabtk
      `cd ~/src; git clone https://github.com/amkozlov/sativa`  
      `./install.sh --no-avx`  
      `echo 'export PATH="/Users/Negorashi2011/src/sativa:${PATH}"' >> ~/.bash_profile`  
-     `# source ~/.bash_profile` # if you want to run immediately  
+     `# source ~/.bash_profile # if you want to run immediately`  
 
   - seqbuddy (v1.3.0)  
      `pip3 install buddysuite # installs a bunch of software`  
      `buddysuite -setup`  
      `seqbuddy -h`  
 
-  - last (926)
+  - last (926)  
      `brew install brewsci/bio/last`
-  - perl (v5.10.1 and v5.26.1)
+  - perl (v5.10.1 and v5.26.1)  
      `brew install perl # perl 5.28 installed`
 
 *get_sequences.sh* also requires MIDORI databases for mitochondrial target genes [Machida *et al.*, 2017](https://www.nature.com/articles/sdata201727). Download relevant MIDORI_UNIQUE FASTAs in RDP format from the [website](http://www.reference-midori.info/download.php). The manuscript used MIDORI_UNIQUE_1.1 versions of COI, Cytb, lrRNA and srRNA. The unzipped FASTAs should be *copied* to the working directory (because the script removes the working MIDORI fasta files after it finishes module one).  
@@ -96,11 +96,12 @@ The 20180221 versions of MIDORI have more complex headers, which interfere with 
 * Version 20180221:  >AF382008.3.649.1602	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
 
 Change the headers and change the filenames to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`  
-     `cd ~/src/screenforbio-mbc-dougwyu/`  
-     `. ~/.linuxify; grep --help # use GNU sed, not BSD sed`  
-     `sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_srRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz`  
-     `sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_lrRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz`  
-
+````
+     cd ~/src/screenforbio-mbc-dougwyu/  
+     . ~/.linuxify; grep --help # use GNU sed, not BSD sed  
+     sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_srRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz  
+     sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_lrRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz  
+````
 
 *get_sequences.sh*  also requires collapsetypes_v4.6.pl to be in the ***screenforbio-mbc*** directory. Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).  
      `chmod 755 ~/Downloads/collapsetypes_v4.6.pl`  
