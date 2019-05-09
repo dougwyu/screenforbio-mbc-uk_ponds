@@ -18,7 +18,7 @@ exec 2> >(tee -a train_weighted_protax.`date +%Y-%m-%d`.log >&2)
 
 # usage: bash train_weighted_protax.sh splist taxonomy screenforbio
 # where:
-# splist is a list of expected species to use in weighing in the format Genus,species (e.g. Homo,sapiens)
+# splist is a list of expected species to use in weighting in the format Genus,species (e.g. Homo,sapiens)
 # taxonomy is the final protax-formatted taxonomy file from get_sequences.sh (e.g. Tetrapoda.final_protax_taxonomy.txt)
 # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
 

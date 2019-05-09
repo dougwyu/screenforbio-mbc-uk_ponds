@@ -16,13 +16,13 @@ exec 2> >(tee -a get_sequences_module-${3}.`date +%Y-%m-%d`.log >&2)
 
 # written by Alex Crampton-Platt for Andreas Wilting (IZW, ScreenForBio project)
 
-# usage: bash get_sequences.sh extras gap-fill module taxon screenforbio
+# usage: bash get_sequences.sh <extras> <gap-fill> <module> <taxon> <screenforbio>
 # where:
-# extras is 'yes' or 'no', indicating whether to add local FASTA format sequences. if 'yes', files must be in present directory labelled "extra_12S.fa", "extra_16S.fa", "extra_Cytb.fa", "extra_COI.fa", with headers in format Genus_species_uniqueID.
-# gap-fill is 'no' or a tab-delimited text file of species names to be targeted for gap-filling from NCBI, in format Genus_species.
-# module is 'one', 'two', 'three' or 'four' indicating whether the script is starting from scratch ('one'), restarting after checking the output of the mafft alignment ('two'), restarting after manual correction of failed taxonomy lookups ('three'), or restarting after manual checks of SATIVA output ('four'). see end of module messages for any requirements for the next module."
-# taxon is the taxon for which the taxonomy was downloaded with get_taxonomy.sh, e.g. Mammalia or Tetrapoda (all outputs should be in present directory).
-# screenforbio is the path to the screenforbio-mbc directory
+# <extras> is 'yes' or 'no', indicating whether to add local FASTA format sequences. if 'yes', files must be in present directory labelled "extra_12S.fa", "extra_16S.fa", "extra_Cytb.fa", "extra_COI.fa", with headers in format Genus_species_uniqueID.
+# <gap-fill> is 'no' or a tab-delimited text file of species names to be targeted for gap-filling from NCBI, in format Genus_species.
+# <module> is 'one', 'two', 'three' or 'four' indicating whether the script is starting from scratch ('one'), restarting after checking the output of the mafft alignment ('two'), restarting after manual correction of failed taxonomy lookups ('three'), or restarting after manual checks of SATIVA output ('four'). see end of module messages for any requirements for the next module."
+# <taxon> is the taxon for which the taxonomy was downloaded with get_taxonomy.sh, e.g. Mammalia or Tetrapoda (all outputs should be in present directory).
+# <screenforbio> is the path to the screenforbio-mbc directory
 
 # assumes that the file are in current directory and names are in format MIDORI_UNIQUE_x.x_locus_RDP.fasta where x.x is version number.
 # assumes collapsetypes_v4.6.pl is in screenforbio directory - available from https://sourceforge.net/projects/collapsetypes/
@@ -37,7 +37,7 @@ then
   echo "where:"
   echo "extras is 'yes' or 'no', indicating whether to add local FASTA format sequences. if 'yes', files must be in present directory labelled "extra_12S.fa", "extra_16S.fa", "extra_Cytb.fa", "extra_COI.fa", with headers in format Genus_species_uniqueID."
   echo "gap-fill is 'no' or a tab-delimited text file of species names to be targeted for gap-filling from NCBI, in format Genus_species."
-  echo "module is 'one', 'two', 'three' or 'four' indicating whether the script is starting from scratch ('one'), restarting after checking the output of the mafft alignment ('two'), restarting after manual correction of failed taxonomy lookups ('three'), or restartinh after manual checks of SATIVA output ('four'). see end of module messages for any requirements for the next module."
+  echo "module is 'one', 'two', 'three' or 'four' indicating whether the script is starting from scratch ('one'), restarting after checking the output of the mafft alignment ('two'), restarting after manual correction of failed taxonomy lookups ('three'), or restarting after manual checks of SATIVA output ('four'). see end of module messages for any requirements for the next module."
   echo "taxon is the taxon for which the taxonomy was downloaded with get_taxonomy.sh, e.g. Mammalia or Tetrapoda (all outputs should be in present directory)."
   echo "screenforbio is the path to the screenforbio-mbc directory"
   echo ""
@@ -349,7 +349,7 @@ function module_one {
         echo "  No gap-filling requested, moving on..."
       fi
       # pcr - allow ~10% mismatch per primer
-      usearch -search_pcr ${label}.raw.fa -db ${SCRIPTS}/Cytb_primers.fa -strand both -maxdiffs 5 -minamp 365 -maxamp 385 -ampout ${label}.amp.fa
+      usearch -search_pcr ${label}.raw.fa -db ${SCRIPTS}/CytB_primers.fa -strand both -maxdiffs 5 -minamp 365 -maxamp 385 -ampout ${label}.amp.fa #DY changed from Cytb_primers.fa to Cytb_primers.fa
       if [ -s ${label}.amp.fa ]
       then
         # remove primers
@@ -490,7 +490,7 @@ function module_one {
   echo "Module 1 took `echo $runtime | awk '{printf "%.2f", $1/3600}'` hours"
   echo ""
   echo "Module 1 complete. Stopping now for manual inspection of alignments *.mafft.fa inside ./intermediate_files."
-  echo "Restart script when happy with alignments (save as *.mafft_edit.fa in present directory even if no edits are made)."
+  echo "Restart script when happy with alignments (save as *.mafft_edit.fa in working directory (screenforbio) even if no edits are made)." #DY changed from "present directory" to "working directory"
   echo "Input files have been moved to ./intermediate_files"
   echo ""
   echo "Enjoy :-)"
@@ -617,7 +617,7 @@ function module_one {
     echo "Module 2 complete. Stopping now for manual inspection of failed species lookups (in ${TAXON}.missing_sp_to_delete.txt)."
     echo "If a failed lookup can be resolved, remove from ${TAXON}.missing_sp_to_delete.txt and add taxonomy to a tab-delimited file named ${TAXON}.missing_sp_taxonomy.txt with columns for kingdom,phylum,class,order,family,genus,species,status,query - 'status' should be something short and descriptive ("_" instead of spaces; eg. "mispelling" or "manual_synonym") and 'query' should be the entry in ${TAXON}.missing_sp_to_delete.txt. ${TAXON}.missing_sp_taxonomy.txt must not have a header line when the script is restarted."
     echo "If all failed lookups are resolved, delete ${TAXON}.missing_sp_to_delete.txt. If some/all failed lookups cannot be resolved, keep the relevant species names in ${TAXON}.missing_sp_to_delete.txt. When restarting the script it will check for the presence of this file and act accordingly (sequences for these species will be discarded)."
-    echo "If no failed lookups can be resolved, do no create ${TAXON}.missing_sp_taxonomy.txt, leave ${TAXON}.missing_sp_to_delete.txt as it is."
+    echo "If no failed lookups can be resolved, do not create ${TAXON}.missing_sp_taxonomy.txt, leave ${TAXON}.missing_sp_to_delete.txt as it is."
     echo "Restart script when happy."
     echo ""
     echo "Enjoy :-)"

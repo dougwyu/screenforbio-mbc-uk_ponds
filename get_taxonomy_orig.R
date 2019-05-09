@@ -20,7 +20,6 @@ taxon<-args[1]
 rank<-args[2]
 taxon_list<-downstream(get_tsn(paste(taxon),rank=paste(rank),kingdom="Animalia"),db="itis",downto="species")
 taxon_sp<-as.data.frame(taxon_list[1])[,1]
-# readr::write_tsv(taxon_sp, "taxon_sp.tsv") 
 message("Step 3: Get taxonomy with classification()")
 taxon_class<-classification(as.tsn(taxon_sp),db="itis",return_id=FALSE)
 message("")
