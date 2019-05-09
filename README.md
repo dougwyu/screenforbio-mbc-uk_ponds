@@ -79,7 +79,7 @@ conda install -c bioconda adapterremoval
      # source ~/.bash_profile # if you want to run immediately  
 ````
   - seqbuddy (v1.3.0)  
-  ````
+````
      pip3 install buddysuite # installs a bunch of software  
      buddysuite -setup  
      seqbuddy -h  
@@ -92,9 +92,9 @@ conda install -c bioconda adapterremoval
 
 *get_sequences.sh* also requires MIDORI databases for mitochondrial target genes [Machida *et al.*, 2017](https://www.nature.com/articles/sdata201727). Download relevant MIDORI_UNIQUE FASTAs in RDP format from the [website](http://www.reference-midori.info/download.php). The manuscript used MIDORI_UNIQUE_1.1 versions of COI, Cytb, lrRNA and srRNA. The unzipped FASTAs should be *copied* to the working directory (because the script removes the working MIDORI fasta files after it finishes module one).  
 
-The 20180221 versions of MIDORI have more complex headers, which interfere with the get_sequences.sh code.  
-* Version 1.1:  >AF382008	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
-* Version 20180221:  >AF382008.3.649.1602	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens
+The 20180221 versions of MIDORI have more complex headers, which interfere with the `get_sequences.sh` code.  
+* *Version 1.1*:  `>AF382008	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`  
+* *Version 20180221*:  `>AF382008.3.649.1602	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`  
 
 Change the headers and change the filenames to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`  
 ````
@@ -104,13 +104,13 @@ Change the headers and change the filenames to this format: `MIDORI_UNIQUE_1.2_s
      sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_lrRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz  
 ````
 
-*get_sequences.sh*  also requires collapsetypes_v4.6.pl to be in the ***screenforbio-mbc*** directory. Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).  
+*get_sequences.sh*  also requires *collapsetypes_v4.6.pl* to be in the ***screenforbio-mbc*** directory. Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).  
 ````
      chmod 755 ~/Downloads/collapsetypes_v4.6.pl  
      mv ~/Downloads/collapsetypes_v4.6.pl ~/src/screenforbio-mbc-dougwyu/  
 ````
 
-*PROTAX* scripts are reposted here with the kind permission of Panu Somervuo. These are in the *protaxscripts* subdirectory of ***screenforbio-mbc***. This version of *PROTAX* is from [Rodgers *et al.,* 2017](https://doi.org/10.1111/1755-0998.12701), scripts were originally posted on [Dryad](https://datadryad.org/resource/doi:10.5061/dryad.bj5k0).  
+*PROTAX* scripts are reposted here with the kind permission of Panu Somervuo. These are in the *protaxscripts* subdirectory of ***screenforbio-mbc***. This version of *PROTAX* is from [Rodgers *et al.* 2017](https://doi.org/10.1111/1755-0998.12701), scripts were originally posted on [Dryad](https://datadryad.org/resource/doi:10.5061/dryad.bj5k0).  
 
 ### Usage
 All steps in the pipeline are implemented via bash scripts with similar parameter requirements. Each script includes commented usage instructions at the start and displays the same instructions if run without any or an incorrect number of parameters.  
