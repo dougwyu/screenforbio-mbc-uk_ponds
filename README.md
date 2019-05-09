@@ -37,12 +37,12 @@ Mac OSX should have GNU grep, awk and sed prioritised over BSD versions. These c
      * downloaded from Illumina.com (only for RedHat or CentOS Linux). If you have a local sequencer, it should already be running somewhere. If you send out for sequencing, the provider will have it running.  
   - AdapterRemoval (v2.1.7)
      * install miniconda:  [anaconda] (https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.pkg)  
-
-    brew update; brew upgrade; brew cleanup  
-    brew install python # installs python3  
-    conda update -n base conda  
-    conda install -c bioconda adapterremoval  
-    
+````
+    brew update; brew upgrade; brew cleanup
+    brew install python # installs python3
+    conda update -n base conda
+    conda install -c bioconda adapterremoval
+````
   - cutadapt (v1.14)
      'brew install cutadapt'
   - usearch (v8.1.1861)
