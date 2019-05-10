@@ -49,8 +49,10 @@ bash ~/src/screenforbio-mbc-dougwyu/get_taxonomy.sh Tetrapoda superclass ~/src/s
 cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 # copy MIDORI files that i want to process to the working directory: screenforbio-mbc-dougwyu/
-cp archived_files/MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz
-cp archived_files/MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz
+cp archived_files/MIDORI_UNIQUE_1.1_lrRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.1_lrRNA_RDP.fasta.gz
+cp archived_files/MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz
+# cp archived_files/MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz
+# cp archived_files/MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz
 
 bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no one Tetrapoda ~/src/screenforbio-mbc-dougwyu/
 
@@ -64,6 +66,7 @@ mv ./intermediate_files/MIDORI_lrRNA.amp_blast.noN.mafft.fa ./MIDORI_lrRNA.amp_b
 mv ./intermediate_files/MIDORI_srRNA.amp_blast.noN.mafft.fa ./MIDORI_srRNA.amp_blast.noN.mafft_edit.fa
 bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no two Tetrapoda ~/src/screenforbio-mbc-dougwyu/
 
+bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no three Tetrapoda ~/src/screenforbio-mbc-dougwyu/
 
 
 # 4. Train PROTAX models for target amplicon(s)

@@ -75,6 +75,7 @@ conda install -c bioconda adapterremoval
 ````
      cd ~/src; git clone https://github.com/amkozlov/sativa  
      ./install.sh --no-avx  
+     ln -s sativa.py sativa  
      echo 'export PATH="/Users/Negorashi2011/src/sativa:${PATH}"' >> ~/.bash_profile  
      # source ~/.bash_profile # if you want to run immediately  
 ````
