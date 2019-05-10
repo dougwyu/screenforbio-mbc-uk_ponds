@@ -688,7 +688,7 @@ function module_one {
         seqtk subseq ${file} MIDORI.seqs_to_retain.txt > ${label}.final.fa
       done
     else
-      echo "  No ${TAXON}.missing_sp_taxonomy.txt present, assume this is becuase there were no failed lookups to check, moving on..."
+      echo "  No ${TAXON}.missing_sp_taxonomy.txt present, assume this is because there were no failed lookups to check, moving on..."
       cp ${TAXON}.combined_taxonomy.txt ${TAXON}.consensus_taxonomy.txt
       # edit alignment names
       FILES=($(find . -mindepth 1 -maxdepth 1 -type f -name "MIDORI_*.mafft_edit.fa" | sed 's/\.\///g'))
@@ -725,7 +725,10 @@ function module_one {
       label=($(echo ${file} | sed 's/.final_for_sativa.fa//g'))
       locus=($(echo ${label} | sed 's/*_//g'))
       mkdir ./${label}_sativa
-      sativa -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 4 -n ${label} -o ./${label}_sativa
+      #DY sativa -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 4 -n ${label} -o ./${label}_sativa
+      #DY to make it run with python2, have to invoke python2 and give full pathname
+      #DY sativa only runs with python2
+      python2 ~/src/sativa/sativa.py -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 4 -n ${label} -o ./${label}_sativa
       #cleanup
       mv ${label}.final.fa ./intermediate_files
       rm ${label}.final_for_sativa.tax
