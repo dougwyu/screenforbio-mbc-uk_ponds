@@ -80,7 +80,7 @@ bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no two Tetrapoda ~/src/s
 
 
 # Module 3 - Discard flagged sequences. Update taxonomy key file for sequences found to be incorrectly labelled in Module 2. Run SATIVA. End of module: optional check of putatively mislabelled sequences
-# requires file Tetrapoda.combined_taxonomy.txt from Module 2, or a copy is in archived_files/
+# requires file Tetrapoda.combined_taxonomy.txt from Module 2, or there is a copy in archived_files/
 cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no three Tetrapoda ~/src/screenforbio-mbc-dougwyu/
