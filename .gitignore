@@ -1,7 +1,6 @@
-archived_files/*
+archived_files/MIDORI*
 intermediate_files/*
 *.log
 MIDORI.raw*
 MIDORI_Tetrapoda.ITIS_mismatch_sp.txt
-Tetrapoda_ITIS_taxonomy.txt
 MIDORI_*.amp_blast.noN.mafft_edit.fa
