@@ -112,11 +112,42 @@ cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no four Tetrapoda ~/src/screenforbio-mbc-dougwyu/
 
+# Actions after Module 4 complete:  None needed
+# Module 4 took 4.96 hours
+#
+# Module 4 complete. You have reached the end of get_sequences.sh
+#
+# Final database sequences are in Tetrapoda.final_database.locus.fa, final taxonomy file is in Tetrapoda.final_protax_taxonomy.txt
+#
+# Next step: train PROTAX models with either:
+#   - train_protax.sh for unweighted models
+#   - train_weighted_protax.sh for models weighted using a list of expected species
+
 
 
 # 4. Train PROTAX models for target amplicon(s)
 #   - *train_protax.sh* (unweighted) or *train_weighted_protax.sh* (weighted)
 #   - *check_protax_training.sh* (makes bias-accuracy plots)
+cd ~/src/screenforbio-mbc-dougwyu/
+. ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+bash ~/src/screenforbio-mbc-dougwyu/train_protax.sh Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-dougwyu/
+# usage: bash train_protax.sh taxonomy screenforbio
+# where:
+# taxonomy is the final protax-formatted taxonomy file from get_sequences.sh (e.g. Tetrapoda.final_protax_taxonomy.txt)
+# screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
+
+# usage: bash train_weighted_protax.sh splist taxonomy screenforbio
+# where:
+# splist is a list of expected species to use in weighting in the format Genus,species (e.g. Homo,sapiens)
+# taxonomy is the final protax-formatted taxonomy file from get_sequences.sh (e.g. Tetrapoda.final_protax_taxonomy.txt)
+# screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
+
+# note: will take the taxon from the protax taxonomy file name
+# note: assumes curated database FASTA files are in current directory and labelled with format taxon.final_database.locus.fa
+
+
+
+
 # 5. Classify query sequences (reads or OTUs) with PROTAX
 #   - *protax_classify.sh* or *protax_classify_otus.sh* (unweighted models)
 #   - *weighted_protax_classify.sh* or *weighted_protax_classify_otus.sh* (weighted models)
