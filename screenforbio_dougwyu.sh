@@ -65,10 +65,12 @@ bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no one Tetrapoda ~/src/s
 # Module 1 complete. Stopping now for manual inspection of alignments *.mafft.fa inside ./intermediate_files.
 # Restart script when happy with alignments (save as *.mafft_edit.fa in present directory even if no edits are made).
 # Input files have been moved to ./intermediate_files
-
-# Module 2 - Compare sequence species labels with taxonomy. Non-matching labels queried against Catalogue of Life to check for known synonyms. Remaining mismatches kept if genus already exists in taxonomy, otherwise flagged for removal. End of module: optional check of flagged species labels.
 mv ./intermediate_files/MIDORI_lrRNA.amp_blast.noN.mafft.fa ./MIDORI_lrRNA.amp_blast.noN.mafft_edit.fa
 mv ./intermediate_files/MIDORI_srRNA.amp_blast.noN.mafft.fa ./MIDORI_srRNA.amp_blast.noN.mafft_edit.fa
+
+# Module 2 - Compare sequence species labels with taxonomy. Non-matching labels queried against Catalogue of Life to check for known synonyms. Remaining mismatches kept if genus already exists in taxonomy, otherwise flagged for removal. End of module: optional check of flagged species labels.
+cd ~/src/screenforbio-mbc-dougwyu/
+. ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no two Tetrapoda ~/src/screenforbio-mbc-dougwyu/
 # Failed, got the output file Tetrapoda.combined_taxonomy.txt from Alex
 
@@ -101,9 +103,9 @@ cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 # archive an original version before changing it with the sativa suggestions
 cp Tetrapoda.final_taxonomy_sativa.txt Tetrapoda.final_taxonomy_sativa_orig.txt
-# can use this R code (delete_seqs_suggested_by_sativa.Rmd) to remove sequences that sativa identifies as incorrect
-# I remove all sequences that sativa identifies as having an incorrect taxonomy above genus level, as such large errors are most likely to be database errors.
-# I then accept sativa's proposed substitute taxonomies where sativa confidence >- 0.998 (i.e. i accept only the most confident substitutions)
+# then use this R code (delete_seqs_suggested_by_sativa.Rmd) to remove sequences that sativa identifies as incorrect
+     # I remove all sequences that sativa identifies as having an incorrect taxonomy above genus level, as such large errors are most likely to be database errors.
+     # I accept sativa's proposed substitute taxonomies where sativa confidence >- 0.998 (i.e. i accept only the most confident substitutions)
 
 # Module 4 - Discard flagged sequences. Finalize consensus taxonomy and relabel sequences with correct species label and accession number. Select 1 representative sequence per haplotype per species.
 cd ~/src/screenforbio-mbc-dougwyu/
