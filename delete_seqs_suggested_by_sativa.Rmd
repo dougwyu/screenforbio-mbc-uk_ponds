@@ -1,0 +1,81 @@
+---
+title: "delete_seqs_suggested_by_sativa"
+author: "Douglas Yu"
+date: "11/05/2019"
+output: html_document
+---
+
+
+```{r delete lrRNA sequences suggested by sativa}
+library(readr)
+library(tidyverse)
+MIDORI_lrRNA <- read_delim("~/src/screenforbio-mbc-dougwyu/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
+# the key is to skip the first set of lines
+names(MIDORI_lrRNA)
+MIDORI_lrRNA_sep <- MIDORI_lrRNA %>% 
+    tidyr::separate(PerRankConfidence, sep = ";", into = c("domain_conf", "phylum_conf", "class_conf", "order_conf", "family_conf", "genus_conf", "species_conf"), remove = FALSE)
+
+# save file with SeqIDs of all sequences where sativa disagrees with its taxonomic designation at the ranks of class, order, family, or subtribe. To do this, i choose all rows where MislabeledLevel != Genus or Species. These are sequences to delete.
+MIDORI_locus.mis_to_delete <- MIDORI_lrRNA_sep %>% 
+    filter(!MislabeledLevel %in% c("Genus", "Species")) %>% 
+    select(SeqID)
+write_tsv(MIDORI_locus.mis_to_delete, "~/src/screenforbio-mbc-dougwyu/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis_to_delete", col_names = FALSE)
+
+# substitute in sequences that have a sativa Confidence ≥ 0.998
+MIDORI_lrRNA_sub <- MIDORI_lrRNA %>% 
+    filter(MislabeledLevel %in% c("Genus", "Species")) %>% 
+    filter(Confidence >= 0.998) %>%
+    select(SeqID, ProposedTaxonomyPath)
+Tetrapoda.final_taxonomy_sativa.txt <- read_delim("~/src/screenforbio-mbc-dougwyu/Tetrapoda.final_taxonomy_sativa.txt", "\t", escape_double = FALSE, col_names = c("SeqID", "ProposedTaxonomyPath"))
+
+Tetrapoda.final_taxonomy_sativa.txt_full <- full_join(MIDORI_lrRNA_sub, Tetrapoda.final_taxonomy_sativa.txt, by = c("SeqID")) 
+Tetrapoda.final_taxonomy_sativa.txt_y <- Tetrapoda.final_taxonomy_sativa.txt_full %>%
+    filter(is.na(ProposedTaxonomyPath.x)) %>% 
+    select(SeqID, ProposedTaxonomyPath = ProposedTaxonomyPath.y)
+Tetrapoda.final_taxonomy_sativa.txt_x <- Tetrapoda.final_taxonomy_sativa.txt_full %>%
+    filter(!is.na(ProposedTaxonomyPath.x)) %>% 
+    select(SeqID, ProposedTaxonomyPath = ProposedTaxonomyPath.x)
+
+Tetrapoda.final_taxonomy_sativa.txt <- bind_rows(Tetrapoda.final_taxonomy_sativa.txt_x, Tetrapoda.final_taxonomy_sativa.txt_y) %>% 
+    arrange(SeqID)
+write_tsv(Tetrapoda.final_taxonomy_sativa.txt, "~/src/screenforbio-mbc-dougwyu/Tetrapoda.final_taxonomy_sativa.txt", col_names = FALSE)
+```
+
+
+
+```{r delete srRNA sequences suggested by sativa}
+library(readr)
+library(tidyverse)
+MIDORI_srRNA <- read_delim("~/src/screenforbio-mbc-dougwyu/MIDORI_srRNA_sativa/MIDORI_srRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
+# the key is to skip the first set of lines
+names(MIDORI_srRNA)
+MIDORI_srRNA_sep <- MIDORI_srRNA %>% 
+    tidyr::separate(PerRankConfidence, sep = ";", into = c("domain_conf", "phylum_conf", "class_conf", "order_conf", "family_conf", "genus_conf", "species_conf"), remove = FALSE)
+
+# save file with SeqIDs of all sequences where sativa disagrees with its taxonomic designation at the ranks of class, order, family, or subtribe. To do this, i choose all rows where MislabeledLevel != Genus or Species. These are sequences to delete.
+MIDORI_locus.mis_to_delete <- MIDORI_srRNA_sep %>% 
+    filter(!MislabeledLevel %in% c("Genus", "Species")) %>% 
+    select(SeqID)
+write_tsv(MIDORI_locus.mis_to_delete, "~/src/screenforbio-mbc-dougwyu/MIDORI_srRNA_sativa/MIDORI_srRNA.mis_to_delete", col_names = FALSE)
+
+# substitute in sequences that have a sativa Confidence ≥ 0.998
+MIDORI_srRNA_sub <- MIDORI_srRNA %>% 
+    filter(MislabeledLevel %in% c("Genus", "Species")) %>% 
+    filter(Confidence >= 0.998) %>%
+    select(SeqID, ProposedTaxonomyPath)
+Tetrapoda.final_taxonomy_sativa.txt <- read_delim("~/src/screenforbio-mbc-dougwyu/Tetrapoda.final_taxonomy_sativa.txt", "\t", escape_double = FALSE, col_names = c("SeqID", "ProposedTaxonomyPath"))
+
+Tetrapoda.final_taxonomy_sativa.txt_full <- full_join(MIDORI_srRNA_sub, Tetrapoda.final_taxonomy_sativa.txt, by = c("SeqID")) 
+Tetrapoda.final_taxonomy_sativa.txt_y <- Tetrapoda.final_taxonomy_sativa.txt_full %>%
+    filter(is.na(ProposedTaxonomyPath.x)) %>% 
+    select(SeqID, ProposedTaxonomyPath = ProposedTaxonomyPath.y)
+Tetrapoda.final_taxonomy_sativa.txt_x <- Tetrapoda.final_taxonomy_sativa.txt_full %>%
+    filter(!is.na(ProposedTaxonomyPath.x)) %>% 
+    select(SeqID, ProposedTaxonomyPath = ProposedTaxonomyPath.x)
+
+Tetrapoda.final_taxonomy_sativa.txt <- bind_rows(Tetrapoda.final_taxonomy_sativa.txt_x, Tetrapoda.final_taxonomy_sativa.txt_y) %>% 
+    arrange(SeqID)
+write_tsv(Tetrapoda.final_taxonomy_sativa.txt, "~/src/screenforbio-mbc-dougwyu/Tetrapoda.final_taxonomy_sativa.txt", col_names = FALSE)
+
+```
+
