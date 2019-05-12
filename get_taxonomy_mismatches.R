@@ -16,10 +16,12 @@ pkgLoad("taxize")
 message("")
 message("Step 2: Import list of species")
 taxon<-args[1]
-mismatch<-read.table(paste0("MIDORI_",taxon,".ITIS_mismatch_sp.txt"),header=F,sep="\t")$V1
+mismatch<-read.table(paste0("MIDORI_",taxon,".ITIS_mismatch_sp.txt"),header=F,sep="\t", stringsAsFactors=FALSE)$V1
 message("")
 message("Step 3: Get CoL matches with classification()")
-mismatch_class<-classification(mismatch,rank="species",db="col",return_id=FALSE,rows=1)
+#DY mismatch_class<-classification(mismatch,rank="species",db="col",return_id=FALSE,rows=1)
+# classification() doesn't take `rank="species"`
+mismatch_class<-classification(mismatch, db="col", return_id=FALSE, rows=1)
 message("")
 message("Step 4: Write successful CoL lookups to file")
 col_matched<-mismatch_class[unlist(lapply(mismatch_class,function(x)is.character(x[[1]])))]
