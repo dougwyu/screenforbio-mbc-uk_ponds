@@ -74,7 +74,7 @@ cp archived_files/MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_
 
 bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no one Tetrapoda ~/src/screenforbio-mbc-dougwyu/
 # Successful
-# Module 1 took 0.81 hours
+# Module 1 took 0.58 hours (16Smam and 12SRiaz primers, Midori 1.1)
 
 # Actions after Module 1 complete
 # Module 1 complete. Stopping now for manual inspection of alignments *.mafft.fa inside ./intermediate_files.
@@ -83,10 +83,26 @@ bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no one Tetrapoda ~/src/s
 mv ./intermediate_files/MIDORI_lrRNA.amp_blast.noN.mafft.fa ./MIDORI_lrRNA.amp_blast.noN.mafft_edit.fa
 mv ./intermediate_files/MIDORI_srRNA.amp_blast.noN.mafft.fa ./MIDORI_srRNA.amp_blast.noN.mafft_edit.fa
 
-# Module 2 - Compare sequence species labels with taxonomy. Non-matching labels queried against Catalogue of Life to check for known synonyms. Remaining mismatches kept if genus already exists in taxonomy, otherwise flagged for removal. End of module: optional check of flagged species labels.
+# Module 2 - Compare sequence species labels with ITIS taxonomy. Non-matching labels queried against Catalogue of Life to check for known synonyms. Remaining mismatches kept if genus already exists in taxonomy, otherwise flagged for removal. End of module: optional check of flagged species labels.
+# requires a taxon_ITIS_taxonomy.txt file (e.g. Tetrapoda_ITIS_taxonomy.txt file)
 cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no two Tetrapoda ~/src/screenforbio-mbc-dougwyu/
+
+# some species cause the taxize::classification() function to fail, throwing up the following error:
+     # Retrieving data for taxon 'Natrix natrix'
+
+     # Error in doc_parse_raw(x, encoding = encoding, base_url = base_url, as_html = as_html,  :
+     #   CData section not finished
+     # Kindler, C., Böhme, W., Corti, C., Gvozdik, V., J [63]
+# These are 'misbehavers,' and we remove them manually by adding a sed command at line 532, before running get_taxonomy_mismatches.R
+     # remove misbehavers by deleting these species, like this:
+     # sed -i '/Hemidactylus adensis/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
+     #
+     # and then add back the removed species at line 564, like this:
+     # sed -i '$a\Hemidactylus_adensis\' MIDORI_${TAXON}.missing_sp.txt
+
+
 # Failed, got the output file Tetrapoda.combined_taxonomy.txt from Alex
 
 # Actions after Module 2 complete
