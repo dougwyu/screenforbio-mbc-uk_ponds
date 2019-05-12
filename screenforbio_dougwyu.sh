@@ -9,7 +9,6 @@ exec > >(tee -a get_taxonomy.`date +%Y-%m-%d`.log)
 exec 2> >(tee -a get_taxonomy.`date +%Y-%m-%d`.log >&2)
 
 # run '. ~/.linuxify' # activates GNU versions of grep, sed, awk
-source ~/.bashrc
 
 # Run
 
@@ -57,6 +56,22 @@ cp archived_files/MIDORI_UNIQUE_1.1_lrRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_
 cp archived_files/MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz
 # cp archived_files/MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz
 # cp archived_files/MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz
+# there are two 12S_primers files:  12S_primers_kocher.fa and 12S_primers_riaz.fa. Duplicate the one that you want to use and change its filename to 12S_primers.fa, and this will be the pair used to pull out 12S amplicons from the Midori reference database
+# to use the Kocher primers (12S_primers_kocher.fa), in get_sequences.sh:
+     # change the usearch -search_pcr line 178 to
+     # usearch -search_pcr ${label}.raw.fa -db ${SCRIPTS}/12S_primers.fa -strand both -maxdiffs 4 -minamp 420 -maxamp 470 -ampout ${label}.amp.fa
+     # change the usearch -fastx_truncate line 183 to
+     # usearch -fastx_truncate ${label}.amp.fa -stripleft 30 -stripright 28 -fastaout ${label}.amp_only.fa # for Kocher 12S primers
+     # change the awk line 188 to
+     # cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=360){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Kocher primers
+# to use the Riaz primers (12S_primers_riaz.fa), in get_sequences.sh:
+     # change the usearch -search_pcr line 179 to
+     # usearch11 -search_pcr2 ${label}.raw.fa -fwdprimer ACTGGGATTAGATACCCC -revprimer YRGAACAGGCTCCTCTAG -minamp 84 -maxamp 120 -strand both -maxdiffs 4 -fastaout ${label}.amp.fa # for 12S Riaz primers
+     # change the usearch -fastx_truncate line 184 to
+     # usearch -fastx_truncate ${label}.amp.fa -stripleft 0 -stripright 0 -fastaout ${label}.amp_only.fa # for Riaz 12S primers
+     # change the awk line 189 to
+     # cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=84){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Riaz primers
+
 bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no one Tetrapoda ~/src/screenforbio-mbc-dougwyu/
 # Successful
 # Module 1 took 0.81 hours
@@ -85,6 +100,7 @@ bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no two Tetrapoda ~/src/s
 # requires file Tetrapoda.combined_taxonomy.txt from Module 2, or there is a copy in archived_files/
 cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+# cp archived_files/Tetrapoda.combined_taxonomy.txt ./
 bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no three Tetrapoda ~/src/screenforbio-mbc-dougwyu/
 # Successful
 # Module 3 took ~ 9 hours for srRNA and lrRNA, using 4 threads

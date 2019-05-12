@@ -1,4 +1,4 @@
-# ScreenForBio metabarcoding pipeline
+# ScreenForBio metabarcoding pipeline 
 
 A series of bash and R scripts used in:
 
