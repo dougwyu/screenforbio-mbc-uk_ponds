@@ -95,7 +95,7 @@ bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no three Tetrapoda ~/src
 # to use R, readr can import if the first set of lines is skipped, and the column names are provided
 # MIDORI_lrRNA <- read_delim("~/src/screenforbio-mbc-dougwyu/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
 # echo "To skip manual editing, do nothing and restart script."
-# echo "To make changes, create file ./MIDORI_locus_sativa/MIDORI_locus.mis_to_delete and copy all confirmed mislabelled sequence accessions as a single column, tab-delimited list. These will be deleted at the start of module 4."
+# echo "To make changes, create file ./MIDORI_locus_sativa/MIDORI_locus.mis_to_delete and copy all confirmed mislabelled sequence accessions as a single column, tab-delimited list. These will be deleted at the start of module 4." # DY a single-column list is all that i created
 # echo "For sequences where species-level or genus-level mislabelling can be resolved, make corrections directly in ${TAXON}.final_taxonomy_sativa.txt (i.e. replace the taxonomic classification for that sequence with the correct one), this will be used to rename sequences."
 # echo "Make higher level changes to the taxonomy at your own risk - untested."
 # echo "Restart script when happy."
@@ -134,6 +134,7 @@ bash ~/src/screenforbio-mbc-dougwyu/train_protax.sh Tetrapoda.final_protax_taxon
 # usage: bash train_protax.sh taxonomy screenforbio
 # where:
 # taxonomy is the final protax-formatted taxonomy file from get_sequences.sh (e.g. Tetrapoda.final_protax_taxonomy.txt)
+# uses fasta files output from module_four of get_sequences.sh:  taxon.final_database.locus.fa (e.g. Tetrapoda.final_database.12S.fa)
 # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
 
 # usage: bash train_weighted_protax.sh splist taxonomy screenforbio
