@@ -1,4 +1,4 @@
-# ScreenForBio metabarcoding pipeline 
+# ScreenForBio metabarcoding pipeline
 
 A series of bash and R scripts used in:
 
@@ -65,8 +65,10 @@ conda install -c bioconda adapterremoval
      `brew install seqkit`  
   - Entrez Direct (v6.00 and v8.30)  
      * see installation instructions on [NIH] (https://www.ncbi.nlm.nih.gov/books/NBK179288/)
-  - usearch (v8.1.1861 and v10.0.240)  
-     * installed from binaries downloaded from drive5.com  
+  - usearch (v8.1.1861 and v11.0.667_i86osx32)  
+     * binaries downloaded from drive5.com and placed in the path /usr/local/bin
+     * i created symlinks to usearch8 as usearch and usearch 11 as usearch11
+     * public (free) usearch binaries are 32-bit only and thus will only run on macOS up to v 10.14. 
   - blast (v2.2.29 and v2.7.1)  
      `brew install blast`  
   - mafft (v7.305b and v7.313)  
