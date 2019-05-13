@@ -793,7 +793,7 @@ function module_one {
           count=($(grep -c ">" ${sp}.fa))
           if [ $count -gt 1 ]
           then
-            mafft --thread 2 --retree 2 --reorder ${sp}.fa > ${sp}.mafft.fa
+            mafft --thread 4 --retree 2 --reorder ${sp}.fa > ${sp}.mafft.fa
             perl ${SCRIPTS}/collapsetypes_v4.6.pl -infile=${sp}.mafft.fa -nrdiffs=0
             seqbuddy ${sp}.mafft.fa.unique_haplotypes --clean_seq > ${sp}.uniq.fa
             cat ${label}.uniq.fa ${sp}.uniq.fa > tmp
@@ -830,7 +830,7 @@ function module_one {
           count=($(grep -c ">" ${sp}.fa))
           if [ $count -gt 1 ]
           then
-            mafft --thread 2 --retree 2 --reorder ${sp}.fa > ${sp}.mafft.fa
+            mafft --thread 4 --retree 2 --reorder ${sp}.fa > ${sp}.mafft.fa
             perl ${SCRIPTS}/collapsetypes_v4.6.pl -infile=${sp}.mafft.fa -nrdiffs=0
             seqbuddy ${sp}.mafft.fa.unique_haplotypes --clean_seq > ${sp}.uniq.fa
             cat ${label}.uniq.fa ${sp}.uniq.fa > tmp
