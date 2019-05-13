@@ -102,35 +102,37 @@ bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no two Tetrapoda ~/src/s
      # and then add back the removed species at line 564, like this:
      # sed -i '$a\Hemidactylus_adensis\' MIDORI_${TAXON}.missing_sp.txt
 
-
-# Failed, got the output file Tetrapoda.combined_taxonomy.txt from Alex
+# Success
+# Module 2 took 0.96 hours
+# There are two output files:
+# Tetrapoda.missing_sp_to_delete.txt
+# Tetrapoda.combined_taxonomy.txt
 
 # Actions after Module 2 complete
-# echo "Module 2 complete. Stopping now for manual inspection of failed species lookups (in ${TAXON}.missing_sp_to_delete.txt)."
-# echo "If a failed lookup can be resolved, remove from ${TAXON}.missing_sp_to_delete.txt and add taxonomy to a tab-delimited file named ${TAXON}.missing_sp_taxonomy.txt with columns for kingdom,phylum,class,order,family,genus,species,status,query - 'status' should be something short and descriptive ("_" instead of spaces; eg. "mispelling" or "manual_synonym") and 'query' should be the entry in ${TAXON}.missing_sp_to_delete.txt. ${TAXON}.missing_sp_taxonomy.txt must not have a header line when the script is restarted."
-# echo "If all failed lookups are resolved, delete ${TAXON}.missing_sp_to_delete.txt. If some/all failed lookups cannot be resolved, keep the relevant species names in ${TAXON}.missing_sp_to_delete.txt. When restarting the script it will check for the presence of this file and act accordingly (sequences for these species will be discarded)."
-# echo "If no failed lookups can be resolved, do not create ${TAXON}.missing_sp_taxonomy.txt, leave ${TAXON}.missing_sp_to_delete.txt as it is."
+# Module 2 complete. Stopping now for manual inspection of failed species lookups (in Tetrapoda.missing_sp_to_delete.txt).
+# If a failed lookup can be resolved, remove from Tetrapoda.missing_sp_to_delete.txt and add taxonomy to a tab-delimited file named Tetrapoda.missing_sp_taxonomy.txt with columns for kingdom,phylum,class,order,family,genus,species,status,query - 'status' should be something short and descriptive (_ instead of spaces; eg. mispelling or manual_synonym) and 'query' should be the entry in Tetrapoda.missing_sp_to_delete.txt. Tetrapoda.missing_sp_taxonomy.txt must not have a header line when the script is restarted.
+# If all failed lookups are resolved, delete Tetrapoda.missing_sp_to_delete.txt. If some/all failed lookups cannot be resolved, keep the relevant species names in Tetrapoda.missing_sp_to_delete.txt. When restarting the script it will check for the presence of this file and act accordingly (sequences for these species will be discarded).
+# If no failed lookups can be resolved, do not create Tetrapoda.missing_sp_taxonomy.txt, leave Tetrapoda.missing_sp_to_delete.txt as it is.
+# Restart script when happy.
+
+# I looked through Tetrapoda.missing_sp_to_delete.txt, and all the species are not ones found in Ailaoshan or Yunnan so rather than look up and add their full taxonomic pathways, i will go to module_three.
 
 
 # Module 3 - Discard flagged sequences. Update taxonomy key file for sequences found to be incorrectly labelled in Module 2. Run SATIVA. End of module: optional check of putatively mislabelled sequences
 # requires file Tetrapoda.combined_taxonomy.txt from Module 2, or there is a copy in archived_files/
 cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-# cp archived_files/Tetrapoda.combined_taxonomy.txt ./
 bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no three Tetrapoda ~/src/screenforbio-mbc-dougwyu/
-# Successful
-# Module 3 took ~ 9 hours for srRNA and lrRNA, using 4 threads
+# Success
+# Module 3 took ~ 5.7 hours for srRNA and lrRNA, using 4 threads
 
 # Actions after Module 3 complete
-# echo "Module 3 complete. Stopping now for manual inspection of mislabelled sequences in ./MIDORI_locus_sativa/MIDORI_locus.mis"
-# to open this file in something like Excel, open the file in a text editor, select all, and paste into an empty Excel table. I cannot import successfully with Excel's import function
-# to use R, readr can import if the first set of lines is skipped, and the column names are provided
-# MIDORI_lrRNA <- read_delim("~/src/screenforbio-mbc-dougwyu/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
-# echo "To skip manual editing, do nothing and restart script."
-# echo "To make changes, create file ./MIDORI_locus_sativa/MIDORI_locus.mis_to_delete and copy all confirmed mislabelled sequence accessions as a single column, tab-delimited list. These will be deleted at the start of module 4." # DY a single-column list is all that i created
-# echo "For sequences where species-level or genus-level mislabelling can be resolved, make corrections directly in ${TAXON}.final_taxonomy_sativa.txt (i.e. replace the taxonomic classification for that sequence with the correct one), this will be used to rename sequences."
-# echo "Make higher level changes to the taxonomy at your own risk - untested."
-# echo "Restart script when happy."
+# Module 3 complete. Stopping now for manual inspection of mislabelled sequences in ./MIDORI_locus_sativa/MIDORI_locus.mis
+# To skip manual editing, do nothing and restart script.
+# To make changes, create file ./MIDORI_locus_sativa/MIDORI_locus.mis_to_delete and copy all confirmed mislabelled sequence accessions as a single column, tab-delimited list. These will be deleted at the start of module 4.
+# For sequences where species-level or genus-level mislabelling can be resolved, make corrections directly in Tetrapoda.final_taxonomy_sativa.txt (i.e. replace the taxonomic classification for that sequence with the correct one), this will be used to rename sequences.
+# Make higher level changes to the taxonomy at your own risk - untested.
+# Restart script when happy.
 cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 # archive an original version before changing it with the sativa suggestions
@@ -138,14 +140,20 @@ cp Tetrapoda.final_taxonomy_sativa.txt Tetrapoda.final_taxonomy_sativa_orig.txt
 # then use this R code (delete_seqs_suggested_by_sativa.Rmd) to remove sequences that sativa identifies as incorrect
      # I remove all sequences that sativa identifies as having an incorrect taxonomy above genus level, as such large errors are most likely to be database errors.
      # I accept sativa's proposed substitute taxonomies where sativa confidence >- 0.998 (i.e. i accept only the most confident substitutions)
+     # Programming notes
+          #to open this file in something like Excel, open the file in a text editor, select all, and paste into an empty Excel table. I cannot import successfully with Excel's import function
+          # to use R, readr can import if the first set of lines is skipped, and the column names are provided
+          # MIDORI_lrRNA <- read_delim("~/src/screenforbio-mbc-dougwyu/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
+
 
 # Module 4 - Discard flagged sequences. Finalize consensus taxonomy and relabel sequences with correct species label and accession number. Select 1 representative sequence per haplotype per species.
 cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no four Tetrapoda ~/src/screenforbio-mbc-dougwyu/
 
-# Actions after Module 4 complete:  None needed
+# Success
 # Module 4 took 4.96 hours
+# Actions after Module 4 complete:  None needed
 #
 # Module 4 complete. You have reached the end of get_sequences.sh
 #

@@ -5,6 +5,10 @@ date: "11/05/2019"
 output: html_document
 ---
 
+```{r}
+setwd("~/src/screenforbio-mbc-dougwyu")
+# if i change my working dir, i have to change all instances of this in the script
+```
 
 ```{r delete lrRNA sequences suggested by sativa}
 library(readr)
@@ -42,7 +46,6 @@ write_tsv(Tetrapoda.final_taxonomy_sativa.txt, "~/src/screenforbio-mbc-dougwyu/T
 ```
 
 
-
 ```{r delete srRNA sequences suggested by sativa}
 library(readr)
 library(tidyverse)
@@ -76,6 +79,5 @@ Tetrapoda.final_taxonomy_sativa.txt_x <- Tetrapoda.final_taxonomy_sativa.txt_ful
 Tetrapoda.final_taxonomy_sativa.txt <- bind_rows(Tetrapoda.final_taxonomy_sativa.txt_x, Tetrapoda.final_taxonomy_sativa.txt_y) %>% 
     arrange(SeqID)
 write_tsv(Tetrapoda.final_taxonomy_sativa.txt, "~/src/screenforbio-mbc-dougwyu/Tetrapoda.final_taxonomy_sativa.txt", col_names = FALSE)
-
 ```
 
