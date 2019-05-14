@@ -152,18 +152,24 @@ cd ~/src/screenforbio-mbc-dougwyu/
 bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no four Tetrapoda ~/src/screenforbio-mbc-dougwyu/
 
 # Success
-# Module 4 took 4.96 hours
-# Actions after Module 4 complete:  None needed
-#
+# Module 4 took 5.67 hours
 # Module 4 complete. You have reached the end of get_sequences.sh
 #
-# Final database sequences are in Tetrapoda.final_database.locus.fa, final taxonomy file is in Tetrapoda.final_protax_taxonomy.txt
+# Final database sequences are in Tetrapoda.final_database.locus.fa
+# Final taxonomy file is in Tetrapoda.final_protax_taxonomy.txt
 #
 # Next step: train PROTAX models with either:
 #   - train_protax.sh for unweighted models
 #   - train_weighted_protax.sh for models weighted using a list of expected species
 
-
+# Actions after Module 4 complete:  Tetrapoda.final_database.16S.fa and Tetrapoda.final_database.12S.fa have a few sequences without species names (e.g. >_DQ158435) or starting with _TAXCLUSTER (e.g. >__TAXCLUSTER161__Spea_bombifrons_AY523786)
+# These should be removed because they interfere with PROTAX train (PROTAX needs sequences in the reference dataset to have the format >Ablepharus_kitaibelii_AY308325)
+cd ~/src/screenforbio-mbc-dougwyu/
+. ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+seqkit grep Tetrapoda.final_database.12S.fa -r -p ^_ -v -o Tetrapoda.final_database.12S_new.fa
+seqkit grep Tetrapoda.final_database.16S.fa -r -p ^_ -v -o Tetrapoda.final_database.16S_new.fa
+mv Tetrapoda.final_database.12S_new.fa Tetrapoda.final_database.12S.fa # overwrites the pre-existing file
+mv Tetrapoda.final_database.16S_new.fa Tetrapoda.final_database.16S.fa # overwrites the pre-existing file
 
 # 4. Train PROTAX models for target amplicon(s)
 #   - *train_protax.sh* (unweighted) or *train_weighted_protax.sh* (weighted)

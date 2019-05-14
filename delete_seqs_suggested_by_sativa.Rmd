@@ -10,9 +10,13 @@ setwd("~/src/screenforbio-mbc-dougwyu")
 # if i change my working dir, i have to change all instances of this in the script
 ```
 
-```{r delete lrRNA sequences suggested by sativa}
+```{r}
 library(readr)
 library(tidyverse)
+```
+
+
+```{r delete lrRNA sequences suggested by sativa}
 MIDORI_lrRNA <- read_delim("~/src/screenforbio-mbc-dougwyu/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
 # the key is to skip the first set of lines
 names(MIDORI_lrRNA)
@@ -47,8 +51,6 @@ write_tsv(Tetrapoda.final_taxonomy_sativa.txt, "~/src/screenforbio-mbc-dougwyu/T
 
 
 ```{r delete srRNA sequences suggested by sativa}
-library(readr)
-library(tidyverse)
 MIDORI_srRNA <- read_delim("~/src/screenforbio-mbc-dougwyu/MIDORI_srRNA_sativa/MIDORI_srRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
 # the key is to skip the first set of lines
 names(MIDORI_srRNA)
