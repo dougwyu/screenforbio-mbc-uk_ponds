@@ -57,13 +57,13 @@ DATA=${1}
 LOCUS=${2}
 MODELS=${3}
 SCRIPTS=${4}
-OUTDIR=${4}
+OUTDIR=${5} # was previously:  OUTDIR=${4}
 DATE=`date +%Y-%m-%d`
 
 ##### MAIN
 echo "Step 1: Get names of input file"
 echo ""
-echo "File names is:"
+echo "File name is:"
 file_name=($(basename ${DATA} ".fa"))
 printf '%s\n' "${file_name[@]}"
 echo ""
