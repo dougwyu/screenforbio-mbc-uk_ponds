@@ -168,6 +168,7 @@ cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 seqkit grep Tetrapoda.final_database.12S.fa -r -p ^_ -v -o Tetrapoda.final_database.12S_new.fa
 seqkit grep Tetrapoda.final_database.16S.fa -r -p ^_ -v -o Tetrapoda.final_database.16S_new.fa
+# check the new fasta files
 mv Tetrapoda.final_database.12S_new.fa Tetrapoda.final_database.12S.fa # overwrites the pre-existing file
 mv Tetrapoda.final_database.16S_new.fa Tetrapoda.final_database.16S.fa # overwrites the pre-existing file
 
@@ -192,10 +193,73 @@ bash ~/src/screenforbio-mbc-dougwyu/train_protax.sh Tetrapoda.final_protax_taxon
 # note: will take the taxon from the protax taxonomy file name
 # note: assumes curated database FASTA files are in current directory and labelled with format taxon.final_database.locus.fa
 
+# End of train_protax.sh
+#
+# This took a total of 305.27 minutes (5.09 hours).
+#
+# Please select an mcmc iteration for each of the four levels for each marker (labelled ./model_16S/mcmc1a-d, ./model_16S/mcmc2a-d etc) based on the training plots (labelled ./model_16S/training_plot_16S_level1a_MCMC.pdf etc). Chains should be well-mixed and k-steps as close to 0.44 as possible. Relabel the selected model as ./model_16S/mcmc1 ./model_16S/mcmc2 etc.
 
+cd ~/src/screenforbio-mbc-dougwyu/
+. ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+# for now, choosing the 'a' run for both loci and all 4 levels
+# 12S
+MOD1CHOSEN12S="mcmc1a"
+MOD2CHOSEN12S="mcmc2a"
+MOD3CHOSEN12S="mcmc3a"
+MOD4CHOSEN12S="mcmc4a"
+# 16S
+MOD1CHOSEN16S="mcmc1a"
+MOD2CHOSEN16S="mcmc2a"
+MOD3CHOSEN16S="mcmc3a"
+MOD4CHOSEN16S="mcmc4a"
 
+mv ./model_12S/${MOD1CHOSEN12S} ./model_12S/mcmc1
+mv ./model_12S/${MOD2CHOSEN12S} ./model_12S/mcmc2
+mv ./model_12S/${MOD3CHOSEN12S} ./model_12S/mcmc3
+mv ./model_12S/${MOD4CHOSEN12S} ./model_12S/mcmc4
+mv ./model_16S/${MOD1CHOSEN16S} ./model_16S/mcmc1
+mv ./model_16S/${MOD2CHOSEN16S} ./model_16S/mcmc2
+mv ./model_16S/${MOD3CHOSEN16S} ./model_16S/mcmc3
+mv ./model_16S/${MOD4CHOSEN16S} ./model_16S/mcmc4
+
+# Next step: Check model training with check_protax_training.sh
+# usage: bash check_protax_training.sh modeldir taxon locus screenforbio
+# where:
+# modeldir is the path to a directory containing the protax model to be checked
+# taxon is the taxon for which the model was generated (used for labelling only)
+# locus is the locus for which the model was generated (used for labelling only)
+# screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
+
+bash check_protax_training.sh model_12S Tetrapoda 12S ~/src/screenforbio-mbc-dougwyu/
+bash check_protax_training.sh model_16S Tetrapoda 16S ~/src/screenforbio-mbc-dougwyu/
+
+# Model check took 0.02 hours
+# Plots can be found in model_12S/checktrain/unweighted_Tetrapoda_12S_biasaccuracy.pdf
+# Plots can be found in model_16S/checktrain/unweighted_Tetrapoda_16S_biasaccuracy.pdf
 
 # 5. Classify query sequences (reads or OTUs) with PROTAX
-#   - *protax_classify.sh* or *protax_classify_otus.sh* (unweighted models)
-#   - *weighted_protax_classify.sh* or *weighted_protax_classify_otus.sh* (weighted models)
-#
+#   - Process raw data with read_preprocessing.sh (experimental design must follow that described in the manuscript) and classify the output with protax_classify.sh or weighted_protax_classify.sh as appropriate
+#   - Classify OTUs with protax_classify_otus.sh or weighted_protax_classify_otus.sh as appropriate
+
+# usage: bash protax_classify_otus.sh otus locus protaxdir screenforbio outdir
+# where:
+# otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
+# locus is the target locus, must be one of: 12S, 16S, CYTB, COI. if you have more than one locus to analyse, run script once for each.
+# protaxdir is the path to a directory containing protax models and clean databases for all 4 loci
+# screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
+# outdir is the name to give an output directory (inside current) (no slash at end)
+
+mkdir protaxmodels/
+mv model_12S/ protaxmodels/
+mv model_16S/ protaxmodels/
+
+OTUS12S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_swarm_lulu.fa"
+OTUS12S_USEARCH="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_usearchderep_lulu.fa"
+OTUS16S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_16S_20180321_otu_table_swarm_lulu.fa"
+echo ${OTUS12S_SWARM}
+echo ${OTUS12S_USEARCH}
+echo ${OTUS16S_SWARM}
+
+bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-dougwyu protaxout_swarm
+bash protax_classify_otus.sh ${OTUS12S_USEARCH} 12S protaxmodels ~/src/screenforbio-mbc-dougwyu protaxout_usearch
+bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-dougwyu protaxout_swarm
