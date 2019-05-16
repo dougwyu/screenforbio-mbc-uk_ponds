@@ -54,8 +54,8 @@ cd ~/src/screenforbio-mbc-dougwyu/
 # copy MIDORI files that i want to process to the working directory: screenforbio-mbc-dougwyu/
 cp archived_files/MIDORI_UNIQUE_1.1_lrRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.1_lrRNA_RDP.fasta.gz
 cp archived_files/MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz
-# cp archived_files/MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz
-# cp archived_files/MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz
+# cp archived_files/MIDORI_UNIQUE_20180221_lrRNA_RDP.fasta.gz ./MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz; gunzip MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz
+# cp archived_files/MIDORI_UNIQUE_20180221_srRNA_RDP.fasta.gz ./MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz; gunzip MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz
 # there are two 12S_primers files:  12S_primers_kocher.fa and 12S_primers_riaz.fa. Duplicate the one that you want to use and change its filename to 12S_primers.fa, and this will be the pair used to pull out 12S amplicons from the Midori reference database
 # to use the Kocher primers (12S_primers_kocher.fa), in get_sequences.sh:
      # change the usearch -search_pcr line 178 to
@@ -141,8 +141,7 @@ cp Tetrapoda.final_taxonomy_sativa.txt Tetrapoda.final_taxonomy_sativa_orig.txt
      # I remove all sequences that sativa identifies as having an incorrect taxonomy above genus level, as such large errors are most likely to be database errors.
      # I accept sativa's proposed substitute taxonomies where sativa confidence >- 0.998 (i.e. i accept only the most confident substitutions)
      # Programming notes
-          #to open this file in something like Excel, open the file in a text editor, select all, and paste into an empty Excel table. I cannot import successfully with Excel's import function
-          # to use R, readr can import if the first set of lines is skipped, and the column names are provided
+          # readr can import only if the first set of lines is skipped and the column names are provided
           # MIDORI_lrRNA <- read_delim("~/src/screenforbio-mbc-dougwyu/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
 
 
@@ -175,6 +174,8 @@ mv Tetrapoda.final_database.16S_new.fa Tetrapoda.final_database.16S.fa # overwri
 # 4. Train PROTAX models for target amplicon(s)
 #   - *train_protax.sh* (unweighted) or *train_weighted_protax.sh* (weighted)
 #   - *check_protax_training.sh* (makes bias-accuracy plots)
+
+# unweighted
 cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 bash ~/src/screenforbio-mbc-dougwyu/train_protax.sh Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-dougwyu/
@@ -184,14 +185,20 @@ bash ~/src/screenforbio-mbc-dougwyu/train_protax.sh Tetrapoda.final_protax_taxon
 # uses fasta files output from module_four of get_sequences.sh:  taxon.final_database.locus.fa (e.g. Tetrapoda.final_database.12S.fa)
 # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
 
+
+# weighted by Ailaoshan species list:  splist (birds, herps, mammals)
+cd ~/src/screenforbio-mbc-dougwyu/
+. ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+cp ~/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/species_lists/splist_20190516.csv ./splist.csv
+bash ~/src/screenforbio-mbc-dougwyu/train_weighted_protax.sh splist.csv Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-dougwyu/
 # usage: bash train_weighted_protax.sh splist taxonomy screenforbio
 # where:
 # splist is a list of expected species to use in weighting in the format Genus,species (e.g. Homo,sapiens)
 # taxonomy is the final protax-formatted taxonomy file from get_sequences.sh (e.g. Tetrapoda.final_protax_taxonomy.txt)
 # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
-
+# weighted_protax_training.R is used and is hardcoded to run through all four loci (12S, 16S, Cytb, COI), so if one or more loci is missing (i.e. no Tetrapoda.final_database.Cytb.fa), the script is halted, but the previous loci do complete successfully.
 # note: will take the taxon from the protax taxonomy file name
-# note: assumes curated database FASTA files are in current directory and labelled with format taxon.final_database.locus.fa
+# note: assumes curated database FASTA files are in current directory and labelled with format taxon.final_database.locus.fa (e.g. Tetrapoda.final_database.12S.fa)
 
 # End of train_protax.sh
 #
@@ -199,23 +206,18 @@ bash ~/src/screenforbio-mbc-dougwyu/train_protax.sh Tetrapoda.final_protax_taxon
 #
 # Please select an mcmc iteration for each of the four levels for each marker (labelled ./model_16S/mcmc1a-d, ./model_16S/mcmc2a-d etc) based on the training plots (labelled ./model_16S/training_plot_16S_level1a_MCMC.pdf etc). Chains should be well-mixed and acceptance ratio as close to 0.44 as possible. Relabel the selected model as ./model_16S/mcmc1 ./model_16S/mcmc2 etc.
 
-# Acceptance ratio is in the second panel
+# Acceptance ratio is on the second page of the PDFs
 # For an example of how to choose, go to archived_files/protax_training_mcmc_output_16S/. There are 4 PDF files (training_plot_16S_level4{a,b,c,d}_MCMC.pdf). To choose amongst these, Panu wrote:
 # "In all four cases a-d, the highest logposterior is very similar (around -7912) and also the coefficients corresponding to it (red dot) among a-d are very close to each other (i.e. mislabeling probability around 0.25 , beta1 around 0, beta2 around -40, beta3 around 4 and beta4 around -80, so I would say that all of them would give very similar classification results. Of course, when looking the traceplot of a, it seems that the MCMC has not converged properly, since in the beginning of the plot it is in a different regime, however, the parameter values corresponding to the largest posterior are similar as in b,c,d. I think if taking any one from b,c,or d, they would give very similar (or even identical) classification results."
-# The traceplots of a can be seen to wander by looking at the traceplots themselves and also at the histograms, which are skewed.
+# The traceplots of 'mcmc a' are seen to wander by looking at the traceplots themselves and also at the histograms, which are skewed.
 
 cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 
-# move output files to a single folder
-mkdir protaxmodels/
-mv model_12S protaxmodels/
-mv model_16S protaxmodels/
-
 # 12S
 MOD1CHOSEN12S="mcmc1d"
 MOD2CHOSEN12S="mcmc2b"
-MOD3CHOSEN12S="mcmc3d"
+MOD3CHOSEN12S="mcmc3c"
 MOD4CHOSEN12S="mcmc4b"
 # 16S
 MOD1CHOSEN16S="mcmc1c"
@@ -223,14 +225,25 @@ MOD2CHOSEN16S="mcmc2d"
 MOD3CHOSEN16S="mcmc3b"
 MOD4CHOSEN16S="mcmc4d"
 
-mv ./protaxmodels/model_12S/${MOD1CHOSEN12S} ./protaxmodels/model_12S/mcmc1
-mv ./protaxmodels/model_12S/${MOD2CHOSEN12S} ./protaxmodels/model_12S/mcmc2
-mv ./protaxmodels/model_12S/${MOD3CHOSEN12S} ./protaxmodels/model_12S/mcmc3
-mv ./protaxmodels/model_12S/${MOD4CHOSEN12S} ./protaxmodels/model_12S/mcmc4
-mv ./protaxmodels/model_16S/${MOD1CHOSEN16S} ./protaxmodels/model_16S/mcmc1
-mv ./protaxmodels/model_16S/${MOD2CHOSEN16S} ./protaxmodels/model_16S/mcmc2
-mv ./protaxmodels/model_16S/${MOD3CHOSEN16S} ./protaxmodels/model_16S/mcmc3
-mv ./protaxmodels/model_16S/${MOD4CHOSEN16S} ./protaxmodels/model_16S/mcmc4
+# unweighted
+mv ./model_12S/${MOD1CHOSEN12S} ./model_12S/mcmc1
+mv ./model_12S/${MOD2CHOSEN12S} ./model_12S/mcmc2
+mv ./model_12S/${MOD3CHOSEN12S} ./model_12S/mcmc3
+mv ./model_12S/${MOD4CHOSEN12S} ./model_12S/mcmc4
+mv ./model_16S/${MOD1CHOSEN16S} ./model_16S/mcmc1
+mv ./model_16S/${MOD2CHOSEN16S} ./model_16S/mcmc2
+mv ./model_16S/${MOD3CHOSEN16S} ./model_16S/mcmc3
+mv ./model_16S/${MOD4CHOSEN16S} ./model_16S/mcmc4
+
+# weighted
+mv ./w_model_12S/${MOD1CHOSEN12S} ./w_model_12S/mcmc1
+mv ./w_model_12S/${MOD2CHOSEN12S} ./w_model_12S/mcmc2
+mv ./w_model_12S/${MOD3CHOSEN12S} ./w_model_12S/mcmc3
+mv ./w_model_12S/${MOD4CHOSEN12S} ./w_model_12S/mcmc4
+mv ./w_model_16S/${MOD1CHOSEN16S} ./w_model_16S/mcmc1
+mv ./w_model_16S/${MOD2CHOSEN16S} ./w_model_16S/mcmc2
+mv ./w_model_16S/${MOD3CHOSEN16S} ./w_model_16S/mcmc3
+mv ./w_model_16S/${MOD4CHOSEN16S} ./w_model_16S/mcmc4
 
 # Next step: Check model training with check_protax_training.sh
 # usage: bash check_protax_training.sh modeldir taxon locus screenforbio
@@ -240,26 +253,22 @@ mv ./protaxmodels/model_16S/${MOD4CHOSEN16S} ./protaxmodels/model_16S/mcmc4
 # locus is the locus for which the model was generated (used for labelling only)
 # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
 
-bash check_protax_training.sh protaxmodels/model_12S Tetrapoda 12S ~/src/screenforbio-mbc-dougwyu/
-bash check_protax_training.sh protaxmodels/model_16S Tetrapoda 16S ~/src/screenforbio-mbc-dougwyu/
+# unweighted
+bash check_protax_training.sh model_12S Tetrapoda 12S ~/src/screenforbio-mbc-dougwyu/
+bash check_protax_training.sh model_16S Tetrapoda 16S ~/src/screenforbio-mbc-dougwyu/
+
+# weighted
+bash check_protax_training.sh w_model_12S Tetrapoda 12S ~/src/screenforbio-mbc-dougwyu/
+bash check_protax_training.sh w_model_16S Tetrapoda 16S ~/src/screenforbio-mbc-dougwyu/
 
 # Each model check took ~0.02 hours
 # Plots can be found in model_12S/checktrain/unweighted_Tetrapoda_12S_biasaccuracy.pdf
 # Plots can be found in model_16S/checktrain/unweighted_Tetrapoda_16S_biasaccuracy.pdf
 
 
-
 # 5. Classify query sequences (reads or OTUs) with PROTAX
 #   - Process raw data with read_preprocessing.sh (experimental design must follow that described in the manuscript) and classify the output with protax_classify.sh or weighted_protax_classify.sh as appropriate
 #   - Classify OTUs with protax_classify_otus.sh or weighted_protax_classify_otus.sh as appropriate
-
-# usage: bash protax_classify_otus.sh otus locus protaxdir screenforbio outdir
-# where:
-# otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
-# locus is the target locus, must be one of: 12S, 16S, CYTB, COI. if you have more than one locus to analyse, run script once for each.
-# protaxdir is the path to a directory containing protax models and clean databases for all 4 loci
-# screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
-# outdir is the name to give an output directory (inside current) (no slash at end)
 
 OTUS12S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_swarm_lulu.fa"
 OTUS12S_USEARCH="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_usearchderep_lulu.fa"
@@ -268,9 +277,39 @@ echo ${OTUS12S_SWARM}
 echo ${OTUS12S_USEARCH}
 echo ${OTUS16S_SWARM}
 
+# unweighted
+# move protax output files to a single folder
+mkdir protaxmodels/
+mv model_12S protaxmodels/
+mv model_16S protaxmodels/
+
 bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-dougwyu protaxout_swarm
 bash protax_classify_otus.sh ${OTUS12S_USEARCH} 12S protaxmodels ~/src/screenforbio-mbc-dougwyu protaxout_usearch
 bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-dougwyu protaxout_swarm
+# usage: bash protax_classify_otus.sh otus locus protaxdir screenforbio outdir
+# where:
+# otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
+# locus is the target locus, must be one of: 12S, 16S, CYTB, COI. if you have more than one locus to analyse, run script once for each.
+# protaxdir is the path to a directory containing protax models and clean databases for all 4 loci
+# screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
+# outdir is the name to give an output directory (inside current) (no slash at end)
+
+# weighted
+# move weighted protax output files to a single folder
+mkdir w_protaxmodels/
+mv model_12S w_protaxmodels/
+mv model_16S w_protaxmodels/
+
+bash weighted_protax_classify_otus.sh ${OTUS12S_SWARM} 12S w_protaxmodels ~/src/screenforbio-mbc-dougwyu w_protaxout_swarm
+bash weighted_protax_classify_otus.sh ${OTUS12S_USEARCH} 12S w_protaxmodels ~/src/screenforbio-mbc-dougwyu w_protaxout_usearch
+bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels ~/src/screenforbio-mbc-dougwyu w_protaxout_swarm
+# usage: bash weighted_protax_classify_otus.sh otus locus protaxdir screenforbio outdir
+# where:
+# otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
+# locus is the target locus, must be one of: 12S, 16S, CYTB, COI. if you have more than one locus to analyse, run script once for each.
+# protaxdir is the path to a directory containing weighted protax models and clean databases for all 4 loci
+# screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
+# outdir is the name to give the output directory (inside current)
 
 # Success
 # Example output from 16S
