@@ -45,8 +45,15 @@ conda install -c bioconda adapterremoval
 ````
   - cutadapt (v1.14)  
   `brew install cutadapt`  
-  - usearch (v8.1.1861)  
-     * binary downloaded from [drive5] (drive5.com) and moved to /usr/local/bin, symlinked usearch -> usearch8, usearch11 -> usearch 11
+  - usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
+     * macOS binaries downloaded from [drive5] (drive5.com) and moved to /usr/local/bin
+````
+     cd /usr/local/bin/
+     # symlink to usearch and usearch11 aliases
+     ln -s usearch8.1.1861_i86osx32 usearch
+     ln -s usearch11.0.667_i86osx32 usearch11
+     # public (free) usearch binaries are 32-bit only and thus will only run on macOS up to v 10.14.
+````
 
 - Building databases and PROTAX  
   - R (v3.5.0)  
@@ -65,10 +72,8 @@ conda install -c bioconda adapterremoval
      `brew install seqkit`  
   - Entrez Direct (v6.00 and v8.30)  
      * see installation instructions on [NIH] (https://www.ncbi.nlm.nih.gov/books/NBK179288/)
-  - usearch (v8.1.1861 and v11.0.667_i86osx32)  
-     * binaries downloaded from drive5.com and placed in the path /usr/local/bin
-     * i created symlinks to usearch8 as usearch and usearch 11 as usearch11
-     * public (free) usearch binaries are 32-bit only and thus will only run on macOS up to v 10.14.
+  - usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
+     * see installation instructions above
   - blast (v2.2.29 and v2.7.1)  
      `brew install blast`  
   - mafft (v7.305b and v7.313)  

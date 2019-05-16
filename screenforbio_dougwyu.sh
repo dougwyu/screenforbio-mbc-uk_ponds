@@ -263,3 +263,20 @@ echo ${OTUS16S_SWARM}
 bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-dougwyu protaxout_swarm
 bash protax_classify_otus.sh ${OTUS12S_USEARCH} 12S protaxmodels ~/src/screenforbio-mbc-dougwyu protaxout_usearch
 bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-dougwyu protaxout_swarm
+
+# Success
+# Example output from 16S
+# This took a total of 0.25 minutes.
+#
+# Results are in ./protaxout_swarm_16S
+# Classification for each OTU at each taxonomic level (species, genus, family, order) in files all_16S_20180321_otu_table_swarm_lulu.level_probs
+# Headers are: queryID taxID   log(probability)        level   taxon
+# e.g. all_12S_20180317_otu_table_swarm_lulu.species_probs
+# queryID taxID   log(probability)  level   taxon
+# OTU1    816     -1.25544          4       Anura,Dicroglossidae,Nanorana,taihangnica
+
+# Additionally, the best matching hit (for assigned species/genus where available) found with LAST is appended to all_16S_20180321_otu_table_swarm_lulu.species_probs in all_16S_20180321_otu_table_swarm_lulu.species_probs_sim
+# Headers are: queryID taxID   log(probability)        level   taxon   bestHit_similarity      bestHit
+# e.g. all_12S_20180317_otu_table_swarm_lulu.species_probs_sim
+# queryID taxID   log(probability) level   taxon                                        bestHit_similarity      bestHit
+# OTU1    816     -1.25544         4       Anura,Dicroglossidae,Nanorana,taihangnica    0.979 Nanorana_taihangnica_KJ569109
