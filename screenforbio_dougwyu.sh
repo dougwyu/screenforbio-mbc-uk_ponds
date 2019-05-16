@@ -115,7 +115,7 @@ bash ~/src/screenforbio-mbc-dougwyu/get_sequences.sh no no two Tetrapoda ~/src/s
 # If no failed lookups can be resolved, do not create Tetrapoda.missing_sp_taxonomy.txt, leave Tetrapoda.missing_sp_to_delete.txt as it is.
 # Restart script when happy.
 
-# I looked through Tetrapoda.missing_sp_to_delete.txt, and all the species are not ones found in Ailaoshan or Yunnan so rather than look up and add their full taxonomic pathways, i will go to module_three.
+# I looked through Tetrapoda.missing_sp_to_delete.txt, and all the species are not ones found in Ailaoshan or Yunnan so rather than look up and add their full taxonomic pathways, i left them in the file and proceeded to module_three.
 
 
 # Module 3 - Discard flagged sequences. Update taxonomy key file for sequences found to be incorrectly labelled in Module 2. Run SATIVA. End of module: optional check of putatively mislabelled sequences
