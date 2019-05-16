@@ -43,7 +43,7 @@ brew install python # installs python3
 conda update -n base conda  
 conda install -c bioconda adapterremoval  
 ````
-  - cutadapt (v1.14)  
+  - cutadapt (v2.3)  
   `brew install cutadapt`  
   - usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
      * macOS binaries downloaded from [drive5] (drive5.com) and moved to /usr/local/bin
@@ -56,7 +56,7 @@ conda install -c bioconda adapterremoval
 ````
 
 - Building databases and PROTAX  
-  - R (v3.5.0)  
+  - R (v3.6.0)  
      * installed from binary downloaded from [CRAN] (https://cran.rstudio.com)
   - tabtk (r19)  
 ````
@@ -66,17 +66,17 @@ conda install -c bioconda adapterremoval
      make  
      mv tabtk /usr/local/bin/tabtk  
 ````
-  - seqtk (v1.2-r94 and v1.2-r102-dirty)  
+  - seqtk (v1.3-r106)  
      `brew install seqtk`  
-  - seqkit (v0.7.2 and seqkit v0.8.0)  
+  - seqkit (v0.10.1)  
      `brew install seqkit`  
   - Entrez Direct (v6.00 and v8.30)  
      * see installation instructions on [NIH] (https://www.ncbi.nlm.nih.gov/books/NBK179288/)
   - usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
      * see installation instructions above
-  - blast (v2.2.29 and v2.7.1)  
+  - blast (v2.9.0+)  
      `brew install blast`  
-  - mafft (v7.305b and v7.313)  
+  - mafft (v7.407)  
      `brew install mafft`  
   - sativa (v0.9-57-g8a99328)  
 ````
@@ -94,7 +94,7 @@ conda install -c bioconda adapterremoval
 ````
   - last (926)  
      `brew install brewsci/bio/last`
-  - perl (v5.10.1 and v5.26.1)  
+  - perl (v5.28)  
      `brew install perl # perl 5.28 installed`
 
 *get_sequences.sh* also requires MIDORI databases for mitochondrial target genes [Machida *et al.*, 2017](https://www.nature.com/articles/sdata201727). Download relevant MIDORI_UNIQUE FASTAs in RDP format from the [website](http://www.reference-midori.info/download.php). The manuscript used MIDORI_UNIQUE_1.1 versions of COI, Cytb, lrRNA and srRNA. The unzipped FASTAs should be *copied* to the working directory (because the script removes the working MIDORI fasta files after it finishes module one).  
