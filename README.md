@@ -28,7 +28,7 @@ Steps and associated scripts:
 **Note:** in some steps the ***screenforbio-mbc*** release associated with the manuscript is specific to the amplicons used in the study - primer sets and relevant settings are hard-coded in *read_preprocessing.sh* and *get_sequences.sh*. This will be generalised in a future release.
 
 ### Required software (tested versions)
-Pipeline tested on Mac OSX (10.13) and Scientific Linux release 6.9 (Carbon).
+Pipeline tested on Mac OSX (10.14)
 
 Mac OSX should have GNU grep, awk and sed prioritised over BSD versions. These can be installed with homebrew. Or if you are running on macOS, you can use [linuxify] (https://github.com/fabiomaia/linuxify)
 
@@ -68,7 +68,7 @@ conda install -c bioconda adapterremoval
   - usearch (v8.1.1861 and v11.0.667_i86osx32)  
      * binaries downloaded from drive5.com and placed in the path /usr/local/bin
      * i created symlinks to usearch8 as usearch and usearch 11 as usearch11
-     * public (free) usearch binaries are 32-bit only and thus will only run on macOS up to v 10.14. 
+     * public (free) usearch binaries are 32-bit only and thus will only run on macOS up to v 10.14.
   - blast (v2.2.29 and v2.7.1)  
      `brew install blast`  
   - mafft (v7.305b and v7.313)  

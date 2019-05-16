@@ -4,3 +4,6 @@ intermediate_files/*
 MIDORI.raw*
 MIDORI_Tetrapoda.ITIS_mismatch_sp.txt
 MIDORI_*.amp_blast.noN.mafft_edit.fa
+.Rhistory
+protaxmodels/*
+protaxout*
