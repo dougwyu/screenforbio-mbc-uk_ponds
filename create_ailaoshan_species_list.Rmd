@@ -19,21 +19,86 @@ mammals <- read_excel("ailaoshan_mammals_20180408.xlsx", sheet = "final_20180408
     select(order = Order, family, genus, species_midori) %>% 
     unite(species, c("genus", "species_midori"), sep = " ", remove = FALSE) %>% 
     select(order, family, genus, species)
+mammal_class <- tibble(class = rep("Mammalia", nrow(mammals)))
+mammals <- bind_cols(mammal_class, mammals)
+rm(mammal_class)
+
 birds <- read_excel("ailaoshan_birds_20180416.xlsx", sheet = "final_dataset") %>% 
     select(order, family, genus, species = species)
-herps <- read_excel("ailaoshan_amphibiansANDreptiles_20180327.xlsx", sheet = "Ailaoshan_list_CheJing_lab") %>% select(-"Chinese name")
+bird_class <- tibble(class = rep("Aves", nrow(birds)))
+birds <- bind_cols(bird_class, birds)
+rm(bird_class)
+
+herps <- read_excel("ailaoshan_amphibiansANDreptiles_20180327.xlsx", sheet = "Ailaoshan_list_CheJing_lab") %>%
+    select(-"Chinese name") %>% 
+    mutate(order = str_replace(order, "Urodela", "Caudata")) %>% # Caudata is used in ITIS, despite Urodela being the order
+    mutate(class = case_when(
+        str_detect(order, "Caudata") == TRUE ~ "Amphibia",
+        str_detect(order, "Anura") == TRUE ~ "Amphibia",
+        str_detect(order, "Squamata") == TRUE ~ "Reptilia",
+        TRUE ~ "MISSING"
+      )
+    ) %>% 
+  select(class, order, family, genus, species)
+
 ```
 
-```{r combine to splist}
+join the Ailaoshan species list table (allspecies) and the Tetrapoda.combined_taxonomy file, which contains the ITIS taxonomy and their CoL synonyms. The allspecies names that don't match the ITIS species names are then matched to the CoL synonyms. If an allspecies name matches a CoL synonym, it is replaced with the original ITIS species name 
+```{r fix synonyms in ailoashan list}
 allspecies <- bind_rows(mammals, birds, herps)
+
 n_distinct(allspecies) == nrow(allspecies) # if all rows are distinct, returns TRUE
 
-splist <- allspecies %>% 
+allspecies <- allspecies %>% 
+    mutate(species = str_replace(species, " ", "_")) # only replaces first whitespace, which is what i want
+
+# ITIS taxonomy and Catalogue of Life synonyms
+Tetrapoda.combined_taxonomy <- read_tsv("~/src/screenforbio-mbc-dougwyu/archived_files/Tetrapoda.combined_taxonomy.txt")
+
+Tetrapoda.combined_taxonomy_allspecies <- allspecies %>% 
+    mutate(species = str_replace(species, "\\s.+$", "")) %>% # remove subspecies names from species by removing everything after first whitespace
+    full_join(Tetrapoda.combined_taxonomy, by = c("species")) %>% 
+    filter(is.na(kingdom))
+
+Tetrapoda.combined_taxonomy_allspecies_synonym <- Tetrapoda.combined_taxonomy_allspecies %>% 
+    filter(is.na(kingdom)) %>% 
+    left_join(Tetrapoda.combined_taxonomy, by = c("species" = "query")) %>% # species.y is the ITIS name
+    filter(!is.na(kingdom.y))
+
+Tetrapoda.combined_taxonomy_allspecies_no_synonym <- Tetrapoda.combined_taxonomy_allspecies %>% 
+    filter(is.na(kingdom)) %>% 
+    left_join(Tetrapoda.combined_taxonomy, by = c("species" = "query")) %>% # species.y is the ITIS name
+    filter(is.na(kingdom.y)) %>% 
+    select(class=class.x, order=order.x, family=family.x, genus=genus.x, species)
+
+
+allspecies_combined <- left_join(allspecies, Tetrapoda.combined_taxonomy_allspecies_synonym, by = c("class" = "class.x", "order" = "order.x", "family" = "family.x", "species" = "species"))
+
+allspecies_orig_sp_good <- allspecies_combined %>% 
+    filter(is.na(kingdom.y)) %>% 
+    select(class, order, family, genus = genus.x.x, species)
+
+allspecies_orig_sp_synonym <- allspecies_combined %>% 
+    filter(!is.na(kingdom.y)) %>% 
+    select(class, order, family, genus = genus.x.x, species = species.y)
+
+allspecies_fixed_synonyms <- bind_rows(allspecies_orig_sp_good, allspecies_orig_sp_synonym)
+```
+
+Pull out only the species column, split to Genus and species, remove species that appear twice and one with "sp" in epithet. Save splist to file.
+```{r combine to splist}
+splist <- allspecies_fixed_synonyms %>% 
     select(species) %>% 
+    mutate(species = str_replace(species, "\\s.+$", "")) %>% # remove subspecies names from species by removing everything after first whitespace
     separate(species, c("genus", "species")) %>% 
     distinct() %>% # Pseudoxenodon macrops appears twice because there are 2 subspecies
     filter(species != "sp") # Leptobrachium sp removed because no species name
 
-write_csv(splist, "splist.csv", col_names = FALSE)
+# write file for use in protax weighting for Ailaoshan
+write_csv(splist, "splist_20190516.csv", col_names = FALSE)
+
+# write file listing Ailaoshan names that did not find a match in Tetrapoda.combined_taxonomy.txt (not to species nor synonym).  Some are mispellings (Miniopterus_schreibersi), some are incomplete names (Leptobrachium_sp.), and some might be missing synonyms
+write_csv(Tetrapoda.combined_taxonomy_allspecies_no_synonym, "Ailaoshan_names_no_ITIS_or_CoL_matches.csv", col_names = FALSE)
 ```
+
 
