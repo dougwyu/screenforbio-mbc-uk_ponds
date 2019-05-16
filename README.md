@@ -28,9 +28,21 @@ Steps and associated scripts:
 **Note:** in some steps the ***screenforbio-mbc*** release associated with the manuscript is specific to the amplicons used in the study - primer sets and relevant settings are hard-coded in *read_preprocessing.sh* and *get_sequences.sh*. This will be generalised in a future release.
 
 ### Required software (tested versions)
-Pipeline tested on Mac OSX (10.14)
+Pipeline tested on macOS 10.14
 
-Mac OSX should have GNU grep, awk and sed prioritised over BSD versions. These can be installed with Homebrew.  If you are running on macOS, you can use [linuxify] (https://github.com/fabiomaia/linuxify)
+- macOS should have GNU grep, awk and sed prioritised over macOS's BSD versions. These can be installed with Homebrew.  To invoke the GNU versions, install and run `linuxify` (https://github.com/fabiomaia/linuxify) every session.
+````
+cd ~/src # or wherever you install your github repos
+git clone https://github.com/fabiomaia/linuxify.git
+cd linuxify/
+./linuxify install # places `./linuxify` file at root directory
+
+# to linuxify a session:  run the following at the beginning of a script or a session.
+. ~/.linuxify; awk; which grep; which sed
+     awk # should return help page for `gawk`
+     which grep # should return: `/usr/local/opt/grep/libexec/gnubin/grep`
+     which sed # should show `/usr/local/opt/gnu-sed/libexec/gnubin/sed`
+````
 
 - Processing of raw reads only  
   - bcl2fastq (v2.18)  
@@ -106,7 +118,7 @@ The 20180221 versions of MIDORI have more complex headers, which interfere with 
 Change the headers and change the filenames to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`  
 ````
      cd ~/src/screenforbio-mbc-dougwyu/  
-     . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed 
+     . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
      sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_srRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz  
      sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_lrRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz  
 ````
