@@ -197,30 +197,40 @@ bash ~/src/screenforbio-mbc-dougwyu/train_protax.sh Tetrapoda.final_protax_taxon
 #
 # This took a total of 305.27 minutes (5.09 hours).
 #
-# Please select an mcmc iteration for each of the four levels for each marker (labelled ./model_16S/mcmc1a-d, ./model_16S/mcmc2a-d etc) based on the training plots (labelled ./model_16S/training_plot_16S_level1a_MCMC.pdf etc). Chains should be well-mixed and k-steps as close to 0.44 as possible. Relabel the selected model as ./model_16S/mcmc1 ./model_16S/mcmc2 etc.
+# Please select an mcmc iteration for each of the four levels for each marker (labelled ./model_16S/mcmc1a-d, ./model_16S/mcmc2a-d etc) based on the training plots (labelled ./model_16S/training_plot_16S_level1a_MCMC.pdf etc). Chains should be well-mixed and acceptance ratio as close to 0.44 as possible. Relabel the selected model as ./model_16S/mcmc1 ./model_16S/mcmc2 etc.
+
+# Acceptance ratio is in the second panel
+# For an example of how to choose, go to archived_files/protax_training_mcmc_output_16S/. There are 4 PDF files (training_plot_16S_level4{a,b,c,d}_MCMC.pdf). To choose amongst these, Panu wrote:
+# "In all four cases a-d, the highest logposterior is very similar (around -7912) and also the coefficients corresponding to it (red dot) among a-d are very close to each other (i.e. mislabeling probability around 0.25 , beta1 around 0, beta2 around -40, beta3 around 4 and beta4 around -80, so I would say that all of them would give very similar classification results. Of course, when looking the traceplot of a, it seems that the MCMC has not converged properly, since in the beginning of the plot it is in a different regime, however, the parameter values corresponding to the largest posterior are similar as in b,c,d. I think if taking any one from b,c,or d, they would give very similar (or even identical) classification results."
+# The traceplots of a can be seen to wander by looking at the traceplots themselves and also at the histograms, which are skewed.
 
 cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-# for now, choosing the 'a' run for both loci and all 4 levels
-# 12S
-MOD1CHOSEN12S="mcmc1a"
-MOD2CHOSEN12S="mcmc2a"
-MOD3CHOSEN12S="mcmc3a"
-MOD4CHOSEN12S="mcmc4a"
-# 16S
-MOD1CHOSEN16S="mcmc1a"
-MOD2CHOSEN16S="mcmc2a"
-MOD3CHOSEN16S="mcmc3a"
-MOD4CHOSEN16S="mcmc4a"
 
-mv ./model_12S/${MOD1CHOSEN12S} ./model_12S/mcmc1
-mv ./model_12S/${MOD2CHOSEN12S} ./model_12S/mcmc2
-mv ./model_12S/${MOD3CHOSEN12S} ./model_12S/mcmc3
-mv ./model_12S/${MOD4CHOSEN12S} ./model_12S/mcmc4
-mv ./model_16S/${MOD1CHOSEN16S} ./model_16S/mcmc1
-mv ./model_16S/${MOD2CHOSEN16S} ./model_16S/mcmc2
-mv ./model_16S/${MOD3CHOSEN16S} ./model_16S/mcmc3
-mv ./model_16S/${MOD4CHOSEN16S} ./model_16S/mcmc4
+# move output files to a single folder
+mkdir protaxmodels/
+mv model_12S protaxmodels/
+mv model_16S protaxmodels/
+
+# 12S
+MOD1CHOSEN12S="mcmc1d"
+MOD2CHOSEN12S="mcmc2b"
+MOD3CHOSEN12S="mcmc3d"
+MOD4CHOSEN12S="mcmc4b"
+# 16S
+MOD1CHOSEN16S="mcmc1c"
+MOD2CHOSEN16S="mcmc2d"
+MOD3CHOSEN16S="mcmc3b"
+MOD4CHOSEN16S="mcmc4d"
+
+mv ./protaxmodels/model_12S/${MOD1CHOSEN12S} ./protaxmodels/model_12S/mcmc1
+mv ./protaxmodels/model_12S/${MOD2CHOSEN12S} ./protaxmodels/model_12S/mcmc2
+mv ./protaxmodels/model_12S/${MOD3CHOSEN12S} ./protaxmodels/model_12S/mcmc3
+mv ./protaxmodels/model_12S/${MOD4CHOSEN12S} ./protaxmodels/model_12S/mcmc4
+mv ./protaxmodels/model_16S/${MOD1CHOSEN16S} ./protaxmodels/model_16S/mcmc1
+mv ./protaxmodels/model_16S/${MOD2CHOSEN16S} ./protaxmodels/model_16S/mcmc2
+mv ./protaxmodels/model_16S/${MOD3CHOSEN16S} ./protaxmodels/model_16S/mcmc3
+mv ./protaxmodels/model_16S/${MOD4CHOSEN16S} ./protaxmodels/model_16S/mcmc4
 
 # Next step: Check model training with check_protax_training.sh
 # usage: bash check_protax_training.sh modeldir taxon locus screenforbio
@@ -230,12 +240,14 @@ mv ./model_16S/${MOD4CHOSEN16S} ./model_16S/mcmc4
 # locus is the locus for which the model was generated (used for labelling only)
 # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
 
-bash check_protax_training.sh model_12S Tetrapoda 12S ~/src/screenforbio-mbc-dougwyu/
-bash check_protax_training.sh model_16S Tetrapoda 16S ~/src/screenforbio-mbc-dougwyu/
+bash check_protax_training.sh protaxmodels/model_12S Tetrapoda 12S ~/src/screenforbio-mbc-dougwyu/
+bash check_protax_training.sh protaxmodels/model_16S Tetrapoda 16S ~/src/screenforbio-mbc-dougwyu/
 
-# Model check took 0.02 hours
+# Each model check took ~0.02 hours
 # Plots can be found in model_12S/checktrain/unweighted_Tetrapoda_12S_biasaccuracy.pdf
 # Plots can be found in model_16S/checktrain/unweighted_Tetrapoda_16S_biasaccuracy.pdf
+
+
 
 # 5. Classify query sequences (reads or OTUs) with PROTAX
 #   - Process raw data with read_preprocessing.sh (experimental design must follow that described in the manuscript) and classify the output with protax_classify.sh or weighted_protax_classify.sh as appropriate
@@ -248,10 +260,6 @@ bash check_protax_training.sh model_16S Tetrapoda 16S ~/src/screenforbio-mbc-dou
 # protaxdir is the path to a directory containing protax models and clean databases for all 4 loci
 # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
 # outdir is the name to give an output directory (inside current) (no slash at end)
-
-mkdir protaxmodels/
-mv model_12S/ protaxmodels/
-mv model_16S/ protaxmodels/
 
 OTUS12S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_swarm_lulu.fa"
 OTUS12S_USEARCH="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_usearchderep_lulu.fa"

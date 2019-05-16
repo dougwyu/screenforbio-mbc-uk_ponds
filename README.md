@@ -30,7 +30,7 @@ Steps and associated scripts:
 ### Required software (tested versions)
 Pipeline tested on macOS 10.14
 
-- macOS should have GNU grep, awk and sed prioritised over macOS's BSD versions. These can be installed with Homebrew.  To invoke the GNU versions, install and run `linuxify` (https://github.com/fabiomaia/linuxify) every session.
+- macOS should have GNU grep, awk and sed prioritised over macOS's BSD versions. These can be installed independently with Homebrew, or you can install with `linuxify` (https://github.com/fabiomaia/linuxify) every session, which provides a command to change paths when you want to use GNU versions in a session.
 ````
 cd ~/src # or wherever you install your github repos
 git clone https://github.com/fabiomaia/linuxify.git
@@ -109,11 +109,11 @@ conda install -c bioconda adapterremoval
   - perl (v5.28)  
      `brew install perl # perl 5.28 installed`
 
-*get_sequences.sh* also requires MIDORI databases for mitochondrial target genes [Machida *et al.*, 2017](https://www.nature.com/articles/sdata201727). Download relevant MIDORI_UNIQUE FASTAs in RDP format from the [website](http://www.reference-midori.info/download.php). The manuscript used MIDORI_UNIQUE_1.1 versions of COI, Cytb, lrRNA and srRNA. The unzipped FASTAs should be *copied* to the working directory (because the script removes the working MIDORI fasta files after it finishes module one).  
+*get_sequences.sh* also requires MIDORI databases for mitochondrial target genes [Machida *et al.*, 2017](https://www.nature.com/articles/sdata201727). Download relevant MIDORI_UNIQUE FASTAs in RDP format from the [website](http://www.reference-midori.info/download.php). The manuscript used MIDORI_UNIQUE_1.1 versions of COI, Cytb, lrRNA and srRNA. The unzipped FASTAs should be *copied* to the working directory (because the script moves the working MIDORI fasta files to the intermediate_files/ folder after it finishes module one).  There are downloaded versions in the archived_files/ folder
 
 The 20180221 versions of MIDORI have more complex headers, which interfere with the `get_sequences.sh` code.  
-* *Version 1.1*:  `>AF382008	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`  
-* *Version 20180221*:  `>AF382008.3.649.1602	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`  
+* *V 1.1*:  `>AF382008	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`  
+* *V 20180221*:  `>AF382008.3.649.1602	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`  
 
 Change the headers and change the filenames to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`  
 ````
