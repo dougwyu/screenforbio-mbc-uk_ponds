@@ -140,7 +140,7 @@ end=`date +%s`
 runtime=$((end-start))
 echo "This took a total of `echo $runtime | awk '{printf "%.2f", $1/60}'` minutes (`echo $runtime | awk '{printf "%.2f", $1/3600}'` hours)."
 echo ""
-echo "Please select an mcmc iteration for each of the four levels for each marker (labelled ./w_model_${locus}/mcmc1a-d, ./w_model_${locus}/mcmc2a-d etc) based on the training plots (labelled ./w_model_${locus}/weighted_training_plot_${locus}_level1a_MCMC.pdf etc). Chains should be well-mixed and k-steps as close to 0.44 as possible. Relabel the selected model as ./w_model_${locus}/mcmc1 ./w_model_${locus}/mcmc2 etc."
+echo "Please select an mcmc iteration for each of the four levels for each marker (labelled ./w_model_${locus}/mcmc1a-d, ./w_model_${locus}/mcmc2a-d etc) based on the training plots (labelled ./w_model_${locus}/weighted_training_plot_${locus}_level1a_MCMC.pdf etc). Chains should be well-mixed and acceptance ratio as close to 0.44 as possible. Relabel the selected model as ./w_model_${locus}/mcmc1 ./w_model_${locus}/mcmc2 etc."
 echo ""
 echo "Next step: Check model training with check_protax_training.sh"
 echo "Then analyse real data. Either:"
