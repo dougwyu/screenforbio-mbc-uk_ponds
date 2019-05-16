@@ -1,0 +1,39 @@
+---
+title: "Ailaoshan_species_list"
+author: "Douglas Yu"
+date: "16/05/2019"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+```{r}
+setwd("/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/species_lists")
+```
+
+```{r import and format data}
+mammals <- read_excel("ailaoshan_mammals_20180408.xlsx", sheet = "final_20180408") %>% 
+    select(order = Order, family, genus, species_midori) %>% 
+    unite(species, c("genus", "species_midori"), sep = " ", remove = FALSE) %>% 
+    select(order, family, genus, species)
+birds <- read_excel("ailaoshan_birds_20180416.xlsx", sheet = "final_dataset") %>% 
+    select(order, family, genus, species = species)
+herps <- read_excel("ailaoshan_amphibiansANDreptiles_20180327.xlsx", sheet = "Ailaoshan_list_CheJing_lab") %>% select(-"Chinese name")
+```
+
+```{r combine to splist}
+allspecies <- bind_rows(mammals, birds, herps)
+n_distinct(allspecies) == nrow(allspecies) # if all rows are distinct, returns TRUE
+
+splist <- allspecies %>% 
+    select(species) %>% 
+    separate(species, c("genus", "species")) %>% 
+    distinct() %>% # Pseudoxenodon macrops appears twice because there are 2 subspecies
+    filter(species != "sp") # Leptobrachium sp removed because no species name
+
+write_csv(splist, "splist.csv", col_names = FALSE)
+```
+
