@@ -106,7 +106,7 @@ The 20180221 versions of MIDORI have more complex headers, which interfere with 
 Change the headers and change the filenames to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`  
 ````
      cd ~/src/screenforbio-mbc-dougwyu/  
-     . ~/.linuxify; grep --help # use GNU sed, not BSD sed  
+     . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed 
      sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_srRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz  
      sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_lrRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz  
 ````
