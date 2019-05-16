@@ -30,7 +30,7 @@ Steps and associated scripts:
 ### Required software (tested versions)
 Pipeline tested on Mac OSX (10.14)
 
-Mac OSX should have GNU grep, awk and sed prioritised over BSD versions. These can be installed with homebrew. Or if you are running on macOS, you can use [linuxify] (https://github.com/fabiomaia/linuxify)
+Mac OSX should have GNU grep, awk and sed prioritised over BSD versions. These can be installed with Homebrew.  If you are running on macOS, you can use [linuxify] (https://github.com/fabiomaia/linuxify)
 
 - Processing of raw reads only  
   - bcl2fastq (v2.18)  
@@ -92,7 +92,6 @@ conda install -c bioconda adapterremoval
      buddysuite -setup  
      seqbuddy -h  
 ````
-
   - last (926)  
      `brew install brewsci/bio/last`
   - perl (v5.10.1 and v5.26.1)  
