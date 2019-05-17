@@ -306,9 +306,10 @@ bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbi
 # weighted
 # move weighted protax output files to a single folder
 mkdir w_protaxmodels/
-mv model_12S w_protaxmodels/
-mv model_16S w_protaxmodels/
+mv w_model_12S w_protaxmodels/
+mv w_model_16S w_protaxmodels/
 
+# START HERE
 bash weighted_protax_classify_otus.sh ${OTUS12S_SWARM} 12S w_protaxmodels ~/src/screenforbio-mbc-dougwyu w_protaxout_swarm
 bash weighted_protax_classify_otus.sh ${OTUS12S_USEARCH} 12S w_protaxmodels ~/src/screenforbio-mbc-dougwyu w_protaxout_usearch
 bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels ~/src/screenforbio-mbc-dougwyu w_protaxout_swarm
