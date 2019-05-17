@@ -1,4 +1,4 @@
-#!/bin/bash
+w_mcmc#!/bin/bash
 
 set -e
 set -u
@@ -214,18 +214,17 @@ bash ~/src/screenforbio-mbc-dougwyu/train_weighted_protax.sh splist.csv Tetrapod
 cd ~/src/screenforbio-mbc-dougwyu/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 
+# unweighted
 # 12S
-MOD1CHOSEN12S="mcmc1d"
-MOD2CHOSEN12S="mcmc2b"
-MOD3CHOSEN12S="mcmc3c"
+MOD1CHOSEN12S="mcmc1c"
+MOD2CHOSEN12S="mcmc2a"
+MOD3CHOSEN12S="mcmc3d"
 MOD4CHOSEN12S="mcmc4b"
 # 16S
-MOD1CHOSEN16S="mcmc1c"
-MOD2CHOSEN16S="mcmc2d"
-MOD3CHOSEN16S="mcmc3b"
+MOD1CHOSEN16S="mcmc1d"
+MOD2CHOSEN16S="mcmc2b"
+MOD3CHOSEN16S="mcmc3c"
 MOD4CHOSEN16S="mcmc4d"
-
-# unweighted
 mv ./model_12S/${MOD1CHOSEN12S} ./model_12S/mcmc1
 mv ./model_12S/${MOD2CHOSEN12S} ./model_12S/mcmc2
 mv ./model_12S/${MOD3CHOSEN12S} ./model_12S/mcmc3
@@ -236,14 +235,24 @@ mv ./model_16S/${MOD3CHOSEN16S} ./model_16S/mcmc3
 mv ./model_16S/${MOD4CHOSEN16S} ./model_16S/mcmc4
 
 # weighted
-mv ./w_model_12S/${MOD1CHOSEN12S} ./w_model_12S/mcmc1
-mv ./w_model_12S/${MOD2CHOSEN12S} ./w_model_12S/mcmc2
-mv ./w_model_12S/${MOD3CHOSEN12S} ./w_model_12S/mcmc3
-mv ./w_model_12S/${MOD4CHOSEN12S} ./w_model_12S/mcmc4
-mv ./w_model_16S/${MOD1CHOSEN16S} ./w_model_16S/mcmc1
-mv ./w_model_16S/${MOD2CHOSEN16S} ./w_model_16S/mcmc2
-mv ./w_model_16S/${MOD3CHOSEN16S} ./w_model_16S/mcmc3
-mv ./w_model_16S/${MOD4CHOSEN16S} ./w_model_16S/mcmc4
+# 12S
+MOD1CHOSEN12S="w_mcmc1c"
+MOD2CHOSEN12S="w_mcmc2a"
+MOD3CHOSEN12S="w_mcmc3d"
+MOD4CHOSEN12S="w_mcmc4b"
+# 16S
+MOD1CHOSEN16S="w_mcmc1d"
+MOD2CHOSEN16S="w_mcmc2b"
+MOD3CHOSEN16S="w_mcmc3c"
+MOD4CHOSEN16S="w_mcmc4d"
+mv ./w_model_12S/${MOD1CHOSEN12S} ./w_model_12S/w_mcmc1
+mv ./w_model_12S/${MOD2CHOSEN12S} ./w_model_12S/w_mcmc2
+mv ./w_model_12S/${MOD3CHOSEN12S} ./w_model_12S/w_mcmc3
+mv ./w_model_12S/${MOD4CHOSEN12S} ./w_model_12S/w_mcmc4
+mv ./w_model_16S/${MOD1CHOSEN16S} ./w_model_16S/w_mcmc1
+mv ./w_model_16S/${MOD2CHOSEN16S} ./w_model_16S/w_mcmc2
+mv ./w_model_16S/${MOD3CHOSEN16S} ./w_model_16S/w_mcmc3
+mv ./w_model_16S/${MOD4CHOSEN16S} ./w_model_16S/w_mcmc4
 
 # Next step: Check model training with check_protax_training.sh
 # usage: bash check_protax_training.sh modeldir taxon locus screenforbio
