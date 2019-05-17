@@ -115,18 +115,12 @@ The 20180221 versions of MIDORI have more complex headers, which interfere with 
 * *V 1.1*:  `>AF382008	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`  
 * *V 20180221*:  `>AF382008.3.649.1602	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`  
 
-Change the headers and change the filenames to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`  
-````
-     cd ~/src/screenforbio-mbc-dougwyu/  
-     . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-     sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_srRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz  
-     sed 's/\.[0-9].*\t/\t/g' archived_files/MIDORI_UNIQUE_20180221_lrRNA.fasta | gzip > MIDORI_fastas_to_ignore/MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz  
-````
+The filenames will be changed to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`, and the extra stuff on the headers will be removed before running get_sequences.h
 
 *get_sequences.sh*  also requires *collapsetypes_v4.6.pl* to be in the ***screenforbio-mbc*** directory. Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).  
 ````
      chmod 755 ~/Downloads/collapsetypes_v4.6.pl  
-     mv ~/Downloads/collapsetypes_v4.6.pl ~/src/screenforbio-mbc-dougwyu/  
+     mv ~/Downloads/collapsetypes_v4.6.pl ~/src/screenforbio-mbc-ailaoshan/  
 ````
 
 *PROTAX* scripts are reposted here with the kind permission of Panu Somervuo. These are in the *protaxscripts* subdirectory of ***screenforbio-mbc***. This version of *PROTAX* is from [Rodgers *et al.* 2017](https://doi.org/10.1111/1755-0998.12701), scripts were originally posted on [Dryad](https://datadryad.org/resource/doi:10.5061/dryad.bj5k0).  
