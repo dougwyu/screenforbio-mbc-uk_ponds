@@ -1,4 +1,4 @@
-w_mcmc#!/bin/bash
+#!/bin/bash
 
 set -e
 set -u
