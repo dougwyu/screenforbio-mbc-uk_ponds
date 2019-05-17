@@ -13,3 +13,17 @@ w_model_12S/
 w_model_12S_oldsplist/
 w_model_16S/
 w_model_16S_oldsplist/
+MIDORI_UNIQUE_1.2_srRNA_RDP.fasta
+MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta
+MIDORI_srRNA.raw.fa
+MIDORI_srRNA.keep_relabel.fa
+MIDORI_srRNA.keep_dedup.fa
+MIDORI_srRNA.keep.txt
+MIDORI_srRNA.keep.fa
+MIDORI_srRNA.amp_only.fa.nsq
+MIDORI_srRNA.amp_only.fa.nin
+MIDORI_srRNA.amp_only.fa.nhr
+MIDORI_srRNA.amp_only.fa
+MIDORI_srRNA.amp.fa
+MIDORI_srRNA.amp.blastn
+Tetrapoda_ITIS_taxonomy.txt
