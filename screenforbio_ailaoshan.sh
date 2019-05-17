@@ -36,6 +36,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_taxonomy.sh Tetrapoda superclass ~/src
 # Failed
 # Probably can succeed with faster internet
 # output is Tetrapoda_ITIS_taxonomy.txt, a copy of which is in screenforbio-mbc-ailaoshan/archived_files/
+cp archived_files/Tetrapoda_ITIS_taxonomy.txt ./Tetrapoda_ITIS_taxonomy.txt
 
 # 3. Generate non-redundant curated reference sequence database for target amplicon(s) and fix taxonomic classification
 #   - *get_sequences.sh*
@@ -52,10 +53,17 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_taxonomy.sh Tetrapoda superclass ~/src
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 # copy MIDORI files that i want to process to the working directory: screenforbio-mbc-ailaoshan/
-cp archived_files/MIDORI_UNIQUE_1.1_lrRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.1_lrRNA_RDP.fasta.gz
-cp archived_files/MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz
-# cp archived_files/MIDORI_UNIQUE_20180221_lrRNA_RDP.fasta.gz ./MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz; gunzip MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz
-# cp archived_files/MIDORI_UNIQUE_20180221_srRNA_RDP.fasta.gz ./MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz; gunzip MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz
+# cp archived_files/MIDORI_UNIQUE_1.1_lrRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.1_lrRNA_RDP.fasta.gz
+# cp archived_files/MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz
+cp archived_files/MIDORI_UNIQUE_20180221_lrRNA_RDP.fasta.gz ./MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz; gunzip MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz
+cp archived_files/MIDORI_UNIQUE_20180221_srRNA_RDP.fasta.gz ./MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz; gunzip MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz
+
+# The 20180221 versions of MIDORI have more complex headers, which interfere with the `get_sequences.sh` code.
+# V 1.1:  `>AF382008	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`
+# V 20180221:  `>AF382008.3.649.1602	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`
+sed -i 's/\.[0-9].*\t/\t/g' MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta | head -n 40
+sed -i 's/\.[0-9].*\t/\t/g' MIDORI_UNIQUE_1.2_srRNA_RDP.fasta | head -n 40
+
 # there are two 12S_primers files:  12S_primers_kocher.fa and 12S_primers_riaz.fa. Duplicate the one that you want to use and change its filename to 12S_primers.fa, and this will be the pair used to pull out 12S amplicons from the Midori reference database
 # to use the Kocher primers (12S_primers_kocher.fa), in get_sequences.sh:
      # change the usearch -search_pcr line 178 to
