@@ -16,7 +16,7 @@ library(tidyverse)
 ```
 
 
-```{r delete lrRNA sequences suggested by sativa}
+```{r delete lrRNA sequences that sativa flags as wrong at family and above}
 MIDORI_lrRNA <- read_delim("~/src/screenforbio-mbc-dougwyu/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
 # the key is to skip the first set of lines
 names(MIDORI_lrRNA)
@@ -28,7 +28,9 @@ MIDORI_locus.mis_to_delete <- MIDORI_lrRNA_sep %>%
     filter(!MislabeledLevel %in% c("Genus", "Species")) %>% 
     select(SeqID)
 write_tsv(MIDORI_locus.mis_to_delete, "~/src/screenforbio-mbc-dougwyu/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis_to_delete", col_names = FALSE)
+```
 
+```{r change genus and species names suggested by sativa for lrRNA, eval=FALSE, include=FALSE}
 # substitute in sequences that have a sativa Confidence ≥ 0.998
 MIDORI_lrRNA_sub <- MIDORI_lrRNA %>% 
     filter(MislabeledLevel %in% c("Genus", "Species")) %>% 
@@ -50,7 +52,7 @@ write_tsv(Tetrapoda.final_taxonomy_sativa.txt, "~/src/screenforbio-mbc-dougwyu/T
 ```
 
 
-```{r delete srRNA sequences suggested by sativa}
+```{r delete srRNA sequences that sativa flags as wrong at family and above}
 MIDORI_srRNA <- read_delim("~/src/screenforbio-mbc-dougwyu/MIDORI_srRNA_sativa/MIDORI_srRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
 # the key is to skip the first set of lines
 names(MIDORI_srRNA)
@@ -62,7 +64,9 @@ MIDORI_locus.mis_to_delete <- MIDORI_srRNA_sep %>%
     filter(!MislabeledLevel %in% c("Genus", "Species")) %>% 
     select(SeqID)
 write_tsv(MIDORI_locus.mis_to_delete, "~/src/screenforbio-mbc-dougwyu/MIDORI_srRNA_sativa/MIDORI_srRNA.mis_to_delete", col_names = FALSE)
+```
 
+```{r change genus and species names suggested by sativa for srRNA, eval=FALSE, include=FALSE}
 # substitute in sequences that have a sativa Confidence ≥ 0.998
 MIDORI_srRNA_sub <- MIDORI_srRNA %>% 
     filter(MislabeledLevel %in% c("Genus", "Species")) %>% 
