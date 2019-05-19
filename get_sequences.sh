@@ -735,7 +735,7 @@ function module_one {
       #DY sativa -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 4 -n ${label} -o ./${label}_sativa
       #DY to make it run with python2, have to invoke python2 and give full pathname
       #DY sativa only runs with python2
-      python2 ~/src/sativa/sativa.py -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 4 -n ${label} -o ./${label}_sativa
+      python2 ~/src/sativa/sativa.py -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 5 -n ${label} -o ./${label}_sativa
       #cleanup
       mv ${label}.final.fa ./intermediate_files
       rm ${label}.final_for_sativa.tax
