@@ -782,6 +782,9 @@ function module_one {
         sed 's/;/\t/g' ${TAXON}.final_taxonomy_sativa.txt | cut -f1,8 | sed 's/ /_/g' | awk '{print $1 "\t" $2 "_" $1}' > ${TAXON}.final_rename_seqs_protax.txt
         seqkit replace -p '(.+)$' -r '{kv}' -k ${TAXON}.final_rename_seqs_protax.txt ${label}.final_clean.fa --keep-key > ${label}.final_clean_relabel.fa
         seqbuddy ${label}.final_clean_relabel.fa --clean_seq > ${label}.final_clean_relabel.unalign.fa
+               #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${label}.final_clean_relabel.unalign.fa
+               #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
+               sed -i '/FTP Error: got more than 8192 bytes/d' ${label}.final_clean_relabel.unalign.fa
         # make final taxonomy
         cut -f2 ${TAXON}.final_taxonomy_sativa.txt | cut -f1,2,3,4,5,7 -d";" | sed 's/;/ /g' | sort -u > ${TAXON}.final_protax_taxonomy.txt
         # get list of sp
@@ -798,6 +801,9 @@ function module_one {
             mafft --thread 4 --retree 2 --reorder ${sp}.fa > ${sp}.mafft.fa
             perl ${SCRIPTS}/collapsetypes_v4.6.pl -infile=${sp}.mafft.fa -nrdiffs=0
             seqbuddy ${sp}.mafft.fa.unique_haplotypes --clean_seq > ${sp}.uniq.fa
+                 #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${sp}.uniq.fa
+                 #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
+                 sed -i '/FTP Error: got more than 8192 bytes/d' ${sp}.uniq.fa
             cat ${label}.uniq.fa ${sp}.uniq.fa > tmp
           else
             cat ${label}.uniq.fa ${sp}.fa > tmp
@@ -819,6 +825,9 @@ function module_one {
         sed 's/;/\t/g' ${TAXON}.final_taxonomy_sativa.txt | cut -f1,8 | sed 's/ /_/g' | awk '{print $1 "\t" $2 "_" $1}' > ${TAXON}.final_rename_seqs_protax.txt
         seqkit replace -p '(.+)$' -r '{kv}' -k ${TAXON}.final_rename_seqs_protax.txt ${label}.final_clean.fa --keep-key > ${label}.final_clean_relabel.fa
         seqbuddy ${label}.final_clean_relabel.fa --clean_seq > ${label}.final_clean_relabel.unalign.fa
+             #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${label}.final_clean_relabel.unalign.fa
+             #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
+             sed -i '/FTP Error: got more than 8192 bytes/d' ${label}.final_clean_relabel.unalign.fa
         # make final taxonomy
         cut -f2 ${TAXON}.final_taxonomy_sativa.txt | cut -f1,2,3,4,5,7 -d";" | sed 's/;/ /g' | sort -u > ${TAXON}.final_protax_taxonomy.txt
         # get list of sp
@@ -835,6 +844,9 @@ function module_one {
             mafft --thread 4 --retree 2 --reorder ${sp}.fa > ${sp}.mafft.fa
             perl ${SCRIPTS}/collapsetypes_v4.6.pl -infile=${sp}.mafft.fa -nrdiffs=0
             seqbuddy ${sp}.mafft.fa.unique_haplotypes --clean_seq > ${sp}.uniq.fa
+                 #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${sp}.uniq.fa
+                 #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
+                 sed -i '/FTP Error: got more than 8192 bytes/d' ${sp}.uniq.fa
             cat ${label}.uniq.fa ${sp}.uniq.fa > tmp
           else
             cat ${label}.uniq.fa ${sp}.fa > tmp
