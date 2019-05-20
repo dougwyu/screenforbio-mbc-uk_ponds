@@ -28,3 +28,10 @@ MIDORI_srRNA.amp.fa
 MIDORI_srRNA.amp.blastn
 Tetrapoda_CoL_matched_taxonomy.txt
 Tetrapoda_ITIS_taxonomy.txt
+splist.csv
+Tetrapoda.final_database.12S.fa
+Tetrapoda.final_database.16S.fa
+Tetrapoda.final_protax_taxonomy.txt
+Tetrapoda.final_taxonomy_sativa_orig.txt
+MIDORI_lrRNA.final_for_sativa.fa
+MIDORI_srRNA.final_for_sativa.fa
