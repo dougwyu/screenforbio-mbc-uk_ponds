@@ -1,18 +1,18 @@
 # ScreenForBio metabarcoding pipeline for Ailaoshan
 
-A series of bash and R scripts used in:
+A fork of the ScreenForBio metabarcoding pipeline originally published in:
 
-Axtner, J., Crampton-Platt, A., Hoerig, L.A., Xu, C.C.Y., Yu, D.W., Wilting, A. (2018).
-An efficient and improved laboratory workflow and tetrapod database for larger scale eDNA studies. bioRxiv 345082. doi:https://doi.org/10.1101/345082.
+Axtner, J., Crampton-Platt, A., Hoerig, L.A., Xu, C.C.Y., Yu, D.W., Wilting, A. (2019), An efficient and robust laboratory workflow and tetrapod database for larger scale environmental DNA studies. Giga Sci. 8, 646–17. doi:10.1093/gigascience/giz029
 
-Available from [bioRxiv](https://www.biorxiv.org/content/early/2018/06/12/345082).
+Preprint available from [bioRxiv](https://www.biorxiv.org/content/early/2018/06/12/345082).
+Paper available from [GigaScience] (https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giz029/5450733)
 
-Provides a complete analysis pipeline for paired-end Illumina metabarcoding data, from processing of twin-tagged raw reads through to taxonomic classification with *PROTAX*.
+This fork is customised to the Ailaoshan leech iDNA dataset, and updated to take advantage of the MIDORI_UNIQUE_20180221 datasets that are now available. There are some bug fixes and additional R utilities. However, if you have some knowledge of bash and R scripting, then you can easily adapt this pipeline for your paired-end Illumina metabarcoding, from processing of twin-tagged raw reads through to taxonomic classification with *PROTAX*.
 
 The pipeline steps that will be of most use to other projects are those related to *PROTAX*: generating curated reference databases and associated taxonomic classification; training *PROTAX* models (weighted or unweighted); and classification of OTUs with *PROTAX*.
 
 Steps and associated scripts:
-1. Process twin-tagged metabarcoding data
+1. Process twin-tagged metabarcoding data (not run in this fork, but the script is available)
   - *read_preprocessing.sh*
 2. Obtain initial taxonomic classification for target taxon
   - *get_taxonomy.sh*
@@ -28,7 +28,7 @@ Steps and associated scripts:
 **Note:** in some steps the ***screenforbio-mbc*** release associated with the manuscript is specific to the amplicons used in the study - primer sets and relevant settings are hard-coded in *read_preprocessing.sh* and *get_sequences.sh*. This will be generalised in a future release.
 
 ### Required software (tested versions)
-Pipeline tested on macOS 10.14
+Pipeline tested on macOS 10.14.4
 
 - macOS should have GNU grep, awk and sed prioritised over macOS's BSD versions. These can be installed independently with Homebrew, or you can install with `linuxify` (https://github.com/fabiomaia/linuxify) every session, which provides a command to change paths when you want to use GNU versions in a session.
 ````
