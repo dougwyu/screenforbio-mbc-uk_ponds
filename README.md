@@ -48,7 +48,7 @@ cd linuxify/
   - bcl2fastq (v2.18)  
      * downloaded from Illumina.com (only for RedHat or CentOS Linux). If you have a local sequencer, it should already be running somewhere. If you send out for sequencing, the provider will have it running.  
   - AdapterRemoval (v2.1.7)  
-     * install miniconda:  [anaconda] (https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.pkg)  
+     * install miniconda:  [anaconda](https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.pkg)  
 ````
 brew update; brew upgrade; brew cleanup  
 brew install python # installs python3  
@@ -58,7 +58,7 @@ conda install -c bioconda adapterremoval
   - cutadapt (v2.3)  
   `brew install cutadapt`  
   - usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
-     * macOS binaries downloaded from [drive5] (drive5.com) and moved to /usr/local/bin
+     * macOS binaries downloaded from [drive5](drive5.com) and moved to /usr/local/bin
 ````
      cd /usr/local/bin/
      # symlink to usearch and usearch11 aliases
@@ -69,7 +69,7 @@ conda install -c bioconda adapterremoval
 
 - Building databases and PROTAX  
   - R (v3.6.0)  
-     * installed from binary downloaded from [CRAN] (https://cran.rstudio.com)
+     * installed from binary downloaded from [CRAN](https://cran.rstudio.com)
   - tabtk (r19)  
 ````
      cd ~/src/  
@@ -83,7 +83,7 @@ conda install -c bioconda adapterremoval
   - seqkit (v0.10.1)  
      `brew install seqkit`  
   - Entrez Direct (v6.00 and v8.30)  
-     * see installation instructions on [NIH] (https://www.ncbi.nlm.nih.gov/books/NBK179288/)
+     * see installation instructions on [NIH](https://www.ncbi.nlm.nih.gov/books/NBK179288/)
   - usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
      * see installation instructions above
   - blast (v2.9.0+)  
