@@ -30,7 +30,7 @@ Steps and associated scripts:
 ### Required software (tested versions)
 Pipeline tested on macOS 10.14.4
 
-- macOS should have GNU grep, awk and sed prioritised over macOS's BSD versions. These can be installed independently with Homebrew, or you can install with `linuxify` (https://github.com/fabiomaia/linuxify) every session, which provides a command to change paths when you want to use GNU versions in a session.
+- macOS should have GNU grep, awk and sed prioritised over macOS's BSD versions. These can be installed independently with Homebrew, or you can install with [linuxify](https://github.com/fabiomaia/linuxify) every session, which provides a command to change paths when you want to use GNU versions in a session.  
 ````
 cd ~/src # or wherever you install your github repos
 git clone https://github.com/fabiomaia/linuxify.git
@@ -48,7 +48,7 @@ cd linuxify/
   - bcl2fastq (v2.18)  
      * downloaded from Illumina.com (only for RedHat or CentOS Linux). If you have a local sequencer, it should already be running somewhere. If you send out for sequencing, the provider will have it running.  
   - AdapterRemoval (v2.1.7)  
-     * install miniconda:  [anaconda](https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.pkg)  
+     * install [miniconda](https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.pkg)  
 ````
 brew update; brew upgrade; brew cleanup  
 brew install python # installs python3  
