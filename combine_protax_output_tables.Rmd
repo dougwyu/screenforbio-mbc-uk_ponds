@@ -16,8 +16,12 @@ library(tidyverse)
 5 or 7 column headings
 "queryID", "taxID", "log_prob", "level", "taxon", "bestHit_similarity", "bestHit"
 
+```{r}
+# rm(list = ls())
+```
+
 ```{r combine swarm_12S}
-pathtoprotaxout <- "~/src/screenforbio-mbc-ailaoshan/v0.1.2_outputs"
+pathtoprotaxout <- "~/src/screenforbio-mbc-ailaoshan/"
 w_protaxout_swarm_12S_class <- read_tsv(file.path(pathtoprotaxout, "w_protaxout_swarm_12S", paste0("all_12S_20180317_otu_table_swarm_lulu.", "w_class_probs")), col_names = c("queryID", "taxID", "log_prob", "level", "class")) %>% 
     mutate(prob_class = exp(log_prob)) %>% 
     select(queryID, class, prob_class)
@@ -44,7 +48,7 @@ w_protaxout_swarm_12S_all <- w_protaxout_swarm_12S_class %>%
 ```
 
 ```{r combine usearch_12S}
-pathtoprotaxout <- "~/src/screenforbio-mbc-ailaoshan/v0.1.2_outputs"
+pathtoprotaxout <- "~/src/screenforbio-mbc-ailaoshan/"
 w_protaxout_usearch_12S_class <- read_tsv(file.path(pathtoprotaxout, "w_protaxout_usearch_12S", paste0("all_12S_20180317_otu_table_usearchderep_lulu.", "w_class_probs")), col_names = c("queryID", "taxID", "log_prob", "level", "class")) %>% 
     mutate(prob_class = exp(log_prob)) %>% 
     select(queryID, class, prob_class)
@@ -71,7 +75,7 @@ w_protaxout_usearch_12S_all <- w_protaxout_usearch_12S_class %>%
 ```
 
 ```{r combine swarm_16S}
-pathtoprotaxout <- "~/src/screenforbio-mbc-ailaoshan/v0.1.2_outputs"
+pathtoprotaxout <- "~/src/screenforbio-mbc-ailaoshan/"
 w_protaxout_swarm_16S_class <- read_tsv(file.path(pathtoprotaxout, "w_protaxout_swarm_16S", paste0("all_16S_20180321_otu_table_swarm_lulu.", "w_class_probs")), col_names = c("queryID", "taxID", "log_prob", "level", "class")) %>% 
     mutate(prob_class = exp(log_prob)) %>% 
     select(queryID, class, prob_class)
@@ -98,9 +102,9 @@ w_protaxout_swarm_16S_all <- w_protaxout_swarm_16S_class %>%
 ```
 
 ```{r export tables}
-pathtoprotaxout <- "~/src/screenforbio-mbc-ailaoshan/v0.1.2_outputs"
-write_tsv(w_protaxout_swarm_12S_all, file.path(pathtoprotaxout, "w_protaxout_swarm_12S_all.tsv"))
-write_tsv(w_protaxout_usearch_12S_all, file.path(pathtoprotaxout, "w_protaxout_usearch_12S_all.tsv"))
-write_tsv(w_protaxout_swarm_16S_all, file.path(pathtoprotaxout, "w_protaxout_swarm_16S_all.tsv"))
+pathtoprotaxout <- "~/src/screenforbio-mbc-ailaoshan/"
+write_tsv(w_protaxout_swarm_12S_all, file.path(pathtoprotaxout, "w_protaxout_swarm_12S","w_protaxout_swarm_12S_all.tsv"))
+write_tsv(w_protaxout_usearch_12S_all, file.path(pathtoprotaxout, "w_protaxout_usearch_12S","w_protaxout_usearch_12S_all.tsv"))
+write_tsv(w_protaxout_swarm_16S_all, file.path(pathtoprotaxout, "w_protaxout_swarm_16S","w_protaxout_swarm_16S_all.tsv"))
 ```
 
