@@ -36,7 +36,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_taxonomy.sh Tetrapoda superclass ~/src
 # Failed
 # Probably can succeed with faster internet
 # output is Tetrapoda_ITIS_taxonomy.txt, a copy of which is in screenforbio-mbc-ailaoshan/archived_files/
-cp archived_files/Tetrapoda_ITIS_taxonomy.txt ./Tetrapoda_ITIS_taxonomy.txt
+cp archived_files/Tetrapoda_ITIS_taxonomy_20190512.txt ./Tetrapoda_ITIS_taxonomy.txt
 
 # 3. Generate non-redundant curated reference sequence database for target amplicon(s) and fix taxonomic classification
 #   - *get_sequences.sh*
@@ -83,6 +83,7 @@ sed -i 's/\.[0-9].*\t/\t/g' MIDORI_UNIQUE_1.2_srRNA_RDP.fasta | head -n 40
 bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no one Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
 # Successful
 # Module 1 took 0.58 hours (16Smam and 12SRiaz primers, Midori 1.1)
+# Module 1 took 0.95 hours (16Smam and 12SRiaz primers, Midori 1.2)
 
 # Actions after Module 1 complete
 # Module 1 complete. Stopping now for manual inspection of alignments *.mafft.fa inside ./intermediate_files.
@@ -91,30 +92,34 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no one Tetrapoda ~/src
 mv ./intermediate_files/MIDORI_lrRNA.amp_blast.noN.mafft.fa ./MIDORI_lrRNA.amp_blast.noN.mafft_edit.fa
 mv ./intermediate_files/MIDORI_srRNA.amp_blast.noN.mafft.fa ./MIDORI_srRNA.amp_blast.noN.mafft_edit.fa
 
-# Module 2 - Compare sequence species labels with ITIS taxonomy. Non-matching labels queried against Catalogue of Life to check for known synonyms. Remaining mismatches kept if genus already exists in taxonomy, otherwise flagged for removal. End of module: optional check of flagged species labels.
-# requires a taxon_ITIS_taxonomy.txt file (e.g. Tetrapoda_ITIS_taxonomy.txt file)
+# Module 2 - Compare sequence species labels in the MIDORI fasta files with the ITIS taxonomy. Non-matching labels are queried against Catalogue of Life to check for known synonyms. Remaining mismatches kept if genus already exists in taxonomy, otherwise flagged for removal. End of module: optional check of flagged species labels.
+# Requires a taxon_ITIS_taxonomy.txt file (e.g. Tetrapoda_ITIS_taxonomy.txt file)
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no two Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
 
-# some species cause the taxize::classification() function to fail, throwing up the following error:
-     # Retrieving data for taxon 'Natrix natrix'
-
+# Some species cause the taxize::classification() function inside get_sequences.sh to fail, throwing up the following error:
+     # Retrieving data for taxon 'Zygogeomys trichopus'
+     #
      # Error in doc_parse_raw(x, encoding = encoding, base_url = base_url, as_html = as_html,  :
      #   CData section not finished
-     # Kindler, C., Böhme, W., Corti, C., Gvozdik, V., J [63]
-# These are 'misbehavers,' and we remove them manually by adding a sed command at line 532, before running get_taxonomy_mismatches.R
+     #  [63]
+     # Calls: classification ... read_xml.character -> read_xml.raw -> doc_parse_raw
+     # Execution halted
+# The developer of taxize has flagged this bug in the Catalogue of Life, to be dealt with in the next release of taxize (for 0.9.8)
+# To ID the species causing this error, open `classification_misbehavers_finder.Rmd`. This script loads "MIDORI_taxon.ITIS_mismatch_sp.txt", uses a tryCatch() loop to run taxize::classification() on each name in this file, and records the species that causes taxize::classification() to throw crashing errors.
+# We call these crashing species 'misbehavers,' and we remove them manually starting at line 532, which is before get_taxonomy_mismatches.R is run
      # remove misbehavers by deleting these species, like this:
      # sed -i '/Hemidactylus adensis/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
-     #
-     # and then add back the removed species at line 564, like this:
+# Then add back the removed species starting at line 565, like this (WITH UNDERSCORE!!):
      # sed -i '$a\Hemidactylus_adensis\' MIDORI_${TAXON}.missing_sp.txt
 
 # Success
-# Module 2 took 0.96 hours
+# Module 2 took 0.96 hours (MIDORI 1.1)
+# Module 2 took 1.09 hours (MIDORI 1.2)
 # There are two output files:
-# Tetrapoda.missing_sp_to_delete.txt
-# Tetrapoda.combined_taxonomy.txt
+     # Tetrapoda.missing_sp_to_delete.txt
+     # Tetrapoda.combined_taxonomy.txt
 
 # Actions after Module 2 complete
 # Module 2 complete. Stopping now for manual inspection of failed species lookups (in Tetrapoda.missing_sp_to_delete.txt).
@@ -123,7 +128,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no two Tetrapoda ~/src
 # If no failed lookups can be resolved, do not create Tetrapoda.missing_sp_taxonomy.txt, leave Tetrapoda.missing_sp_to_delete.txt as it is.
 # Restart script when happy.
 
-# I looked through Tetrapoda.missing_sp_to_delete.txt, and all the species are not ones found in Ailaoshan or Yunnan so rather than look up and add their full taxonomic pathways, i left them in the file and proceeded to module_three.
+# I looked through Tetrapoda.missing_sp_to_delete.txt, and all the species are not ones found in Ailaoshan, so rather than look up and add their full taxonomic pathways, i left them in the file and proceeded to module_three.
 
 
 # Module 3 - Discard flagged sequences. Update taxonomy key file for sequences found to be incorrectly labelled in Module 2. Run SATIVA. End of module: optional check of putatively mislabelled sequences
@@ -132,7 +137,8 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no three Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
 # Success
-# Module 3 took ~ 5.7 hours for srRNA and lrRNA, using 4 threads
+# Module 3 took ~ 5.7 hours for srRNA and lrRNA, using 4 threads (MIDORI 1.1)
+# Module 3 took ~ 11.9 hours for srRNA and lrRNA, using 5 threads (MIDORI 1.2)
 
 # Actions after Module 3 complete
 # Module 3 complete. Stopping now for manual inspection of mislabelled sequences in ./MIDORI_locus_sativa/MIDORI_locus.mis
@@ -141,16 +147,14 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no three Tetrapoda ~/s
 # For sequences where species-level or genus-level mislabelling can be resolved, make corrections directly in Tetrapoda.final_taxonomy_sativa.txt (i.e. replace the taxonomic classification for that sequence with the correct one), this will be used to rename sequences.
 # Make higher level changes to the taxonomy at your own risk - untested.
 # Restart script when happy.
+
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 # archive an original version before changing it with the sativa suggestions
 cp Tetrapoda.final_taxonomy_sativa.txt Tetrapoda.final_taxonomy_sativa_orig.txt
 # then use this R code (delete_seqs_suggested_by_sativa.Rmd) to remove sequences that sativa identifies as incorrect
      # I remove all sequences that sativa identifies as having an incorrect taxonomy above genus level, as such large errors are most likely to be database errors.
-     # I accept sativa's proposed substitute taxonomies where sativa confidence >- 0.998 (i.e. i accept only the most confident substitutions)
-     # Programming notes
-          # readr can import only if the first set of lines is skipped and the column names are provided
-          # MIDORI_lrRNA <- read_delim("~/src/screenforbio-mbc-ailaoshan/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
+     # I ignore sativa's proposed substitute taxonomies at genus and species ranks, because some unknown, possibly large, proportion of these are due to the *tree* being incorrect, since these are short seqs
 
 
 # Module 4 - Discard flagged sequences. Finalize consensus taxonomy and relabel sequences with correct species label and accession number. Select 1 representative sequence per haplotype per species.
@@ -159,7 +163,11 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no four Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
 
 # Success
-# Module 4 took 5.67 hours
+# Module 4 took 5.67 hours (MIDORI 1.1)
+# Module 4 took 3.73 hours (MIDORI 1.2)
+
+# there
+
 # Module 4 complete. You have reached the end of get_sequences.sh
 #
 # Final database sequences are in Tetrapoda.final_database.locus.fa
@@ -169,49 +177,52 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no four Tetrapoda ~/sr
 #   - train_protax.sh for unweighted models
 #   - train_weighted_protax.sh for models weighted using a list of expected species
 
-# Actions after Module 4 complete:  Tetrapoda.final_database.16S.fa and Tetrapoda.final_database.12S.fa have a few sequences without species names (e.g. >_DQ158435) or starting with _TAXCLUSTER (e.g. >__TAXCLUSTER161__Spea_bombifrons_AY523786)
+#
+# Actions after Module 4 complete:  If sativa is used to change genus and/or species names, some of the reference sequences in Tetrapoda.final_database.16S.fa and Tetrapoda.final_database.12S.fa will have a few sequences without species names (e.g. >_DQ158435) or starting with _TAXCLUSTER (e.g. >__TAXCLUSTER161__Spea_bombifrons_AY523786)
 # These should be removed because they interfere with PROTAX train (PROTAX needs sequences in the reference dataset to have the format >Ablepharus_kitaibelii_AY308325)
-cd ~/src/screenforbio-mbc-ailaoshan/
-. ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-seqkit grep Tetrapoda.final_database.12S.fa -r -p ^_ -v -o Tetrapoda.final_database.12S_new.fa
-seqkit grep Tetrapoda.final_database.16S.fa -r -p ^_ -v -o Tetrapoda.final_database.16S_new.fa
+# cd ~/src/screenforbio-mbc-ailaoshan/
+# . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+# seqkit grep Tetrapoda.final_database.12S.fa -r -p ^_ -v -o Tetrapoda.final_database.12S_new.fa
+# seqkit grep Tetrapoda.final_database.16S.fa -r -p ^_ -v -o Tetrapoda.final_database.16S_new.fa
 # check the new fasta files
-mv Tetrapoda.final_database.12S_new.fa Tetrapoda.final_database.12S.fa # overwrites the pre-existing file
-mv Tetrapoda.final_database.16S_new.fa Tetrapoda.final_database.16S.fa # overwrites the pre-existing file
+# mv Tetrapoda.final_database.12S_new.fa Tetrapoda.final_database.12S.fa # overwrites the pre-existing file
+# mv Tetrapoda.final_database.16S_new.fa Tetrapoda.final_database.16S.fa # overwrites the pre-existing file
 
 # 4. Train PROTAX models for target amplicon(s)
 #   - *train_protax.sh* (unweighted) or *train_weighted_protax.sh* (weighted)
 #   - *check_protax_training.sh* (makes bias-accuracy plots)
 
 # unweighted
-cd ~/src/screenforbio-mbc-ailaoshan/
-. ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-bash ~/src/screenforbio-mbc-ailaoshan/train_protax.sh Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-ailaoshan/
-# usage: bash train_protax.sh taxonomy screenforbio
-# where:
-# taxonomy is the final protax-formatted taxonomy file from get_sequences.sh (e.g. Tetrapoda.final_protax_taxonomy.txt)
-# uses fasta files output from module_four of get_sequences.sh:  taxon.final_database.locus.fa (e.g. Tetrapoda.final_database.12S.fa)
-# screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
+# cd ~/src/screenforbio-mbc-ailaoshan/
+# . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+# bash ~/src/screenforbio-mbc-ailaoshan/train_protax.sh Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-ailaoshan/
+     # usage: bash train_protax.sh taxonomy screenforbio
+     # where:
+     # taxonomy is the final protax-formatted taxonomy file from get_sequences.sh (e.g. Tetrapoda.final_protax_taxonomy.txt)
+     # uses fasta files output from module_four of get_sequences.sh:  taxon.final_database.locus.fa (e.g. Tetrapoda.final_database.12S.fa)
+     # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
 
 
 # weighted by Ailaoshan species list:  splist (birds, herps, mammals)
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+
 cp ~/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/species_lists/splist_20190516.csv ./splist.csv
+
 bash ~/src/screenforbio-mbc-ailaoshan/train_weighted_protax.sh splist.csv Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-ailaoshan/
-# usage: bash train_weighted_protax.sh splist taxonomy screenforbio
-# where:
-# splist is a list of expected species to use in weighting in the format Genus,species (e.g. Homo,sapiens)
-# taxonomy is the final protax-formatted taxonomy file from get_sequences.sh (e.g. Tetrapoda.final_protax_taxonomy.txt)
-# screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
-# weighted_protax_training.R is used and is hardcoded to run through all four loci (12S, 16S, Cytb, COI), so if one or more loci is missing (i.e. no Tetrapoda.final_database.Cytb.fa), the script is halted, but the previous loci do complete successfully.
-# note: will take the taxon from the protax taxonomy file name
-# note: assumes curated database FASTA files are in current directory and labelled with format taxon.final_database.locus.fa (e.g. Tetrapoda.final_database.12S.fa)
+     # usage: bash train_weighted_protax.sh splist taxonomy screenforbio
+     # where:
+     # splist is a list of expected species to use in weighting in the format Genus,species (e.g. Homo,sapiens)
+     # taxonomy is the final protax-formatted taxonomy file from get_sequences.sh (e.g. Tetrapoda.final_protax_taxonomy.txt)
+     # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
+     # note: will take the taxon from the protax taxonomy file name
+     # note: assumes curated database FASTA files are in current directory and labelled with format taxon.final_database.locus.fa (e.g. Tetrapoda.final_database.12S.fa)
 
 # End of train_protax.sh
-#
-# This took a total of 305.27 minutes (5.09 hours).
-#
+# Success
+# This took a total of 4 hours (MIDORI 1.2)
+     # weighted_protax_training.R is hardcoded to run through all four loci (12S, 16S, Cytb, COI), so if one or more loci is missing (i.e. no Tetrapoda.final_database.Cytb.fa), the script is halted, but the previous loci do complete successfully.
+
 # Please select an mcmc iteration for each of the four levels for each marker (labelled ./model_16S/mcmc1a-d, ./model_16S/mcmc2a-d etc) based on the training plots (labelled ./model_16S/training_plot_16S_level1a_MCMC.pdf etc). Chains should be well-mixed and acceptance ratio as close to 0.44 as possible. Relabel the selected model as ./model_16S/mcmc1 ./model_16S/mcmc2 etc.
 
 # Acceptance ratio is on the second page of the PDFs
@@ -222,37 +233,37 @@ bash ~/src/screenforbio-mbc-ailaoshan/train_weighted_protax.sh splist.csv Tetrap
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 
-# unweighted
-# 12S
-MOD1CHOSEN12S="mcmc1c"
-MOD2CHOSEN12S="mcmc2a"
-MOD3CHOSEN12S="mcmc3d"
-MOD4CHOSEN12S="mcmc4b"
-# 16S
-MOD1CHOSEN16S="mcmc1d"
-MOD2CHOSEN16S="mcmc2b"
-MOD3CHOSEN16S="mcmc3c"
-MOD4CHOSEN16S="mcmc4d"
-mv ./model_12S/${MOD1CHOSEN12S} ./model_12S/mcmc1
-mv ./model_12S/${MOD2CHOSEN12S} ./model_12S/mcmc2
-mv ./model_12S/${MOD3CHOSEN12S} ./model_12S/mcmc3
-mv ./model_12S/${MOD4CHOSEN12S} ./model_12S/mcmc4
-mv ./model_16S/${MOD1CHOSEN16S} ./model_16S/mcmc1
-mv ./model_16S/${MOD2CHOSEN16S} ./model_16S/mcmc2
-mv ./model_16S/${MOD3CHOSEN16S} ./model_16S/mcmc3
-mv ./model_16S/${MOD4CHOSEN16S} ./model_16S/mcmc4
+     # unweighted
+     # 12S
+# MOD1CHOSEN12S="mcmc1c"
+# MOD2CHOSEN12S="mcmc2a"
+# MOD3CHOSEN12S="mcmc3d"
+# MOD4CHOSEN12S="mcmc4b"
+     # 16S
+# MOD1CHOSEN16S="mcmc1d"
+# MOD2CHOSEN16S="mcmc2b"
+# MOD3CHOSEN16S="mcmc3c"
+# MOD4CHOSEN16S="mcmc4d"
+# mv ./model_12S/${MOD1CHOSEN12S} ./model_12S/mcmc1
+# mv ./model_12S/${MOD2CHOSEN12S} ./model_12S/mcmc2
+# mv ./model_12S/${MOD3CHOSEN12S} ./model_12S/mcmc3
+# mv ./model_12S/${MOD4CHOSEN12S} ./model_12S/mcmc4
+# mv ./model_16S/${MOD1CHOSEN16S} ./model_16S/mcmc1
+# mv ./model_16S/${MOD2CHOSEN16S} ./model_16S/mcmc2
+# mv ./model_16S/${MOD3CHOSEN16S} ./model_16S/mcmc3
+# mv ./model_16S/${MOD4CHOSEN16S} ./model_16S/mcmc4
 
-# weighted
-# 12S
+     # weighted
+     # 12S
 MOD1CHOSEN12S="w_mcmc1c"
-MOD2CHOSEN12S="w_mcmc2a"
-MOD3CHOSEN12S="w_mcmc3d"
+MOD2CHOSEN12S="w_mcmc2b"
+MOD3CHOSEN12S="w_mcmc3c"
 MOD4CHOSEN12S="w_mcmc4b"
-# 16S
-MOD1CHOSEN16S="w_mcmc1d"
-MOD2CHOSEN16S="w_mcmc2b"
-MOD3CHOSEN16S="w_mcmc3c"
-MOD4CHOSEN16S="w_mcmc4d"
+     # 16S
+MOD1CHOSEN16S="w_mcmc1b"
+MOD2CHOSEN16S="w_mcmc2a"
+MOD3CHOSEN16S="w_mcmc3d"
+MOD4CHOSEN16S="w_mcmc4c"
 mv ./w_model_12S/${MOD1CHOSEN12S} ./w_model_12S/w_mcmc1
 mv ./w_model_12S/${MOD2CHOSEN12S} ./w_model_12S/w_mcmc2
 mv ./w_model_12S/${MOD3CHOSEN12S} ./w_model_12S/w_mcmc3
@@ -271,8 +282,8 @@ mv ./w_model_16S/${MOD4CHOSEN16S} ./w_model_16S/w_mcmc4
 # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
 
 # unweighted
-bash check_protax_training.sh model_12S Tetrapoda 12S ~/src/screenforbio-mbc-ailaoshan/
-bash check_protax_training.sh model_16S Tetrapoda 16S ~/src/screenforbio-mbc-ailaoshan/
+# bash check_protax_training.sh model_12S Tetrapoda 12S ~/src/screenforbio-mbc-ailaoshan/
+# bash check_protax_training.sh model_16S Tetrapoda 16S ~/src/screenforbio-mbc-ailaoshan/
 
 # weighted
 bash check_protax_training.sh w_model_12S Tetrapoda 12S ~/src/screenforbio-mbc-ailaoshan/
@@ -294,22 +305,22 @@ echo ${OTUS12S_SWARM}
 echo ${OTUS12S_USEARCH}
 echo ${OTUS16S_SWARM}
 
-# unweighted
-# move protax output files to a single folder
-mkdir protaxmodels/
-mv model_12S protaxmodels/
-mv model_16S protaxmodels/
+     # unweighted
+     # move protax output files to a single folder
+# mkdir protaxmodels/
+# mv model_12S protaxmodels/
+# mv model_16S protaxmodels/
 
-bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm
-bash protax_classify_otus.sh ${OTUS12S_USEARCH} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_usearch
-bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm
-# usage: bash protax_classify_otus.sh otus locus protaxdir screenforbio outdir
-# where:
-# otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
-# locus is the target locus, must be one of: 12S, 16S, CYTB, COI. if you have more than one locus to analyse, run script once for each.
-# protaxdir is the path to a directory containing protax models and clean databases for all 4 loci
-# screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
-# outdir is the name to give an output directory (inside current) (no slash at end)
+# bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm
+# bash protax_classify_otus.sh ${OTUS12S_USEARCH} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_usearch
+# bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm
+     # usage: bash protax_classify_otus.sh otus locus protaxdir screenforbio outdir
+     # where:
+     # otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
+     # locus is the target locus, must be one of: 12S, 16S, CYTB, COI. if you have more than one locus to analyse, run script once for each.
+     # protaxdir is the path to a directory containing protax models and clean databases for all 4 loci
+     # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
+     # outdir is the name to give an output directory (inside current) (no slash at end)
 
 # weighted
 # move weighted protax output files to a single folder
@@ -345,3 +356,6 @@ bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels ~/src/
 # e.g. all_12S_20180317_otu_table_swarm_lulu.species_probs_sim
 # queryID taxID   log(probability) level   taxon                                        bestHit_similarity      bestHit
 # OTU1    816     -1.25544         4       Anura,Dicroglossidae,Nanorana,taihangnica    0.979 Nanorana_taihangnica_KJ569109
+
+
+# Use combine_protax_output_tables.Rmd to combine protax output files. Written to process w_protaxout_swarm_12S, w_protaxout_swarm_16S, w_protaxout_usearch_12S
