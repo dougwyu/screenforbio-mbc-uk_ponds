@@ -5,7 +5,7 @@ A fork of the ScreenForBio metabarcoding pipeline originally published in:
 Axtner, J., Crampton-Platt, A., Hoerig, L.A., Xu, C.C.Y., Yu, D.W., Wilting, A. (2019), An efficient and robust laboratory workflow and tetrapod database for larger scale environmental DNA studies. Giga Sci. 8, 646–17. doi:10.1093/gigascience/giz029
 
 Preprint available from [bioRxiv](https://www.biorxiv.org/content/early/2018/06/12/345082).  
-Paper available from [GigaScience] (https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giz029/5450733).  
+Paper available from [GigaScience](https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giz029/5450733).  
 
 This fork is customised to the Ailaoshan leech iDNA dataset, and updated to take advantage of the MIDORI_UNIQUE_20180221 datasets that are now available. There are some bug fixes and additional R utilities. However, if you have some knowledge of bash and R scripting, then you can easily adapt this pipeline for your paired-end Illumina metabarcoding, from processing of twin-tagged raw reads through to taxonomic classification with *PROTAX*.
 
