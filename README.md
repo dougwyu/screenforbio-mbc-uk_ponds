@@ -126,9 +126,11 @@ The filenames will be changed to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta
 *PROTAX* scripts are reposted here with the kind permission of Panu Somervuo. These are in the *protaxscripts* subdirectory of ***screenforbio-mbc***. This version of *PROTAX* is from [Rodgers *et al.* 2017](https://doi.org/10.1111/1755-0998.12701), scripts were originally posted on [Dryad](https://datadryad.org/resource/doi:10.5061/dryad.bj5k0).  
 
 ### Usage
-All steps in the pipeline are implemented via bash scripts with similar parameter requirements. Each script includes commented usage instructions at the start and displays the same instructions if run without any or an incorrect number of parameters.  
+All steps in the pipeline are implemented via bash scripts with similar parameter requirements. Each script includes commented usage instructions at the start and displays the same instructions if run without any or an incorrect number of parameters.
 
-Some of the bash scripts are primarily wrappers for R scripts, all of which are assumed to be in the ***screenforbio-mbc*** directory.  
+For the Ailaoshan fork, the full command history is in `screenforbio_ailaoshan.sh`. Although formatted as a shell script, it should be run command by command, instead of as a single bash script file, because there are multiple choices to be made during the pipeline. 
+
+Some of the bash scripts used within are primarily wrappers for R scripts, all of which are assumed to be in the ***screenforbio-mbc*** directory.  
 
 *get_taxonomy.sh* example:
 
