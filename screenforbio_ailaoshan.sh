@@ -53,8 +53,6 @@ cp archived_files/Tetrapoda_ITIS_taxonomy_20190512.txt ./Tetrapoda_ITIS_taxonomy
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 # copy MIDORI files that i want to process to the working directory: screenforbio-mbc-ailaoshan/
-# cp archived_files/MIDORI_UNIQUE_1.1_lrRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.1_lrRNA_RDP.fasta.gz
-# cp archived_files/MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz ./; gunzip MIDORI_UNIQUE_1.1_srRNA_RDP.fasta.gz
 cp archived_files/MIDORI_UNIQUE_20180221_lrRNA_RDP.fasta.gz ./MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz; gunzip MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz
 cp archived_files/MIDORI_UNIQUE_20180221_srRNA_RDP.fasta.gz ./MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz; gunzip MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz
 
@@ -106,7 +104,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no two Tetrapoda ~/src
      #  [63]
      # Calls: classification ... read_xml.character -> read_xml.raw -> doc_parse_raw
      # Execution halted
-# The developer of taxize has flagged this bug in the Catalogue of Life, to be dealt with in the next release of taxize (for 0.9.8)
+# The developer of taxize has flagged this bug in the Catalogue of Life, to be dealt with in the next release of taxize (for 0.9.8). Update:  the problem appears to be in read_xml2, which is a separate module, which cannot read some non-standard ASCII characters in the names of some taxonomists.
 # To ID the species causing this error, open `classification_misbehavers_finder.Rmd`. This script loads "MIDORI_taxon.ITIS_mismatch_sp.txt", uses a tryCatch() loop to run taxize::classification() on each name in this file, and records the species that causes taxize::classification() to throw crashing errors.
 # We call these crashing species 'misbehavers,' and we remove them manually starting at line 532, which is before get_taxonomy_mismatches.R is run
      # remove misbehavers by deleting these species, like this:
@@ -226,14 +224,14 @@ bash ~/src/screenforbio-mbc-ailaoshan/train_weighted_protax.sh splist.csv Tetrap
 # Please select an mcmc iteration for each of the four levels for each marker (labelled ./model_16S/mcmc1a-d, ./model_16S/mcmc2a-d etc) based on the training plots (labelled ./model_16S/training_plot_16S_level1a_MCMC.pdf etc). Chains should be well-mixed and acceptance ratio as close to 0.44 as possible. Relabel the selected model as ./model_16S/mcmc1 ./model_16S/mcmc2 etc.
 
 # Acceptance ratio is on the second page of the PDFs
-# For an example of how to choose, go to archived_files/protax_training_mcmc_output_16S/. There are 4 PDF files (training_plot_16S_level4{a,b,c,d}_MCMC.pdf). To choose amongst these, Panu wrote:
-# "In all four cases a-d, the highest logposterior is very similar (around -7912) and also the coefficients corresponding to it (red dot) among a-d are very close to each other (i.e. mislabeling probability around 0.25 , beta1 around 0, beta2 around -40, beta3 around 4 and beta4 around -80, so I would say that all of them would give very similar classification results. Of course, when looking the traceplot of a, it seems that the MCMC has not converged properly, since in the beginning of the plot it is in a different regime, however, the parameter values corresponding to the largest posterior are similar as in b,c,d. I think if taking any one from b,c,or d, they would give very similar (or even identical) classification results."
-# The traceplots of 'mcmc a' are seen to wander by looking at the traceplots themselves and also at the histograms, which are skewed.
+# For an example of how to choose, go to archived_files/protax_training_mcmc_output_16S_example/. There are 4 PDF files (training_plot_16S_level4{a,b,c,d}_MCMC.pdf). To choose amongst these, Panu Somervuo wrote:
+     # "In all four cases a-d, the highest logposterior is very similar (around -7912) and also the coefficients corresponding to it (red dot) among a-d are very close to each other (i.e. mislabeling probability around 0.25 , beta1 around 0, beta2 around -40, beta3 around 4 and beta4 around -80, so I would say that all of them would give very similar classification results. Of course, when looking the traceplot of a, it seems that the MCMC has not converged properly, since in the beginning of the plot it is in a different regime, however, the parameter values corresponding to the largest posterior are similar as in b,c,d. I think if taking any one from b,c,or d, they would give very similar (or even identical) classification results."
+     # The traceplots of 'mcmc a' are seen to wander by looking at the traceplots themselves and also at the histograms, which are skewed.
 
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 
-     # unweighted
+# unweighted
      # 12S
 # MOD1CHOSEN12S="mcmc1c"
 # MOD2CHOSEN12S="mcmc2a"
@@ -253,7 +251,7 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 # mv ./model_16S/${MOD3CHOSEN16S} ./model_16S/mcmc3
 # mv ./model_16S/${MOD4CHOSEN16S} ./model_16S/mcmc4
 
-     # weighted
+# weighted
      # 12S
 MOD1CHOSEN12S="w_mcmc1c"
 MOD2CHOSEN12S="w_mcmc2b"
@@ -298,6 +296,7 @@ bash check_protax_training.sh w_model_16S Tetrapoda 16S ~/src/screenforbio-mbc-a
 #   - Process raw data with read_preprocessing.sh (experimental design must follow that described in the manuscript) and classify the output with protax_classify.sh or weighted_protax_classify.sh as appropriate
 #   - Classify OTUs with protax_classify_otus.sh or weighted_protax_classify_otus.sh as appropriate
 
+# these are the pathnames to the Ailaoshan OTU representative sequences
 OTUS12S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_swarm_lulu.fa"
 OTUS12S_USEARCH="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_usearchderep_lulu.fa"
 OTUS16S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_16S_20180321_otu_table_swarm_lulu.fa"
@@ -305,12 +304,11 @@ echo ${OTUS12S_SWARM}
 echo ${OTUS12S_USEARCH}
 echo ${OTUS16S_SWARM}
 
-     # unweighted
+# unweighted
      # move protax output files to a single folder
 # mkdir protaxmodels/
 # mv model_12S protaxmodels/
 # mv model_16S protaxmodels/
-
 # bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm
 # bash protax_classify_otus.sh ${OTUS12S_USEARCH} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_usearch
 # bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm
@@ -323,39 +321,34 @@ echo ${OTUS16S_SWARM}
      # outdir is the name to give an output directory (inside current) (no slash at end)
 
 # weighted
-# move weighted protax output files to a single folder
+     # move weighted protax output files to a single folder
 mkdir w_protaxmodels/
 mv w_model_12S w_protaxmodels/
 mv w_model_16S w_protaxmodels/
-
-
 bash weighted_protax_classify_otus.sh ${OTUS12S_SWARM} 12S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm
 bash weighted_protax_classify_otus.sh ${OTUS12S_USEARCH} 12S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_usearch
 bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm
-# usage: bash weighted_protax_classify_otus.sh otus locus protaxdir screenforbio outdir
-# where:
-# otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
-# locus is the target locus, must be one of: 12S, 16S, CYTB, COI. if you have more than one locus to analyse, run script once for each.
-# protaxdir is the path to a directory containing weighted protax models and clean databases for all 4 loci
-# screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
-# outdir is the name to give the output directory (inside current)
+     # usage: bash weighted_protax_classify_otus.sh otus locus protaxdir screenforbio outdir
+     # where:
+     # otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
+     # locus is the target locus, must be one of: 12S, 16S, CYTB, COI. if you have more than one locus to analyse, run script once for each.
+     # protaxdir is the path to a directory containing weighted protax models and clean databases for all 4 loci
+     # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
+     # outdir is the name to give the output directory (inside current)
 
 # Success
-# Example output from 16S
+# Example output from 16S:
 # This took a total of 0.25 minutes.
 #
-# Results are in ./protaxout_swarm_16S
-# Classification for each OTU at each taxonomic level (species, genus, family, order) in files all_16S_20180321_otu_table_swarm_lulu.level_probs
-# Headers are: queryID taxID   log(probability)        level   taxon
-# e.g. all_12S_20180317_otu_table_swarm_lulu.species_probs
+# Results are in ./w_protaxout_swarm_16S/
+# Classification for each OTU at each taxonomic level (species, genus, family, order) in files all_16S_20180321_otu_table_swarm_lulu.<level>_probs
+# e.g. all_16S_20180321_otu_table_swarm_lulu.w_species_probs
 # queryID taxID   log(probability)  level   taxon
 # OTU1    816     -1.25544          4       Anura,Dicroglossidae,Nanorana,taihangnica
+# log(prob) is ln(prob), so to get probability, convert by exp(log(probability))
 
 # Additionally, the best matching hit (for assigned species/genus where available) found with LAST is appended to all_16S_20180321_otu_table_swarm_lulu.species_probs in all_16S_20180321_otu_table_swarm_lulu.species_probs_sim
-# Headers are: queryID taxID   log(probability)        level   taxon   bestHit_similarity      bestHit
-# e.g. all_12S_20180317_otu_table_swarm_lulu.species_probs_sim
 # queryID taxID   log(probability) level   taxon                                        bestHit_similarity      bestHit
 # OTU1    816     -1.25544         4       Anura,Dicroglossidae,Nanorana,taihangnica    0.979 Nanorana_taihangnica_KJ569109
 
-
-# Use combine_protax_output_tables.Rmd to combine protax output files. Written to process w_protaxout_swarm_12S, w_protaxout_swarm_16S, w_protaxout_usearch_12S
+# Use combine_protax_output_tables.Rmd to combine the protax output files. The script is written to process w_protaxout_swarm_12S, w_protaxout_swarm_16S, w_protaxout_usearch_12S
