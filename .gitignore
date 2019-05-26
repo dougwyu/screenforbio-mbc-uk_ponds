@@ -36,3 +36,8 @@ Tetrapoda.final_taxonomy_sativa_orig.txt
 MIDORI_lrRNA.final_for_sativa.fa
 MIDORI_srRNA.final_for_sativa.fa
 intermediate_files.zip
+MIDORI.seqs_to_retain.txt
+MIDORI.taxonomy_status.txt
+Tetrapoda.combined_taxonomy.txt
+Tetrapoda.consensus_taxonomy.txt
+Tetrapoda.missing_sp_to_delete.txt
