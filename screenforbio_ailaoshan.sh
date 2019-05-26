@@ -33,10 +33,13 @@ exec 2> >(tee -a get_taxonomy.`date +%Y-%m-%d`.log >&2)
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 bash ~/src/screenforbio-mbc-ailaoshan/get_taxonomy.sh Tetrapoda superclass ~/src/screenforbio-mbc-ailaoshan/
-# Failed
-# Probably can succeed with faster internet
+# Success.
+# Fetching taxonomy of Tetrapoda took 8.14 hours on 20190526, using fast internet
 # output is Tetrapoda_ITIS_taxonomy.txt, a copy of which is in screenforbio-mbc-ailaoshan/archived_files/
 cp archived_files/Tetrapoda_ITIS_taxonomy_20190512.txt ./Tetrapoda_ITIS_taxonomy.txt
+
+# format of the new file is different from the 20190512 version, so this needs to be tested
+cp archived_files/Tetrapoda_ITIS_taxonomy_20190526.txt ./Tetrapoda_ITIS_taxonomy.txt
 
 # 3. Generate non-redundant curated reference sequence database for target amplicon(s) and fix taxonomic classification
 #   - *get_sequences.sh*
