@@ -184,7 +184,7 @@ function module_one {
         usearch -fastx_truncate ${label}.amp.fa -stripleft 0 -stripright 0 -fastaout ${label}.amp_only.fa # for Riaz 12S primers
         # blast
         makeblastdb -in ${label}.amp_only.fa -dbtype nucl
-        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 4
+        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 5
         # cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=360){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Kocher primers
         cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=84){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Riaz primers
         # remove blastdb
@@ -272,7 +272,7 @@ function module_one {
         usearch -fastx_truncate ${label}.amp.fa -stripleft 19 -stripright 21 -fastaout ${label}.amp_only.fa
         # blast
         makeblastdb -in ${label}.amp_only.fa -dbtype nucl
-        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 2
+        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 5
         cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=90){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords
         # remove blastdb
         rm ${label}.amp_only.fa.n*
@@ -359,7 +359,7 @@ function module_one {
         usearch -fastx_truncate ${label}.amp.fa -stripleft 30 -stripright 31 -fastaout ${label}.amp_only.fa
         # blast
         makeblastdb -in ${label}.amp_only.fa -dbtype nucl
-        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 2
+        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 5
         cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=300){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords
         # remove blastdb
         rm ${label}.amp_only.fa.n*
@@ -446,7 +446,7 @@ function module_one {
         usearch -fastx_truncate ${label}.amp.fa -stripleft 26 -stripright 19 -fastaout ${label}.amp_only.fa
         # blast
         makeblastdb -in ${label}.amp_only.fa -dbtype nucl
-        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 2
+        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 5
         cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=195){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords
         # remove blastdb
         rm ${label}.amp_only.fa.n*
@@ -528,6 +528,7 @@ function module_one {
     awk '{print $2}' MIDORI.raw_id2sp.txt | sort -u > MIDORI.raw_sp.txt
     # non-matching
     tabtk isct -1 7 -2 1 -c ${TAXON}_ITIS_taxonomy.txt  MIDORI.raw_sp.txt | sed 's/_/ /g' > MIDORI_${TAXON}.ITIS_mismatch_sp.txt
+    # -1 field(s) of the loaded file = ${TAXON}_ITIS_taxonomy.txt, -2 files of the streamed file = MIDORI.raw_sp.txt, -c print lines not present in loaded.txt, <loaded.txt> <streamed.txt>
     # remove misbehavers by deleting the lines with these species
     sed -i '/Hemidactylus adensis/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
     sed -i '/Hemidactylus awashensis/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
@@ -735,7 +736,7 @@ function module_one {
       #DY sativa -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 4 -n ${label} -o ./${label}_sativa
       #DY to make it run with python2, have to invoke python2 and give full pathname
       #DY sativa only runs with python2
-      python2 ~/src/sativa/sativa.py -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 5 -n ${label} -o ./${label}_sativa
+      python2 ~/src/sativa/sativa.py -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 6 -n ${label} -o ./${label}_sativa
       #cleanup
       mv ${label}.final.fa ./intermediate_files
       rm ${label}.final_for_sativa.tax
@@ -785,6 +786,7 @@ function module_one {
                #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${label}.final_clean_relabel.unalign.fa
                #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
                sed -i '/FTP Error: got more than 8192 bytes/d' ${label}.final_clean_relabel.unalign.fa
+               sed -i '/FTP Error: [Errno 8] nodename nor servname provided, or not known/d'  ${label}.final_clean_relabel.unalign.fa
         # make final taxonomy
         cut -f2 ${TAXON}.final_taxonomy_sativa.txt | cut -f1,2,3,4,5,7 -d";" | sed 's/;/ /g' | sort -u > ${TAXON}.final_protax_taxonomy.txt
         # get list of sp
@@ -804,6 +806,7 @@ function module_one {
                  #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${sp}.uniq.fa
                  #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
                  sed -i '/FTP Error: got more than 8192 bytes/d' ${sp}.uniq.fa
+                 sed -i '/FTP Error: [Errno 8] nodename nor servname provided, or not known/d'  ${sp}.uniq.fa
             cat ${label}.uniq.fa ${sp}.uniq.fa > tmp
           else
             cat ${label}.uniq.fa ${sp}.fa > tmp
@@ -828,6 +831,8 @@ function module_one {
              #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${label}.final_clean_relabel.unalign.fa
              #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
              sed -i '/FTP Error: got more than 8192 bytes/d' ${label}.final_clean_relabel.unalign.fa
+             sed -i '/FTP Error: [Errno 8] nodename nor servname provided, or not known/d'  ${label}.final_clean_relabel.unalign.fa
+
         # make final taxonomy
         cut -f2 ${TAXON}.final_taxonomy_sativa.txt | cut -f1,2,3,4,5,7 -d";" | sed 's/;/ /g' | sort -u > ${TAXON}.final_protax_taxonomy.txt
         # get list of sp
@@ -847,6 +852,7 @@ function module_one {
                  #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${sp}.uniq.fa
                  #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
                  sed -i '/FTP Error: got more than 8192 bytes/d' ${sp}.uniq.fa
+                 sed -i '/FTP Error: [Errno 8] nodename nor servname provided, or not known/d'  ${sp}.uniq.fa
             cat ${label}.uniq.fa ${sp}.uniq.fa > tmp
           else
             cat ${label}.uniq.fa ${sp}.fa > tmp
