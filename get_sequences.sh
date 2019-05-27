@@ -786,7 +786,7 @@ function module_one {
                #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${label}.final_clean_relabel.unalign.fa
                #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
                sed -i '/FTP Error: got more than 8192 bytes/d' ${label}.final_clean_relabel.unalign.fa
-               sed -i '/FTP Error: [Errno 8] nodename nor servname provided, or not known/d'  ${label}.final_clean_relabel.unalign.fa
+               sed -i '/FTP Error: \[Errno 8] nodename nor servname provided, or not known/d'  MIDORI_lrRNA.final_clean_relabel.unalign.fa
         # make final taxonomy
         cut -f2 ${TAXON}.final_taxonomy_sativa.txt | cut -f1,2,3,4,5,7 -d";" | sed 's/;/ /g' | sort -u > ${TAXON}.final_protax_taxonomy.txt
         # get list of sp
@@ -806,7 +806,8 @@ function module_one {
                  #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${sp}.uniq.fa
                  #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
                  sed -i '/FTP Error: got more than 8192 bytes/d' ${sp}.uniq.fa
-                 sed -i '/FTP Error: [Errno 8] nodename nor servname provided, or not known/d'  ${sp}.uniq.fa
+                 sed -i '/FTP Error: \[Errno 8] nodename nor servname provided, or not known/d'  ${sp}.uniq.fa
+                 sed -i '/FTP Error: \[Errno 8] nodename nor servname provided, or not known/d'  MIDORI_lrRNA.uniq.fa
             cat ${label}.uniq.fa ${sp}.uniq.fa > tmp
           else
             cat ${label}.uniq.fa ${sp}.fa > tmp
@@ -831,7 +832,7 @@ function module_one {
              #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${label}.final_clean_relabel.unalign.fa
              #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
              sed -i '/FTP Error: got more than 8192 bytes/d' ${label}.final_clean_relabel.unalign.fa
-             sed -i '/FTP Error: [Errno 8] nodename nor servname provided, or not known/d'  ${label}.final_clean_relabel.unalign.fa
+             sed -i '/FTP Error: \[Errno 8] nodename nor servname provided, or not known/d'  ${label}.final_clean_relabel.unalign.fa
 
         # make final taxonomy
         cut -f2 ${TAXON}.final_taxonomy_sativa.txt | cut -f1,2,3,4,5,7 -d";" | sed 's/;/ /g' | sort -u > ${TAXON}.final_protax_taxonomy.txt
@@ -852,7 +853,7 @@ function module_one {
                  #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${sp}.uniq.fa
                  #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
                  sed -i '/FTP Error: got more than 8192 bytes/d' ${sp}.uniq.fa
-                 sed -i '/FTP Error: [Errno 8] nodename nor servname provided, or not known/d'  ${sp}.uniq.fa
+                 sed -i '/FTP Error: \[Errno 8] nodename nor servname provided, or not known/d'  ${sp}.uniq.fa
             cat ${label}.uniq.fa ${sp}.uniq.fa > tmp
           else
             cat ${label}.uniq.fa ${sp}.fa > tmp
