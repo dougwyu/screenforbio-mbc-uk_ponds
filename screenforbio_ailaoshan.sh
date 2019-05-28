@@ -39,7 +39,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_taxonomy.sh Tetrapoda superclass ~/src
 cp archived_files/Tetrapoda_ITIS_taxonomy_20190512.txt ./Tetrapoda_ITIS_taxonomy.txt
 
 # format of the new file is different from the 20190512 version, so this needs to be tested
-cp archived_files/Tetrapoda_ITIS_taxonomy_20190526.txt ./Tetrapoda_ITIS_taxonomy.txt
+# cp archived_files/Tetrapoda_ITIS_taxonomy_20190526.txt ./Tetrapoda_ITIS_taxonomy.txt
 
 # 3. Generate non-redundant curated reference sequence database for target amplicon(s) and fix taxonomic classification
 #   - *get_sequences.sh*
@@ -139,7 +139,7 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no three Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
 # Success
 # Module 3 took ~ 5.7 hours for srRNA and lrRNA, using 4 threads (MIDORI 1.1)
-# Module 3 took ~ 11.9 hours for srRNA and lrRNA, using 5 threads (MIDORI 1.2)
+# Module 3 took ~ 12.02 hours for srRNA and lrRNA, using 5 threads (MIDORI 1.2)
 
 # Actions after Module 3 complete
 # Module 3 complete. Stopping now for manual inspection of mislabelled sequences in ./MIDORI_locus_sativa/MIDORI_locus.mis
@@ -157,17 +157,21 @@ cp Tetrapoda.final_taxonomy_sativa.txt Tetrapoda.final_taxonomy_sativa_orig.txt
      # I remove all sequences that sativa identifies as having an incorrect taxonomy above genus level, as such large errors are most likely to be database errors.
      # I ignore sativa's proposed substitute taxonomies at genus and species ranks, because some unknown, possibly large, proportion of these are due to the *tree* being incorrect, since these are short seqs
 
+# START AGAIN HERE to go over the species and genus-level sativa-flagged sequences to see if i can make useful corrections:  e.g. add Bufo to the ones with missing genus name
 
 # Module 4 - Discard flagged sequences. Finalize consensus taxonomy and relabel sequences with correct species label and accession number. Select 1 representative sequence per haplotype per species.
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no four Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
 
+# sometimes Module 4 will fail because it reports an "F" in the sequence. This is because seqbuddy --clean_seq inserts "FTP error" messages in the within-species fasta files.  Check the uniq.fa and taxon.fa files in the working directory and see what the FTP error message is, which will be appended to the last sequence. Then go to get_sequences.sh module_four and modify or add to the sed -i lines where i remove these error messages (search on 'FTP error')
+# examples from line 788.  There are 4 pairs of such lines.
+     # sed -i '/FTP Error: got more than 8192 bytes/d' ${label}.final_clean_relabel.unalign.fa
+     # sed -i '/FTP Error: \[Errno 8] nodename nor servname provided, or not known/d'  ${label}.final_clean_relabel.unalign.fa  ## \[ to escape the square bracket
+
 # Success
 # Module 4 took 5.67 hours (MIDORI 1.1)
-# Module 4 took 3.73 hours (MIDORI 1.2)
-
-# there
+# Module 4 took 4.08 hours (MIDORI 1.2)
 
 # Module 4 complete. You have reached the end of get_sequences.sh
 #
@@ -178,7 +182,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no four Tetrapoda ~/sr
 #   - train_protax.sh for unweighted models
 #   - train_weighted_protax.sh for models weighted using a list of expected species
 
-#
+
 # Actions after Module 4 complete:  If sativa is used to change genus and/or species names, some of the reference sequences in Tetrapoda.final_database.16S.fa and Tetrapoda.final_database.12S.fa will have a few sequences without species names (e.g. >_DQ158435) or starting with _TAXCLUSTER (e.g. >__TAXCLUSTER161__Spea_bombifrons_AY523786)
 # These should be removed because they interfere with PROTAX train (PROTAX needs sequences in the reference dataset to have the format >Ablepharus_kitaibelii_AY308325)
 # cd ~/src/screenforbio-mbc-ailaoshan/
@@ -192,6 +196,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no four Tetrapoda ~/sr
 # 4. Train PROTAX models for target amplicon(s)
 #   - *train_protax.sh* (unweighted) or *train_weighted_protax.sh* (weighted)
 #   - *check_protax_training.sh* (makes bias-accuracy plots)
+#   - *choose between weighted or unweighted.  I use weighted because we have a species list for Ailaoshan
 
 # unweighted
 # cd ~/src/screenforbio-mbc-ailaoshan/
@@ -221,15 +226,24 @@ bash ~/src/screenforbio-mbc-ailaoshan/train_weighted_protax.sh splist.csv Tetrap
 
 # End of train_protax.sh
 # Success
-# This took a total of 4 hours (MIDORI 1.2)
-     # weighted_protax_training.R is hardcoded to run through all four loci (12S, 16S, Cytb, COI), so if one or more loci is missing (i.e. no Tetrapoda.final_database.Cytb.fa), the script is halted, but the previous loci do complete successfully.
+# This took a total of 4.3 hours (MIDORI 1.2)
+     # weighted_protax_training.R is hardcoded to run through all four loci (12S, 16S, Cytb, COI), so if one or more loci is missing (i.e. no Tetrapoda.final_database.Cytb.fa), the script is halted and generates an error message, but the previous loci do complete successfully.
+     # example error message when Cytb is not included. Just ignore this and go to the next step
+          # Working on Cytb in folder ./w_model_Cytb/
+          # Working on level1
+          # Error in file(file, "rt") : cannot open the connection
+          # Calls: read.xdata -> read.table -> file
+          # In addition: Warning message:
+          # In file(file, "rt") :
+          #   cannot open file './w_model_Cytb/train.w1.xdat': No such file or directory
+          # Execution halted
 
-# Please select an mcmc iteration for each of the four levels for each marker (labelled ./model_16S/mcmc1a-d, ./model_16S/mcmc2a-d etc) based on the training plots (labelled ./model_16S/training_plot_16S_level1a_MCMC.pdf etc). Chains should be well-mixed and acceptance ratio as close to 0.44 as possible. Relabel the selected model as ./model_16S/mcmc1 ./model_16S/mcmc2 etc.
+# Select an mcmc iteration for each of the four levels for each marker (e.g. ./w_model_16S/w_mcmc1a-d, ./w_model_16S/w_mcmc2a-d, etc.) based on the training plots (labelled ./w_model_16S/weighted_training_plot_16S_level1a_MCMC.pdf, etc). Chains should be well-mixed and acceptance ratio as close to 0.44 as possible. Relabel the selected model as ./w_model_16S/mcmc1 ./w_model_16S/mcmc2 etc.
 
-# Acceptance ratio is on the second page of the PDFs
-# For an example of how to choose, go to archived_files/protax_training_mcmc_output_16S_example/. There are 4 PDF files (training_plot_16S_level4{a,b,c,d}_MCMC.pdf). To choose amongst these, Panu Somervuo wrote:
+# For an example of how to choose the model, go to archived_files/protax_training_mcmc_output_16S_example/. There are 4 PDF files (training_plot_16S_level4{a,b,c,d}_MCMC.pdf). To choose amongst these, Panu Somervuo wrote:
      # "In all four cases a-d, the highest logposterior is very similar (around -7912) and also the coefficients corresponding to it (red dot) among a-d are very close to each other (i.e. mislabeling probability around 0.25 , beta1 around 0, beta2 around -40, beta3 around 4 and beta4 around -80, so I would say that all of them would give very similar classification results. Of course, when looking the traceplot of a, it seems that the MCMC has not converged properly, since in the beginning of the plot it is in a different regime, however, the parameter values corresponding to the largest posterior are similar as in b,c,d. I think if taking any one from b,c,or d, they would give very similar (or even identical) classification results."
      # The traceplots of 'mcmc a' are seen to wander by looking at the traceplots themselves and also at the histograms, which are skewed.
+     # Acceptance ratio is on the second page of the PDFs
 
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
@@ -256,14 +270,14 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 
 # weighted
      # 12S
-MOD1CHOSEN12S="w_mcmc1c"
-MOD2CHOSEN12S="w_mcmc2b"
-MOD3CHOSEN12S="w_mcmc3c"
-MOD4CHOSEN12S="w_mcmc4b"
+MOD1CHOSEN12S="w_mcmc1d"
+MOD2CHOSEN12S="w_mcmc2d"
+MOD3CHOSEN12S="w_mcmc3b"
+MOD4CHOSEN12S="w_mcmc4d"
      # 16S
-MOD1CHOSEN16S="w_mcmc1b"
-MOD2CHOSEN16S="w_mcmc2a"
-MOD3CHOSEN16S="w_mcmc3d"
+MOD1CHOSEN16S="w_mcmc1c"
+MOD2CHOSEN16S="w_mcmc2c"
+MOD3CHOSEN16S="w_mcmc3b"
 MOD4CHOSEN16S="w_mcmc4c"
 mv ./w_model_12S/${MOD1CHOSEN12S} ./w_model_12S/w_mcmc1
 mv ./w_model_12S/${MOD2CHOSEN12S} ./w_model_12S/w_mcmc2
@@ -299,7 +313,7 @@ bash check_protax_training.sh w_model_16S Tetrapoda 16S ~/src/screenforbio-mbc-a
 #   - Process raw data with read_preprocessing.sh (experimental design must follow that described in the manuscript) and classify the output with protax_classify.sh or weighted_protax_classify.sh as appropriate
 #   - Classify OTUs with protax_classify_otus.sh or weighted_protax_classify_otus.sh as appropriate
 
-# these are the pathnames to the Ailaoshan OTU representative sequences
+# these are my pathnames to my Ailaoshan OTU representative sequences
 OTUS12S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_swarm_lulu.fa"
 OTUS12S_USEARCH="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_usearchderep_lulu.fa"
 OTUS16S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_16S_20180321_otu_table_swarm_lulu.fa"
@@ -341,7 +355,7 @@ bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels ~/src/
 
 # Success
 # Example output from 16S:
-# This took a total of 0.25 minutes.
+# This took a total of 0.58 minutes.
 #
 # Results are in ./w_protaxout_swarm_16S/
 # Classification for each OTU at each taxonomic level (species, genus, family, order) in files all_16S_20180321_otu_table_swarm_lulu.<level>_probs
@@ -354,4 +368,4 @@ bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels ~/src/
 # queryID taxID   log(probability) level   taxon                                        bestHit_similarity      bestHit
 # OTU1    816     -1.25544         4       Anura,Dicroglossidae,Nanorana,taihangnica    0.979 Nanorana_taihangnica_KJ569109
 
-# Use combine_protax_output_tables.Rmd to combine the protax output files. The script is written to process w_protaxout_swarm_12S, w_protaxout_swarm_16S, w_protaxout_usearch_12S
+# 5.1 Use combine_protax_output_tables.Rmd to combine the protax output files. The script is written to process w_protaxout_swarm_12S, w_protaxout_swarm_16S, w_protaxout_usearch_12S

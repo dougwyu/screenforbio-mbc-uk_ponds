@@ -66,24 +66,28 @@ MIDORI_locus.mis_to_delete <- MIDORI_srRNA_sep %>%
 write_tsv(MIDORI_locus.mis_to_delete, "~/src/screenforbio-mbc-ailaoshan/MIDORI_srRNA_sativa/MIDORI_srRNA.mis_to_delete", col_names = FALSE)
 ```
 
+
+
+
 Code to replace genus and species names with sativa-suggested names, but choosing not to run this because a lot of them are probably wrong because the sativa tree will inevitably have small errors, esp. near the tips
 ```{r change genus and species names suggested by sativa for srRNA, eval=FALSE, include=FALSE}
 # # substitute in sequences that have a sativa Confidence ≥ 0.998
-# MIDORI_srRNA_sub <- MIDORI_srRNA %>% 
-#     filter(MislabeledLevel %in% c("Genus", "Species")) %>% 
+# MIDORI_srRNA_sub <- MIDORI_srRNA %>%
+#     filter(MislabeledLevel %in% c("Genus", "Species")) %>%
 #     filter(Confidence >= 0.998) %>%
 #     select(SeqID, ProposedTaxonomyPath)
 # Tetrapoda.final_taxonomy_sativa.txt <- read_delim("~/src/screenforbio-mbc-ailaoshan/Tetrapoda.final_taxonomy_sativa.txt", "\t", escape_double = FALSE, col_names = c("SeqID", "ProposedTaxonomyPath"))
+# # 
+# Tetrapoda.final_taxonomy_sativa.txt_full <- full_join(MIDORI_srRNA_sub, Tetrapoda.final_taxonomy_sativa.txt, by = c("SeqID"))
 # 
-# Tetrapoda.final_taxonomy_sativa.txt_full <- full_join(MIDORI_srRNA_sub, Tetrapoda.final_taxonomy_sativa.txt, by = c("SeqID")) 
 # Tetrapoda.final_taxonomy_sativa.txt_y <- Tetrapoda.final_taxonomy_sativa.txt_full %>%
-#     filter(is.na(ProposedTaxonomyPath.x)) %>% 
+#     filter(is.na(ProposedTaxonomyPath.x)) %>%
 #     select(SeqID, ProposedTaxonomyPath = ProposedTaxonomyPath.y)
 # Tetrapoda.final_taxonomy_sativa.txt_x <- Tetrapoda.final_taxonomy_sativa.txt_full %>%
-#     filter(!is.na(ProposedTaxonomyPath.x)) %>% 
+#     filter(!is.na(ProposedTaxonomyPath.x)) %>%
 #     select(SeqID, ProposedTaxonomyPath = ProposedTaxonomyPath.x)
 # 
-# Tetrapoda.final_taxonomy_sativa.txt <- bind_rows(Tetrapoda.final_taxonomy_sativa.txt_x, Tetrapoda.final_taxonomy_sativa.txt_y) %>% 
+# Tetrapoda.final_taxonomy_sativa.txt <- bind_rows(Tetrapoda.final_taxonomy_sativa.txt_x, Tetrapoda.final_taxonomy_sativa.txt_y) %>%
 #     arrange(SeqID)
 # write_tsv(Tetrapoda.final_taxonomy_sativa.txt, "~/src/screenforbio-mbc-ailaoshan/Tetrapoda.final_taxonomy_sativa.txt", col_names = FALSE)
 ```
