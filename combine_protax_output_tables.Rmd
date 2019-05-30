@@ -22,6 +22,7 @@ library(tidyverse)
 
 ```{r combine swarm_12S}
 pathtoprotaxout <- "~/src/screenforbio-mbc-ailaoshan/"
+# setwd(pathtoprotaxout)
 w_protaxout_swarm_12S_class <- read_tsv(file.path(pathtoprotaxout, "w_protaxout_swarm_12S", paste0("all_12S_20180317_otu_table_swarm_lulu.", "w_class_probs")), col_names = c("queryID", "taxID", "log_prob", "level", "class")) %>% 
     mutate(prob_class = exp(log_prob)) %>% 
     select(queryID, class, prob_class)

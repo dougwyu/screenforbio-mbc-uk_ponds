@@ -30,7 +30,7 @@ Steps and associated scripts:
 ### Required software (tested versions)
 Pipeline tested on macOS 10.14.4
 
-- macOS should have GNU grep, awk and sed prioritised over macOS's BSD versions. These can be installed independently with Homebrew, or you can install with [linuxify](https://github.com/fabiomaia/linuxify) every session, which provides a command to change paths when you want to use GNU versions in a session.  
+- macOS should have GNU grep, awk and sed prioritised over macOS's BSD versions. These can be installed independently with Homebrew, or you can activate their pathnames with [linuxify](https://github.com/fabiomaia/linuxify) for every new session.  
 ````
 cd ~/src # or wherever you install your github repos
 git clone https://github.com/fabiomaia/linuxify.git
@@ -41,7 +41,7 @@ cd linuxify/
 . ~/.linuxify; awk; which grep; which sed
      awk # should return help page for `gawk`
      which grep # should return: `/usr/local/opt/grep/libexec/gnubin/grep`
-     which sed # should show `/usr/local/opt/gnu-sed/libexec/gnubin/sed`
+     which sed # should return: `/usr/local/opt/gnu-sed/libexec/gnubin/sed`
 ````
 
 - Processing of raw reads only  
@@ -128,7 +128,7 @@ The filenames will be changed to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta
 ### Usage
 All steps in the pipeline are implemented via bash scripts with similar parameter requirements. Each script includes commented usage instructions at the start and displays the same instructions if run without any or an incorrect number of parameters.
 
-For the Ailaoshan fork, the full command history is in `screenforbio_ailaoshan.sh`. Although formatted as a shell script, it should be run command by command, instead of as a single bash script file, because there are multiple choices to be made during the pipeline. 
+For the Ailaoshan fork, the full command history is in `screenforbio_ailaoshan.sh`. Although formatted as a shell script, it should be run command by command, instead of as a single bash script file, because there are multiple choices to be made during the pipeline.
 
 Some of the bash scripts used within are primarily wrappers for R scripts, all of which are assumed to be in the ***screenforbio-mbc*** directory.  
 
