@@ -70,6 +70,8 @@ conda install -c bioconda adapterremoval
 - Building databases and PROTAX  
   - R (v3.6.0)  
      * installed from binary downloaded from [CRAN](https://cran.rstudio.com)
+  - taxize (v0.9.8)
+     * if not available, install development version ≥0.9.7.9313: `remotes::install_github("ropensci/taxize")`  
   - tabtk (r19)  
 ````
      cd ~/src/  
