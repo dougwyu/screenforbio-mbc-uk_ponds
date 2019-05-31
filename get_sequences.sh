@@ -529,11 +529,12 @@ function module_one {
     # non-matching
     tabtk isct -1 7 -2 1 -c ${TAXON}_ITIS_taxonomy.txt  MIDORI.raw_sp.txt | sed 's/_/ /g' > MIDORI_${TAXON}.ITIS_mismatch_sp.txt
     # -1 field(s) of the loaded file = ${TAXON}_ITIS_taxonomy.txt, -2 files of the streamed file = MIDORI.raw_sp.txt, -c print lines not present in loaded.txt, <loaded.txt> <streamed.txt>
-    # remove misbehavers by deleting the lines with these species
-    sed -i '/Hemidactylus adensis/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
-    sed -i '/Hemidactylus awashensis/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
-    sed -i '/Hemidactylus macropholis/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
-    sed -i '/Natrix natrix/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
+    # no longer needed with new version of taxize (>= 0.9.8)
+         # remove misbehavers by deleting the lines with these species
+         # sed -i '/Hemidactylus adensis/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
+         # sed -i '/Hemidactylus awashensis/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
+         # sed -i '/Hemidactylus macropholis/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
+         # sed -i '/Natrix natrix/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
     # lookup non-matching in CoL in first instance, lookup failures in ITIS, output list of failures to discard
     Rscript --vanilla ${SCRIPTS}/get_taxonomy_mismatches.R ${TAXON}
     # combine CoL and ITIS outputs (if ITIS exists)
@@ -563,10 +564,11 @@ function module_one {
     tabtk isct -1 7 -2 1 -c ${TAXON}.combined_taxonomy.txt <(tabtk isct -1 9 -2 1 -c ${TAXON}.combined_taxonomy.txt <(cat MIDORI.raw_sp.txt ${TAXON}.ITIS_missing_sp.txt)) > MIDORI_${TAXON}.missing_sp.txt
     if [ -s MIDORI_${TAXON}.missing_sp.txt ]
     then
-      sed -i '$a\Hemidactylus_adensis\' MIDORI_${TAXON}.missing_sp.txt
-      sed -i '$a\Hemidactylus_awashensis\' MIDORI_${TAXON}.missing_sp.txt
-      sed -i '$a\Hemidactylus_macropholis\' MIDORI_${TAXON}.missing_sp.txt
-      sed -i '$a\Natrix_natrix\' MIDORI_${TAXON}.missing_sp.txt
+      # these lines no longer needed with new version of taxize (>= 0.9.8)
+           # sed -i '$a\Hemidactylus_adensis\' MIDORI_${TAXON}.missing_sp.txt
+           # sed -i '$a\Hemidactylus_awashensis\' MIDORI_${TAXON}.missing_sp.txt
+           # sed -i '$a\Hemidactylus_macropholis\' MIDORI_${TAXON}.missing_sp.txt
+           # sed -i '$a\Natrix_natrix\' MIDORI_${TAXON}.missing_sp.txt
       # check if missing sp have genus in taxonomy, if so add a new line, if not check if known synonym and add a new line, if not flag for deletion
       splist=($(cut -f1 MIDORI_${TAXON}.missing_sp.txt))
       for sp in ${splist[@]}

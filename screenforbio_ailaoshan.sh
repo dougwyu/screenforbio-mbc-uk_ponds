@@ -82,6 +82,7 @@ sed -i 's/\.[0-9].*\t/\t/g' MIDORI_UNIQUE_1.2_srRNA_RDP.fasta | head -n 40
      # cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=84){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Riaz primers
 
 bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no one Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
+# the first no can be changed to yes to add the Salleh et al. 72 mitogenomes from GigaScience, which is in archived_files/. However, the header info lines need to be reformatted to Genus_species_uniqueID
 # Successful
 # Module 1 took 0.58 hours (16Smam and 12SRiaz primers, Midori 1.1)
 # Module 1 took 0.95 hours (16Smam and 12SRiaz primers, Midori 1.2)
@@ -107,13 +108,13 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no two Tetrapoda ~/src
      #  [63]
      # Calls: classification ... read_xml.character -> read_xml.raw -> doc_parse_raw
      # Execution halted
-# The developer of taxize has flagged this bug in the Catalogue of Life, to be dealt with in the next release of taxize (for 0.9.8). Update:  the problem appears to be in read_xml2, which is a separate module, which cannot read some non-standard ASCII characters in the names of some taxonomists.
-# To ID the species causing this error, open `classification_misbehavers_finder.Rmd`. This script loads "MIDORI_taxon.ITIS_mismatch_sp.txt", uses a tryCatch() loop to run taxize::classification() on each name in this file, and records the species that causes taxize::classification() to throw crashing errors.
-# We call these crashing species 'misbehavers,' and we remove them manually starting at line 532, which is before get_taxonomy_mismatches.R is run
-     # remove misbehavers by deleting these species, like this:
-     # sed -i '/Hemidactylus adensis/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
-# Then add back the removed species starting at line 565, like this (WITH UNDERSCORE!!):
-     # sed -i '$a\Hemidactylus_adensis\' MIDORI_${TAXON}.missing_sp.txt
+# The developer of taxize has flagged this bug in the Catalogue of Life, to be dealt with in the next release of taxize (for 0.9.8). Update:  the problem appears to be in read_xml2, which is a separate module, which cannot read some non-standard ASCII characters in the names of some taxonomists. Update2: The development version of taxize has fixed the problem. The fix will be in version 0.9.8. The fix below is no longer needed.
+     # To ID the species causing this error, open `classification_misbehavers_finder.Rmd`. This script loads "MIDORI_taxon.ITIS_mismatch_sp.txt", uses a tryCatch() loop to run taxize::classification() on each name in this file, and records the species that causes taxize::classification() to throw crashing errors.
+     # We call these crashing species 'misbehavers,' and we remove them manually starting at line 532, which is before get_taxonomy_mismatches.R is run
+          # remove misbehavers by deleting these species, like this:
+          # sed -i '/Hemidactylus adensis/d' MIDORI_${TAXON}.ITIS_mismatch_sp.txt
+     # Then add back the removed species starting at line 565, like this (WITH UNDERSCORE!!):
+          # sed -i '$a\Hemidactylus_adensis\' MIDORI_${TAXON}.missing_sp.txt
 
 # Success
 # Module 2 took 0.96 hours (MIDORI 1.1)
