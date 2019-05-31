@@ -82,7 +82,7 @@ sed -i 's/\.[0-9].*\t/\t/g' MIDORI_UNIQUE_1.2_srRNA_RDP.fasta | head -n 40
      # cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=84){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Riaz primers
 
 bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no one Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
-# the first no can be changed to yes to add the Salleh et al. 72 mitogenomes from GigaScience, which is in archived_files/. However, the header info lines need to be reformatted to Genus_species_uniqueID
+# the first no can be changed to yes to add the Salleh et al. 75 mitogenomes from GigaScience, which are in the files extra_12S.fa and extra_16S.fa (same content). The files were created with parse_Salleh_fasta_header.sh
 # Successful
 # Module 1 took 0.58 hours (16Smam and 12SRiaz primers, Midori 1.1)
 # Module 1 took 0.95 hours (16Smam and 12SRiaz primers, Midori 1.2)
