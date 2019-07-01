@@ -370,3 +370,26 @@ bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels ~/src/
 # OTU1    816     -1.25544         4       Anura,Dicroglossidae,Nanorana,taihangnica    0.979 Nanorana_taihangnica_KJ569109
 
 # 5.1 Use combine_protax_output_tables.Rmd to combine the protax output files. The script is written to process w_protaxout_swarm_12S, w_protaxout_swarm_16S, w_protaxout_usearch_12S
+
+
+# 6. To assign taxonomies to new a new set of OTUs
+# these are my pathnames to my Ailaoshan OTU representative sequences
+cd ~/src/screenforbio-mbc-ailaoshan/
+. ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+
+# set pathnames to OTU sequences
+OTUS12S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/12S_otu_table_swarm_lulu_20190624.fas"
+OTUS16S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/16S_otu_table_swarm_lulu_20190624.fas"
+echo ${OTUS12S_SWARM}
+echo ${OTUS16S_SWARM}
+bash weighted_protax_classify_otus.sh ${OTUS12S_SWARM} 12S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm_20190624
+bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm_20190624
+     # usage: bash weighted_protax_classify_otus.sh otus locus protaxdir screenforbio outdir
+     # where:
+     # otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
+     # locus is the target locus, must be one of: 12S, 16S, CYTB, COI. if you have more than one locus to analyse, run script once for each.
+     # protaxdir is the path to a directory containing weighted protax models and clean databases for all 4 loci
+     # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
+     # outdir is the name to give the output directory (inside current)
+
+     # 5.1 Use combine_protax_output_tables.Rmd to combine the protax output files. The script is written to process w_protaxout_swarm_12S, w_protaxout_swarm_16S, w_protaxout_usearch_12S
