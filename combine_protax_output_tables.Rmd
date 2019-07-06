@@ -21,8 +21,8 @@ library(tidyverse)
 
 ```{r combine swarm_12S}
 pathtoprotaxout <- "~/src/screenforbio-mbc-ailaoshan"
-pathtoprotax2 <- "w_protaxout_swarm_12S_20190624"
-pathtoprotax_file <- "12S_otu_table_swarm_lulu_20190624.fas."
+pathtoprotax2 <- "w_protaxout_swarm_20190704_12S"
+pathtoprotax_file <- "table_500ponds2_12sv5_97.fas.blast.fas."
 # setwd(pathtoprotaxout)
 w_protaxout_swarm_12S_class <- read_tsv(file.path(pathtoprotaxout, pathtoprotax2, paste0(pathtoprotax_file, "w_class_probs")), col_names = c("queryID", "taxID", "log_prob", "level", "class")) %>% 
     mutate(prob_class = exp(log_prob)) %>% 

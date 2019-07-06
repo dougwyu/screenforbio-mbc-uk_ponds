@@ -378,11 +378,11 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 
 # set pathnames to OTU sequences
-OTUS12S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/12S_otu_table_swarm_lulu_20190624.fas"
+OTUS12S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Cai_443_Ponds/OTUs/table_500ponds2_12sv5_97.fas.blast.fas"
 OTUS16S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/16S_otu_table_swarm_lulu_20190624.fas"
-echo ${OTUS12S_SWARM}
+echo ${OTUS12S_SWARM}; head ${OTUS12S_SWARM}
 echo ${OTUS16S_SWARM}
-bash weighted_protax_classify_otus.sh ${OTUS12S_SWARM} 12S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm_20190624
+bash weighted_protax_classify_otus.sh ${OTUS12S_SWARM} 12S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm_20190704
 bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm_20190624
      # usage: bash weighted_protax_classify_otus.sh otus locus protaxdir screenforbio outdir
      # where:
