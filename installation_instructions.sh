@@ -46,9 +46,9 @@ mv ./tabtk /usr/local/bin
      git clone https://github.com/fabiomaia/linuxify.git
      cd linuxify/
      ./linuxify install # to install all the GNU versions
-          # ./linuxify uninstall # to remove all the GNU versions and the pathname changes
+          # cd ~/src/linuxify/;  ./linuxify uninstall # to remove all the GNU versions and the pathname changes
           # manually remove '. ~/.linuxify' from my ~/.bashrc file
-     ls -al ~/src/linuxify # should see the file .linuxify
+     ls -al ~/src/linuxify/ # should see the file .linuxify
      cp ~/src/linuxify/.linuxify ~/ # cp to root directory
 # 2. to 'linuxify' a terminal session:  run the following at the beginning of a script or a session.
      . ~/.linuxify; awk; which sed; which grep
