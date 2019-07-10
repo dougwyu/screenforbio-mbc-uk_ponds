@@ -9,6 +9,33 @@ set -o pipefail
 # I install all github repositories (repos) in ~/src
 mkdir ~/src
 
+# go to https://drive5.com/usearch/
+# register and download the 32-bit usearch11 binary for your OS
+# install usearch binary downloaded from https://drive5.com/usearch/download.html
+cd ~/Downloads
+mv ~/Downloads/usearch11.0.667_i86osx32 /usr/local/bin
+cd /usr/local/bin
+ln -s usearch11.0.667_i86osx32 usearch11  # make symbolic link (symlink)
+chmod 755 usearch11
+usearch11 # should return something like the following
+# usearch v11.0.667_i86osx32, 4.0Gb RAM (17.2Gb total), 8 cores
+# (C) Copyright 2013-18 Robert C. Edgar, all rights reserved.
+# https://drive5.com/usearch
+#
+# License: dougwyu@mac.com
+
+# download and install usearch 8.1, also from https://drive5.com/usearch/download.html
+mv ~/Downloads/v8.1.1861_i86osx32 /usr/local/bin
+cd /usr/local/bin
+ln -s v8.1.1861_i86osx32 usearch  # make symbolic link (symlink)
+chmod 755 usearch
+usearch # should return something like the following
+# usearch v8.1.1861_i86osx32, 4.0Gb RAM (17.2Gb total), 8 cores
+# (C) Copyright 2013-15 Robert C. Edgar, all rights reserved.
+# http://drive5.com/usearch
+#
+# License: dougwyu@mac.com
+
 ## Homebrew for macOS
 # go to http://brew.sh and follow the instructions for installing Homebrew on macOS
 
@@ -84,8 +111,8 @@ export PATH=${PATH}:$HOME/edirect >& /dev/null || setenv PATH "${PATH}:$HOME/edi
 
 # In order to complete the configuration process, please execute the following:
 
-# echo "source ~/.bash_profile" >> $HOME/.bashrc # prob not needed, since =.bash_profile is sourced with every new window
-# mv ~/edirect ~/src/edirect
+echo "source ~/.bash_profile" >> $HOME/.bashrc # prob not needed, since =.bash_profile is sourced with every new window
+mv ~/edirect ~/src/edirect
 echo "export PATH=\${PATH}:/Users/Negorashi2011/src/edirect" >> $HOME/.bash_profile
 
 # test commands

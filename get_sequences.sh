@@ -176,7 +176,7 @@ function module_one {
       fi
       # pcr - allow ~10% mismatch per primer
       # usearch -search_pcr ${label}.raw.fa -db ${SCRIPTS}/12S_primers.fa -strand both -maxdiffs 4 -minamp 420 -maxamp 470 -ampout ${label}.amp.fa # for Kocher 12S primers
-      usearch11 -search_pcr2 ${label}.raw.fa -fwdprimer ACTGGGATTAGATACCCC -revprimer YRGAACAGGCTCCTCTAG -minamp 84 -maxamp 120 -strand both -maxdiffs 4 -fastaout ${label}.amp.fa # for 12S Riaz primers
+      usearch11 -search_pcr2 ${label}.raw.fa -fwdprimer ACTGGGATTAGATACCCC -revprimer YRGAACAGGCTCCTCTAG -minamp 80 -maxamp 120 -strand both -maxdiffs 4 -fastaout ${label}.amp.fa # for 12S Riaz primers
       if [ -s ${label}.amp.fa ]
       then
         # remove primers
@@ -186,7 +186,7 @@ function module_one {
         makeblastdb -in ${label}.amp_only.fa -dbtype nucl
         blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 5
         # cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=360){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Kocher primers
-        cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=84){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Riaz primers
+        cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=80){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Riaz primers
         # remove blastdb
         rm ${label}.amp_only.fa.n*
         # get amplicons
