@@ -6,6 +6,9 @@ set -o pipefail
 
 # installation instructions for screenforbio
 
+# I install all github repositories (repos) in ~/src
+mkdir ~/src
+
 ## Homebrew for macOS
 # go to http://brew.sh and follow the instructions for installing Homebrew on macOS
 
@@ -13,16 +16,31 @@ set -o pipefail
 brew tap brewsci/bio # a "tap" is a source of "installation formulae" of specialist software, here, bioinformatics
 brew tap tseemann/bio
 brew install seqtk # https://github.com/lh3/seqtk
-brew install coreutils # cut, join, 
+brew install coreutils # cut, join, sort, tr
 brew install gnu-sed
+brew install grep # gnu-grep
+brew install gawk
+brew install brewsci/bio/seqkit
+brew install perl
+brew install python@3
+brew install python@2
 
-# awk, cut, grep, join, sed, sort, tr seqbuddy seqkit  tabtk
+#### install buddysuite, which requires python3
+# https://github.com/biologyguy/BuddySuite
+pip3 install buddysuite # installs a bunch of software
+buddysuite -setup
+seqbuddy -h
 
+# tabtk
+cd ~/src/
+git clone https://github.com/lh3/tabtk
+cd tabtk/
+make
 
 
 #### https://github.com/alexcrampton-platt/screenforbio-mbc
 # screenforbio
-# to run this, i need to change my macOS setup to use GNU versions of unix utilities and *also* to prioritise GNU grep, sed, and awk over the macOS versions. To do this, i need to install GNU grep, GNU sed, and GNU awk. These are installed with homebrew, but they are given different names (e.g. gsed, gawk). I need 'sed' to invoke 'gsed'. To do this, i do something that's probably over the top, but it seems to work.
+# install linuxify to use GNU versions of sed, awk, and grep over the macOS versions. GNU grep, GNU sed, and GNU awk are installed with homebrew, but they are given different names (e.g. gsed, gawk, ggrep). However, the scripts use 'sed', 'grep', and 'awk'. To prioritise GNU versions, i use 'Linuxify'
 # 1. install and run linuxify # https://github.com/fabiomaia/linuxify
      cd ~/src
      git clone https://github.com/fabiomaia/linuxify.git
@@ -30,14 +48,14 @@ brew install gnu-sed
      ./linuxify install # to install all the GNU versions
           # ./linuxify uninstall # to remove all the GNU versions and the pathname changes
           # manually remove '. ~/.linuxify' from my ~/.bashrc file
-# 2. to linuxify a session:  run the following at the beginning of a script or a session.
+# 2. to 'linuxify' a terminal session:  run the following at the beginning of a script or a session.
      . ~/.linuxify; which sed; awk; which grep
           which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
           awk # should return help page for gawk
           which grep # should return: '/usr/local/opt/grep/libexec/gnubin/grep'
 # 3. OPTIONAL if i want to run linuxify automatically with each new shell
      # add this to my ~/.bashrc
-          . ~/.linuxify'
+          . ~/.linuxify
      # then add this to my .bash_profile
           if [ -f ~/.bashrc ]; then
               source ~/.bashrc
