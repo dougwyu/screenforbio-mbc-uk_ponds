@@ -36,7 +36,7 @@ cd ~/src/
 git clone https://github.com/lh3/tabtk
 cd tabtk/
 make
-
+mv ./tabtk /usr/local/bin
 
 #### https://github.com/alexcrampton-platt/screenforbio-mbc
 # screenforbio
@@ -49,8 +49,8 @@ make
           # ./linuxify uninstall # to remove all the GNU versions and the pathname changes
           # manually remove '. ~/.linuxify' from my ~/.bashrc file
      ls -al ~/src/linuxify # should see .linuxify but not executable
-     chmod 755 ~/src/.linuxify # make executable
-     cp ~/src/.linuxify ~/ # cp to root
+     chmod 755 ~/src/linuxify/.linuxify # make executable
+     cp ~/src/linuxify/.linuxify ~/ # cp to root
 # 2. to 'linuxify' a terminal session:  run the following at the beginning of a script or a session.
      . ~/.linuxify; awk; which sed; which grep
           awk # should return help page for gawk
