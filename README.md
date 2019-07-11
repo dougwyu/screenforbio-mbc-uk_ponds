@@ -70,15 +70,19 @@ mkdir ~/src
           # manually remove '. ~/.linuxify' from my ~/.bashrc file
      ls -al ~/src/linuxify/ # should see the file .linuxify
      cp ~/src/linuxify/.linuxify ~/ # cp to root directory
-````
+````  
+
      * 2. to 'linuxify' a terminal session:  run the following at the beginning of a script or a session.
+
 ````
      . ~/.linuxify; awk; which sed; which grep
           # awk # should return help page for gawk
           # which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
           # which grep # should return: '/usr/local/opt/grep/libexec/gnubin/grep'\
-````
+````  
+
      * 3. OPTIONAL if i want to run linuxify automatically with each new shell
+
 ````
      # add this to my ~/.bashrc
           . ~/.linuxify
