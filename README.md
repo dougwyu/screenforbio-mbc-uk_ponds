@@ -30,10 +30,10 @@ Steps and associated scripts:
 ### Required software (tested versions)
 Pipeline tested on macOS 10.14.4 on a MacBook Pro with i7 CPU (4 cores, 8 virtual cores). If you run with an i5 CPU, you have only 4 virtual cores, and you will need to adjust the requested number of threads in the blastn (-num_threads) and sativa.py (-T) commands in get_sequences.sh
 
-Homebrew for macOS  
+- Homebrew for macOS  
 Go to http://brew.sh and follow the instructions for installing Homebrew on macOS
 
-After Homebrew or Linuxbrew  is installed, run these brew installations
+- After Homebrew or Linuxbrew  is installed, run these brew installations
 ````
 brew tap brewsci/bio # a "tap" is a source of "installation formulae" of specialist software, here, bioinformatics
 brew install brewsci/bio/seqkit
@@ -54,13 +54,13 @@ brew update; brew upgrade; brew cleanup  # run occasionally to update your softw
 
 For the rest of the software packages, here are installation instructions:  
 
-I install all github repositories (repos) in ~/src  
+- I install all github repositories (repos) in ~/src  
 ````
 mkdir ~/src
 ````
 
-Install *linuxify* to prioritise GNU versions of sed, awk, and grep over the macOS versions. GNU grep, GNU sed, and GNU awk are installed with homebrew, but they are given different names (e.g. gsed, gawk, ggrep). However, the scripts use 'sed', 'grep', and 'awk'. To prioritise the GNU versions and to call them as sed, awk, and grep, i use 'Linuxify'
-1. install and run linuxify # https://github.com/fabiomaia/linuxify
+- Install *linuxify* to prioritise GNU versions of sed, awk, and grep over the macOS versions. GNU grep, GNU sed, and GNU awk are installed with homebrew, but they are given different names (e.g. gsed, gawk, ggrep). However, the scripts use 'sed', 'grep', and 'awk'. To prioritise the GNU versions and to call them as sed, awk, and grep, i use 'Linuxify'  
+     1. install and run linuxify # https://github.com/fabiomaia/linuxify
 ````
      cd ~/src
      git clone https://github.com/fabiomaia/linuxify.git
@@ -71,14 +71,14 @@ Install *linuxify* to prioritise GNU versions of sed, awk, and grep over the mac
      ls -al ~/src/linuxify/ # should see the file .linuxify
      cp ~/src/linuxify/.linuxify ~/ # cp to root directory
 ````
-2. to 'linuxify' a terminal session:  run the following at the beginning of a script or a session.
+     2. to 'linuxify' a terminal session:  run the following at the beginning of a script or a session.
 ````
      . ~/.linuxify; awk; which sed; which grep
           # awk # should return help page for gawk
           # which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
           # which grep # should return: '/usr/local/opt/grep/libexec/gnubin/grep'\
 ````
-3. OPTIONAL if i want to run linuxify automatically with each new shell
+     3. OPTIONAL if i want to run linuxify automatically with each new shell
 ````
      # add this to my ~/.bashrc
           . ~/.linuxify
@@ -128,12 +128,11 @@ bcl2fastq and AdapterRemoval are required for processing of raw reads.
      #
      # License: dougwyu@mac.com
 ````
-- R (v3.6.0)  
-     * installed from binary downloaded from [CRAN](https://cran.rstudio.com)
 - RStudio
      * installed from binary downloaded from [RStudio](https://www.rstudio.com/products/rstudio/download/#download)
-  - taxize (v0.9.8) R package.
-     On the R command line:  
+- R (v3.6.0+)  
+     * installed from binary downloaded from [CRAN](https://cran.rstudio.com)
+- taxize (v0.9.8) R package.  On the R command line:  
      `install.packages("taxize", dep=TRUE)`  
 - tabtk (r19)  
 ````
@@ -162,22 +161,22 @@ bcl2fastq and AdapterRemoval are required for processing of raw reads.
 - Entrez Direct (v6.00 and v8.30)  
      * see installation instructions on [NIH](https://www.ncbi.nlm.nih.gov/books/NBK179288/)  
 
-*get_sequences.sh* also requires MIDORI databases for mitochondrial target genes [Machida *et al.*, 2017](https://www.nature.com/articles/sdata201727). Download relevant MIDORI_UNIQUE FASTAs in RDP format from the [website](http://www.reference-midori.info/download.php). The manuscript used MIDORI_UNIQUE_1.1 versions of COI, Cytb, lrRNA and srRNA. The unzipped FASTAs should be *copied* to the working directory (because the script moves the working MIDORI fasta files to the intermediate_files/ folder after it finishes module one).  There are downloaded versions in the archived_files/ folder
+- *get_sequences.sh* also requires MIDORI databases for mitochondrial target genes [Machida *et al.*, 2017](https://www.nature.com/articles/sdata201727). Download relevant MIDORI_UNIQUE FASTAs in RDP format from the [website](http://www.reference-midori.info/download.php). The manuscript used MIDORI_UNIQUE_1.1 versions of COI, Cytb, lrRNA and srRNA. The unzipped FASTAs should be *copied* to the working directory (because the script moves the working MIDORI fasta files to the intermediate_files/ folder after it finishes module one).  There are downloaded versions in the archived_files/ folder
 
-The 20180221 versions of MIDORI have more complex headers, which interfere with the `get_sequences.sh` code.  
+- The 20180221 versions of MIDORI have more complex headers, which interfere with the `get_sequences.sh` code.  
 * *V 1.1*:  `>AF382008	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`  
 * *V 20180221*:  `>AF382008.3.649.1602	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`  
 
 The filenames will be changed to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`, and the extra stuff on the headers will be removed before running get_sequences.h
 
-*collapsetypes_v4.6.pl* should already be in your ***screenforbio-mbc*** directory. If not, install as follows:  
+- *collapsetypes_v4.6.pl* should already be in your ***screenforbio-mbc*** directory. If not, install as follows:  
 Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).  
 ````
      chmod 755 ~/Downloads/collapsetypes_v4.6.pl  
      mv ~/Downloads/collapsetypes_v4.6.pl ~/src/screenforbio-mbc-ailaoshan/  
 ````
 
-*PROTAX* scripts are reposted here with the kind permission of Panu Somervuo. These are in the *protaxscripts* subdirectory of ***screenforbio-mbc***. This version of *PROTAX* is from [Rodgers *et al.* 2017](https://doi.org/10.1111/1755-0998.12701), scripts were originally posted on [Dryad](https://datadryad.org/resource/doi:10.5061/dryad.bj5k0).  
+- *PROTAX* scripts are reposted here with the kind permission of Panu Somervuo. These are in the *protaxscripts* subdirectory of ***screenforbio-mbc***. This version of *PROTAX* is from [Rodgers *et al.* 2017](https://doi.org/10.1111/1755-0998.12701), scripts were originally posted on [Dryad](https://datadryad.org/resource/doi:10.5061/dryad.bj5k0).  
 
 ### Usage
 All steps in the pipeline are implemented via bash scripts with similar parameter requirements. Each script includes commented usage instructions at the start and displays the same instructions if run without any or an incorrect number of parameters.
