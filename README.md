@@ -30,7 +30,7 @@ Steps and associated scripts:
 ### Required software (tested versions)
 Pipeline tested on macOS 10.14.4 on a MacBook Pro with i7 CPU (4 cores, 8 virtual cores). If you run with an i5 CPU, you have only 4 virtual cores, and you will need to adjust the requested number of threads in the blastn (-num_threads) and sativa.py (-T) commands in get_sequences.sh
 
-## Homebrew for macOS
+Homebrew for macOS
 Go to http://brew.sh and follow the instructions for installing Homebrew on macOS
 
 After Homebrew or Linuxbrew  is installed, run these brew installations
@@ -86,20 +86,20 @@ Install *linuxify* to prioritise GNU versions of sed, awk, and grep over the mac
           if [ -f ~/.bashrc ]; then
               source ~/.bashrc
           fi
+     # https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-bash-profile-and-bashrc
 ````
-https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-bash-profile-and-bashrc
 
-- Processing of raw reads only  
-  - bcl2fastq (v2.18)  
+bcl2fastq and AdapterRemoval are required for processing of raw reads.  
+- bcl2fastq (v2.18)  
      * downloaded from Illumina.com (only for RedHat or CentOS Linux). If you have a local sequencer, it should already be running somewhere. If you send out for sequencing, the provider will have it running.  
-  - AdapterRemoval (v2.1.7)  
+- AdapterRemoval (v2.1.7)  
      * first install [miniconda](https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.pkg)  
 ````
      # brew install python@3 # installs python3 if you haven't done so already (see above)
      conda update -n base conda  
      conda install -c bioconda adapterremoval  
 ````
-  - usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
+- usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
 ````
      # go to https://drive5.com/usearch/
      # register and download the 32-bit usearch11 binary for your OS
@@ -128,11 +128,9 @@ https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-b
      #
      # License: dougwyu@mac.com
 ````
-
-- Building databases and PROTAX  
-  - R (v3.6.0)  
+- R (v3.6.0)  
      * installed from binary downloaded from [CRAN](https://cran.rstudio.com)
-  - RStudio
+- RStudio
      * installed from binary downloaded from [RStudio](https://www.rstudio.com/products/rstudio/download/#download)
   - taxize (v0.9.8) R package.
      On the R command line:  
@@ -145,8 +143,6 @@ https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-b
      make  
      mv tabtk /usr/local/bin/tabtk  
 ````
-- Entrez Direct (v6.00 and v8.30)  
-     * see installation instructions on [NIH](https://www.ncbi.nlm.nih.gov/books/NBK179288/)  
 - sativa (v0.9-57-g8a99328)  
 ````
      cd ~/src; git clone https://github.com/amkozlov/sativa  
@@ -163,6 +159,8 @@ https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-b
      buddysuite -setup  
      seqbuddy -h
 ````
+- Entrez Direct (v6.00 and v8.30)  
+     * see installation instructions on [NIH](https://www.ncbi.nlm.nih.gov/books/NBK179288/)  
 
 *get_sequences.sh* also requires MIDORI databases for mitochondrial target genes [Machida *et al.*, 2017](https://www.nature.com/articles/sdata201727). Download relevant MIDORI_UNIQUE FASTAs in RDP format from the [website](http://www.reference-midori.info/download.php). The manuscript used MIDORI_UNIQUE_1.1 versions of COI, Cytb, lrRNA and srRNA. The unzipped FASTAs should be *copied* to the working directory (because the script moves the working MIDORI fasta files to the intermediate_files/ folder after it finishes module one).  There are downloaded versions in the archived_files/ folder
 
