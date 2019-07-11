@@ -31,9 +31,9 @@ Steps and associated scripts:
 Pipeline tested on macOS 10.14.4 on a MacBook Pro with i7 CPU (4 cores, 8 virtual cores). If you run with an i5 CPU, you have only 4 virtual cores, and you will need to adjust the requested number of threads in the blastn and sativa.py commands in get_sequences.sh
 
 ## Homebrew for macOS
-# go to http://brew.sh and follow the instructions for installing Homebrew on macOS
+Go to http://brew.sh and follow the instructions for installing Homebrew on macOS
 
-## after Homebrew or Linuxbrew  is installed, run these brew installations
+After Homebrew or Linuxbrew  is installed, run these brew installations
 ````
 brew tap brewsci/bio # a "tap" is a source of "installation formulae" of specialist software, here, bioinformatics
 brew install brewsci/bio/seqkit
@@ -48,11 +48,11 @@ brew install python@2
 brew update; brew upgrade; brew cleanup  # run occasionally to update your software
 ````
 
-# I install all github repositories (repos) in ~/src
-mkdir ~/src
+I install all github repositories (repos) in ~/src
+`mkdir ~/src`
 
-# Install linuxify to use GNU versions of sed, awk, and grep over the macOS versions. GNU grep, GNU sed, and GNU awk are installed with homebrew, but they are given different names (e.g. gsed, gawk, ggrep). However, the scripts use 'sed', 'grep', and 'awk'. To prioritise the GNU versions and to call them as sed, awk, and grep, i use 'Linuxify'
-# 1. install and run linuxify # https://github.com/fabiomaia/linuxify
+Install linuxify to use GNU versions of sed, awk, and grep over the macOS versions. GNU grep, GNU sed, and GNU awk are installed with homebrew, but they are given different names (e.g. gsed, gawk, ggrep). However, the scripts use 'sed', 'grep', and 'awk'. To prioritise the GNU versions and to call them as sed, awk, and grep, i use 'Linuxify'
+1. install and run linuxify # https://github.com/fabiomaia/linuxify
 ````
      cd ~/src
      git clone https://github.com/fabiomaia/linuxify.git
@@ -63,14 +63,14 @@ mkdir ~/src
      ls -al ~/src/linuxify/ # should see the file .linuxify
      cp ~/src/linuxify/.linuxify ~/ # cp to root directory
 ````
-# 2. to 'linuxify' a terminal session:  run the following at the beginning of a script or a session.
+2. to 'linuxify' a terminal session:  run the following at the beginning of a script or a session.
 ````
      . ~/.linuxify; awk; which sed; which grep
           # awk # should return help page for gawk
           # which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
           # which grep # should return: '/usr/local/opt/grep/libexec/gnubin/grep'\
 ````
-# 3. OPTIONAL if i want to run linuxify automatically with each new shell
+3. OPTIONAL if i want to run linuxify automatically with each new shell
 ````
      # add this to my ~/.bashrc
           . ~/.linuxify
@@ -79,7 +79,7 @@ mkdir ~/src
               source ~/.bashrc
           fi
 ````
-# https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-bash-profile-and-bashrc
+https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-bash-profile-and-bashrc
 
 - Processing of raw reads only  
   - bcl2fastq (v2.18)  
