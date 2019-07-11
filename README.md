@@ -28,7 +28,7 @@ Steps and associated scripts:
 **Note:** in some steps the ***screenforbio-mbc*** release associated with the manuscript is specific to the amplicons used in the study - primer sets and relevant settings are hard-coded in *read_preprocessing.sh* and *get_sequences.sh*. This will be generalised in a future release.
 
 ### Required software (tested versions)
-Pipeline tested on macOS 10.14.4 on a MacBook Pro with i7 CPU (4 cores, 8 virtual cores). If you run with an i5 CPU, you have only 4 virtual cores, and you will need to adjust the requested number of threads in the blastn and sativa.py commands in get_sequences.sh
+Pipeline tested on macOS 10.14.4 on a MacBook Pro with i7 CPU (4 cores, 8 virtual cores). If you run with an i5 CPU, you have only 4 virtual cores, and you will need to adjust the requested number of threads in the blastn (-num_threads) and sativa.py (-T) commands in get_sequences.sh
 
 ## Homebrew for macOS
 Go to http://brew.sh and follow the instructions for installing Homebrew on macOS
@@ -42,16 +42,24 @@ brew install seqtk # https://github.com/lh3/seqtk
 brew install gnu-sed # GNU sed
 brew install grep # GNU grep
 brew install gawk # GNU awk
-brew install perl
+brew install perl # v5.28+
+brew install blast # v2.9.0+
+brew install mafft # v7.407+
+brew install brewsci/bio/last # v926+
+brew install cutadapt # v2.3+
 brew install python@3
 brew install python@2
 brew update; brew upgrade; brew cleanup  # run occasionally to update your software
 ````
 
-I install all github repositories (repos) in ~/src
-`mkdir ~/src`
+For the rest of the software packages, here are installation instructions:  
 
-Install linuxify to use GNU versions of sed, awk, and grep over the macOS versions. GNU grep, GNU sed, and GNU awk are installed with homebrew, but they are given different names (e.g. gsed, gawk, ggrep). However, the scripts use 'sed', 'grep', and 'awk'. To prioritise the GNU versions and to call them as sed, awk, and grep, i use 'Linuxify'
+I install all github repositories (repos) in ~/src  
+````
+mkdir ~/src
+````
+
+Install *linuxify* to prioritise GNU versions of sed, awk, and grep over the macOS versions. GNU grep, GNU sed, and GNU awk are installed with homebrew, but they are given different names (e.g. gsed, gawk, ggrep). However, the scripts use 'sed', 'grep', and 'awk'. To prioritise the GNU versions and to call them as sed, awk, and grep, i use 'Linuxify'
 1. install and run linuxify # https://github.com/fabiomaia/linuxify
 ````
      cd ~/src
@@ -91,8 +99,6 @@ https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-b
      conda update -n base conda  
      conda install -c bioconda adapterremoval  
 ````
-  - cutadapt (v2.3)  
-  `brew install cutadapt`  
   - usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
 ````
      # go to https://drive5.com/usearch/
@@ -123,7 +129,6 @@ https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-b
      # License: dougwyu@mac.com
 ````
 
-
 - Building databases and PROTAX  
   - R (v3.6.0)  
      * installed from binary downloaded from [CRAN](https://cran.rstudio.com)
@@ -141,28 +146,7 @@ https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-b
      mv tabtk /usr/local/bin/tabtk  
 ````
   - Entrez Direct (v6.00 and v8.30)  
-     * see installation instructions on [NIH](https://www.ncbi.nlm.nih.gov/books/NBK179288/)
-````
-     cd ~
-     /bin/bash
-     perl -MNet::FTP -e \
-       '$ftp = new Net::FTP("ftp.ncbi.nlm.nih.gov", Passive => 1);
-        $ftp->login; $ftp->binary;
-        $ftp->get("/entrez/entrezdirect/edirect.tar.gz");'
-     gunzip -c edirect.tar.gz | tar xf -
-     rm edirect.tar.gz
-     builtin exit
-     export PATH=${PATH}:$HOME/edirect >& /dev/null || setenv PATH "${PATH}:$HOME/edirect"
-     ./edirect/setup.sh # takes a long time
-
-     echo "export PATH=\$PATH:\$HOME/edirect" >> $HOME/.bash_profile
-````
-  - usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
-     * see installation instructions above
-  - blast (v2.9.0+)  
-     `brew install blast`  
-  - mafft (v7.407)  
-     `brew install mafft`  
+     * see installation instructions on [NIH](https://www.ncbi.nlm.nih.gov/books/NBK179288/)  
   - sativa (v0.9-57-g8a99328)  
 ````
      cd ~/src; git clone https://github.com/amkozlov/sativa  
@@ -179,10 +163,6 @@ https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-b
      buddysuite -setup  
      seqbuddy -h
 ````
-  - last (926)  
-     `brew install brewsci/bio/last`
-  - perl (v5.28)  
-     `brew install perl # perl 5.30 installed`
 
 *get_sequences.sh* also requires MIDORI databases for mitochondrial target genes [Machida *et al.*, 2017](https://www.nature.com/articles/sdata201727). Download relevant MIDORI_UNIQUE FASTAs in RDP format from the [website](http://www.reference-midori.info/download.php). The manuscript used MIDORI_UNIQUE_1.1 versions of COI, Cytb, lrRNA and srRNA. The unzipped FASTAs should be *copied* to the working directory (because the script moves the working MIDORI fasta files to the intermediate_files/ folder after it finishes module one).  There are downloaded versions in the archived_files/ folder
 
@@ -192,8 +172,8 @@ The 20180221 versions of MIDORI have more complex headers, which interfere with 
 
 The filenames will be changed to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`, and the extra stuff on the headers will be removed before running get_sequences.h
 
-*collapsetypes_v4.6.pl* should already be in your ***screenforbio-mbc*** directory. If not, install as follows:
-*get_sequences.sh* requires *collapsetypes_v4.6.pl* to be in the ***screenforbio-mbc*** directory. Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).  
+*collapsetypes_v4.6.pl* should already be in your ***screenforbio-mbc*** directory. If not, install as follows:  
+Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).  
 ````
      chmod 755 ~/Downloads/collapsetypes_v4.6.pl  
      mv ~/Downloads/collapsetypes_v4.6.pl ~/src/screenforbio-mbc-ailaoshan/  
