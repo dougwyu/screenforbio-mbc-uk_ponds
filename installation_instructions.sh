@@ -65,6 +65,10 @@ cd tabtk/
 make
 mv ./tabtk /usr/local/bin
 
+# sativa
+
+
+
 #### https://github.com/alexcrampton-platt/screenforbio-mbc
 # screenforbio
 # install linuxify to use GNU versions of sed, awk, and grep over the macOS versions. GNU grep, GNU sed, and GNU awk are installed with homebrew, but they are given different names (e.g. gsed, gawk, ggrep). However, the scripts use 'sed', 'grep', and 'awk'. To prioritise GNU versions, i use 'Linuxify'
@@ -97,6 +101,18 @@ mv ./tabtk /usr/local/bin
 # Entrez Direct
 # https://www.ncbi.nlm.nih.gov/books/NBK179288/
 # This downloads several scripts into an "edirect" folder in the user's home directory. The setup.sh script then downloads any missing Perl modules, and may print an additional command for updating the PATH environment variable in the user's configuration file. Copy that command, if present, and paste it into the terminal window to complete the installation process.
+cd ~
+/bin/bash
+perl -MNet::FTP -e \
+  '$ftp = new Net::FTP("ftp.ncbi.nlm.nih.gov", Passive => 1);
+   $ftp->login; $ftp->binary;
+   $ftp->get("/entrez/entrezdirect/edirect.tar.gz");'
+gunzip -c edirect.tar.gz | tar xf -
+rm edirect.tar.gz
+builtin exit
+export PATH=${PATH}:$HOME/edirect >& /dev/null || setenv PATH "${PATH}:$HOME/edirect"
+./edirect/setup.sh # takes a long time
+
 cd ~
 /bin/bash
 perl -MNet::FTP -e \

@@ -85,12 +85,14 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no one Tetrapoda ~/src
 # the first no can be changed to yes to add the Salleh et al. 75 mitogenomes from GigaScience, which are in the files extra_12S.fa and extra_16S.fa (same content). The files were created with parse_Salleh_fasta_header.sh
 # Successful
 # Module 1 took 0.58 hours (16Smam and 12SRiaz primers, Midori 1.1)
-# Module 1 took 0.95 hours (16Smam and 12SRiaz primers, Midori 1.2)
+# Module 1 took 0.81 hours (16Smam and 12SRiaz primers, Midori 1.2)
 
 # Actions after Module 1 complete
 # Module 1 complete. Stopping now for manual inspection of alignments *.mafft.fa inside ./intermediate_files.
 # Restart script when happy with alignments (save as *.mafft_edit.fa in present directory even if no edits are made).
 # Input files have been moved to ./intermediate_files
+cd ~/src/screenforbio-mbc-ailaoshan/
+. ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 mv ./intermediate_files/MIDORI_lrRNA.amp_blast.noN.mafft.fa ./MIDORI_lrRNA.amp_blast.noN.mafft_edit.fa
 mv ./intermediate_files/MIDORI_srRNA.amp_blast.noN.mafft.fa ./MIDORI_srRNA.amp_blast.noN.mafft_edit.fa
 
@@ -118,7 +120,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no two Tetrapoda ~/src
 
 # Success
 # Module 2 took 0.96 hours (MIDORI 1.1)
-# Module 2 took 1.09 hours (MIDORI 1.2)
+# Module 2 took 3.63 hours (MIDORI 1.2)
 # There are two output files:
      # Tetrapoda.missing_sp_to_delete.txt
      # Tetrapoda.combined_taxonomy.txt

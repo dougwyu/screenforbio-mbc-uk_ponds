@@ -86,6 +86,19 @@ conda install -c bioconda adapterremoval
      `brew install seqkit`  
   - Entrez Direct (v6.00 and v8.30)  
      * see installation instructions on [NIH](https://www.ncbi.nlm.nih.gov/books/NBK179288/)
+````
+     cd ~
+     /bin/bash
+     perl -MNet::FTP -e \
+       '$ftp = new Net::FTP("ftp.ncbi.nlm.nih.gov", Passive => 1);
+        $ftp->login; $ftp->binary;
+        $ftp->get("/entrez/entrezdirect/edirect.tar.gz");'
+     gunzip -c edirect.tar.gz | tar xf -
+     rm edirect.tar.gz
+     builtin exit
+     export PATH=${PATH}:$HOME/edirect >& /dev/null || setenv PATH "${PATH}:$HOME/edirect"
+     ./edirect/setup.sh # takes a long time
+````
   - usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
      * see installation instructions above
   - blast (v2.9.0+)  
@@ -95,9 +108,10 @@ conda install -c bioconda adapterremoval
   - sativa (v0.9-57-g8a99328)  
 ````
      cd ~/src; git clone https://github.com/amkozlov/sativa  
+     cd sativa
      ./install.sh --no-avx  
      ln -s sativa.py sativa  
-     echo 'export PATH="/Users/Negorashi2011/src/sativa:${PATH}"' >> ~/.bash_profile  
+     echo 'export PATH="$HOME/src/sativa:${PATH}"' >> ~/.bash_profile  
      # source ~/.bash_profile # if you want to run immediately  
 ````
   - seqbuddy (v1.3.0)  
@@ -109,7 +123,7 @@ conda install -c bioconda adapterremoval
   - last (926)  
      `brew install brewsci/bio/last`
   - perl (v5.28)  
-     `brew install perl # perl 5.28 installed`
+     `brew install perl # perl 5.30 installed`
 
 *get_sequences.sh* also requires MIDORI databases for mitochondrial target genes [Machida *et al.*, 2017](https://www.nature.com/articles/sdata201727). Download relevant MIDORI_UNIQUE FASTAs in RDP format from the [website](http://www.reference-midori.info/download.php). The manuscript used MIDORI_UNIQUE_1.1 versions of COI, Cytb, lrRNA and srRNA. The unzipped FASTAs should be *copied* to the working directory (because the script moves the working MIDORI fasta files to the intermediate_files/ folder after it finishes module one).  There are downloaded versions in the archived_files/ folder
 
@@ -119,7 +133,8 @@ The 20180221 versions of MIDORI have more complex headers, which interfere with 
 
 The filenames will be changed to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`, and the extra stuff on the headers will be removed before running get_sequences.h
 
-*get_sequences.sh*  also requires *collapsetypes_v4.6.pl* to be in the ***screenforbio-mbc*** directory. Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).  
+*collapsetypes_v4.6.pl* should already be in your ***screenforbio-mbc*** directory. If not, install as follows:
+*get_sequences.sh* requires *collapsetypes_v4.6.pl* to be in the ***screenforbio-mbc*** directory. Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).  
 ````
      chmod 755 ~/Downloads/collapsetypes_v4.6.pl  
      mv ~/Downloads/collapsetypes_v4.6.pl ~/src/screenforbio-mbc-ailaoshan/  
