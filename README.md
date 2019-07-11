@@ -30,7 +30,7 @@ Steps and associated scripts:
 ### Required software (tested versions)
 Pipeline tested on macOS 10.14.4 on a MacBook Pro with i7 CPU (4 cores, 8 virtual cores). If you run with an i5 CPU, you have only 4 virtual cores, and you will need to adjust the requested number of threads in the blastn (-num_threads) and sativa.py (-T) commands in get_sequences.sh
 
-Homebrew for macOS
+Homebrew for macOS  
 Go to http://brew.sh and follow the instructions for installing Homebrew on macOS
 
 After Homebrew or Linuxbrew  is installed, run these brew installations
