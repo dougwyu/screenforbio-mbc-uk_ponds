@@ -37,6 +37,8 @@ Go to http://brew.sh and follow the instructions for installing Homebrew on macO
 ````
 brew tap brewsci/bio # a "tap" is a source of "installation formulae" of specialist software, here, bioinformatics
 brew install brewsci/bio/seqkit
+brew install brewsci/bio/last # v926+
+brew install brewsci/bio/raxml
 brew install coreutils # cut, join, sort, tr, etc.
 brew install seqtk # https://github.com/lh3/seqtk
 brew install gnu-sed # GNU sed
@@ -45,7 +47,6 @@ brew install gawk # GNU awk
 brew install perl # v5.28+
 brew install blast # v2.9.0+
 brew install mafft # v7.407+
-brew install brewsci/bio/last # v926+
 brew install cutadapt # v2.3+
 brew install python@3
 brew install python@2
@@ -110,11 +111,9 @@ bcl2fastq and AdapterRemoval are required for processing of raw reads.
      ln -s usearch11.0.667_i86osx32 usearch11  # make symbolic link (symlink)
      chmod 755 usearch11
      usearch11 # should return something like the following
-     # usearch v11.0.667_i86osx32, 4.0Gb RAM (17.2Gb total), 8 cores
-     # (C) Copyright 2013-18 Robert C. Edgar, all rights reserved.
-     # https://drive5.com/usearch
-     #
-     # License: dougwyu@mac.com
+          # usearch v11.0.667_i86osx32, 4.0Gb RAM (17.2Gb total), 8 cores
+          # (C) Copyright 2013-18 Robert C. Edgar, all rights reserved.
+          # https://drive5.com/usearch
 
      # download and install usearch 8.1, also from https://drive5.com/usearch/download.html
      mv ~/Downloads/v8.1.1861_i86osx32 /usr/local/bin
@@ -122,17 +121,15 @@ bcl2fastq and AdapterRemoval are required for processing of raw reads.
      ln -s v8.1.1861_i86osx32 usearch  # make symbolic link (symlink)
      chmod 755 usearch
      usearch # should return something like the following
-     # usearch v8.1.1861_i86osx32, 4.0Gb RAM (17.2Gb total), 8 cores
-     # (C) Copyright 2013-15 Robert C. Edgar, all rights reserved.
-     # http://drive5.com/usearch
-     #
-     # License: dougwyu@mac.com
+          # usearch v8.1.1861_i86osx32, 4.0Gb RAM (17.2Gb total), 8 cores
+          # (C) Copyright 2013-15 Robert C. Edgar, all rights reserved.
+          # http://drive5.com/usearch
 ````
 - RStudio
      * installed from binary downloaded from [RStudio](https://www.rstudio.com/products/rstudio/download/#download)
 - R (v3.6.0+)  
      * installed from binary downloaded from [CRAN](https://cran.rstudio.com)
-- taxize (v0.9.8) R package.  On the R command line:  
+- taxize (v0.9.8) R package.  On the R command line, run:  
      `install.packages("taxize", dep=TRUE)`  
 - tabtk (r19)  
 ````
@@ -167,7 +164,7 @@ bcl2fastq and AdapterRemoval are required for processing of raw reads.
      * *V 1.1*:  `>AF382008	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`  
      * *V 20180221*:  `>AF382008.3.649.1602	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`  
 
-     The filenames will be changed to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`, and the extra stuff on the headers will be removed before running get_sequences.h
+     The filenames will be changed to this format: `MIDORI_UNIQUE_1.2_srRNA_RDP.fasta`, and the extra stuff on the headers will be removed before running *get_sequences.sh*
 
 - *collapsetypes_v4.6.pl* should already be in your ***screenforbio-mbc*** directory. If not, install as follows:  
 Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/projects/collapsetypes/).  
