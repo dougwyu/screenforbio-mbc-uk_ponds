@@ -38,7 +38,6 @@ Go to http://brew.sh and follow the instructions for installing Homebrew on macO
 brew tap brewsci/bio # a "tap" is a source of "installation formulae" of specialist software, here, bioinformatics
 brew install brewsci/bio/seqkit
 brew install brewsci/bio/last # v926+
-brew install brewsci/bio/raxml
 brew install coreutils # cut, join, sort, tr, etc.
 brew install seqtk # https://github.com/lh3/seqtk
 brew install gnu-sed # GNU sed
@@ -139,7 +138,7 @@ bcl2fastq and AdapterRemoval are required for processing of raw reads.
      make  
      mv tabtk /usr/local/bin/tabtk  
 ````
-- sativa (v0.9-57-g8a99328)  
+- sativa (v0.9-57-g8a99328)  Sativa is unstable during installation, in that its built-in raxml source does not always compile. Check that the sativa/raxml/ directory contains one or more raxml binaries (the specific one depends on your configuration) and test the sativa installation with the example dataset (see code below).
 ````
      cd ~/src; git clone https://github.com/amkozlov/sativa  
      cd sativa
@@ -148,8 +147,9 @@ bcl2fastq and AdapterRemoval are required for processing of raw reads.
      echo 'export PATH="$HOME/src/sativa:${PATH}"' >> ~/.bash_profile  
      # source ~/.bash_profile # if you want to run immediately  
           # to test installation,
+               # ls ~/src/sativa/raxml/ # should contain one or more raxml binaries
                # cd ~/src/sativa/example
-               # ../sativa.py -s test.phy -t test.tax -x BAC -T 2
+               # ../sativa.py -s test.phy -t test.tax -x BAC -T 2 # runs fast
 ````
 - seqbuddy (v1.3.0)  
 ````
@@ -176,20 +176,20 @@ Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/proje
      mv ~/Downloads/collapsetypes_v4.6.pl ~/src/screenforbio-mbc-ailaoshan/  
 ````
 
-- *PROTAX* scripts are reposted here with the kind permission of Panu Somervuo. These are in the *protaxscripts* subdirectory of ***screenforbio-mbc***. This version of *PROTAX* is from [Rodgers *et al.* 2017](https://doi.org/10.1111/1755-0998.12701), scripts were originally posted on [Dryad](https://datadryad.org/resource/doi:10.5061/dryad.bj5k0).  
+- *PROTAX* scripts are reposted here with the kind permission of Panu Somervuo. These are in the *protaxscripts* subdirectory of ***screenforbio-mbc-ailaoshan***. This version of *PROTAX* is from [Rodgers *et al.* 2017](https://doi.org/10.1111/1755-0998.12701), and the scripts were originally posted on [Dryad](https://datadryad.org/resource/doi:10.5061/dryad.bj5k0).  
 
 ### Usage
 All steps in the pipeline are implemented via bash scripts with similar parameter requirements. Each script includes commented usage instructions at the start and displays the same instructions if run without any or an incorrect number of parameters.
 
 For the Ailaoshan fork, the full command history is in `screenforbio_ailaoshan.sh`. Although formatted as a shell script, it should be run command by command, instead of as a single bash script file, because there are multiple choices to be made during the pipeline.
 
-Some of the bash scripts used within are primarily wrappers for R scripts, all of which are assumed to be in the ***screenforbio-mbc*** directory.  
+Some of the bash scripts used within are primarily wrappers for R scripts, all of which are assumed to be in the ***screenforbio-mbc-ailaoshan*** directory.  
 
 *get_taxonomy.sh* example:
 
     mkdir ~/Documents/mbc_analysis
     cd ~/Documents/mbc_analysis
-    bash ~/Documents/screenforbio-mbc/get_taxonomy.sh
+    bash ~/Documents/screenforbio-mbc-ailaoshan/get_taxonomy.sh
 
 You will see the following message:
 
@@ -200,11 +200,11 @@ You will see the following message:
     Where:
     taxonName is the scientific name of the target taxon e.g. Tetrapoda
     taxonRank is the classification rank of the target taxon e.g. superclass
-    screenforbio is the path to the screenforbio-mbc directory
+    screenforbio is the path to the screenforbio-mbc-ailaoshan directory
 
 To get the ITIS classification for Mammalia:
 
-    bash ~/Documents/screenforbio-mbc/get_taxonomy.sh Mammalia class ~/Documents/screenforbio-mbc
+    bash ~/Documents/screenforbio-mbc-ailaoshan/get_taxonomy.sh Mammalia class ~/Documents/screenforbio-mbc-ailaoshan/
 
 When the script is running various messages will be printed to both the terminal and a log file. On completion of the script the final messages will indicate the next script that should be run and any actions the user should take beforehand.
 
