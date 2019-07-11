@@ -60,7 +60,7 @@ mkdir ~/src
 ````
 
 - Install *linuxify* to prioritise GNU versions of sed, awk, and grep over the macOS versions. GNU grep, GNU sed, and GNU awk are installed with homebrew, but they are given different names (e.g. gsed, gawk, ggrep). However, the scripts use 'sed', 'grep', and 'awk'. To prioritise the GNU versions and to call them as sed, awk, and grep, i use 'Linuxify'  
-     * 1. install and run linuxify # https://github.com/fabiomaia/linuxify
+1. install and run linuxify # https://github.com/fabiomaia/linuxify
 ````
      cd ~/src
      git clone https://github.com/fabiomaia/linuxify.git
@@ -71,18 +71,14 @@ mkdir ~/src
      ls -al ~/src/linuxify/ # should see the file .linuxify
      cp ~/src/linuxify/.linuxify ~/ # cp to root directory
 ````  
-
-     * 2. to 'linuxify' a terminal session:  run the following at the beginning of a script or a session.
-
+2. to 'linuxify' a terminal session:  run the following at the beginning of a script or a session.
 ````
      . ~/.linuxify; awk; which sed; which grep
           # awk # should return help page for gawk
           # which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
           # which grep # should return: '/usr/local/opt/grep/libexec/gnubin/grep'\
 ````  
-
-     * 3. OPTIONAL if i want to run linuxify automatically with each new shell
-
+3. OPTIONAL if i want to run linuxify automatically with each new shell
 ````
      # add this to my ~/.bashrc
           . ~/.linuxify
