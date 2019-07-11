@@ -147,6 +147,9 @@ bcl2fastq and AdapterRemoval are required for processing of raw reads.
      ln -s sativa.py sativa  
      echo 'export PATH="$HOME/src/sativa:${PATH}"' >> ~/.bash_profile  
      # source ~/.bash_profile # if you want to run immediately  
+          # to test installation,
+               # cd ~/src/sativa/example
+               # ../sativa.py -s test.phy -t test.tax -x BAC -T 2
 ````
 - seqbuddy (v1.3.0)  
 ````
