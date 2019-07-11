@@ -28,21 +28,58 @@ Steps and associated scripts:
 **Note:** in some steps the ***screenforbio-mbc*** release associated with the manuscript is specific to the amplicons used in the study - primer sets and relevant settings are hard-coded in *read_preprocessing.sh* and *get_sequences.sh*. This will be generalised in a future release.
 
 ### Required software (tested versions)
-Pipeline tested on macOS 10.14.4
+Pipeline tested on macOS 10.14.4 on a MacBook Pro with i7 CPU (4 cores, 8 virtual cores). If you run with an i5 CPU, you have only 4 virtual cores, and you will need to adjust the requested number of threads in the blastn and sativa.py commands in get_sequences.sh
 
-- macOS should have GNU grep, awk and sed prioritised over macOS's BSD versions. These can be installed independently with Homebrew, or you can activate their pathnames with [linuxify](https://github.com/fabiomaia/linuxify) for every new session.  
-````
-cd ~/src # or wherever you install your github repos
-git clone https://github.com/fabiomaia/linuxify.git
-cd linuxify/
-./linuxify install # places `./linuxify` file at root directory
+## Homebrew for macOS
+# go to http://brew.sh and follow the instructions for installing Homebrew on macOS
 
-# to linuxify a session:  run the following at the beginning of a script or a session.
-. ~/.linuxify; awk; which grep; which sed
-     awk # should return help page for `gawk`
-     which grep # should return: `/usr/local/opt/grep/libexec/gnubin/grep`
-     which sed # should return: `/usr/local/opt/gnu-sed/libexec/gnubin/sed`
+## after Homebrew or Linuxbrew  is installed, run these brew installations
 ````
+brew tap brewsci/bio # a "tap" is a source of "installation formulae" of specialist software, here, bioinformatics
+brew install brewsci/bio/seqkit
+brew install coreutils # cut, join, sort, tr, etc.
+brew install seqtk # https://github.com/lh3/seqtk
+brew install gnu-sed # GNU sed
+brew install grep # GNU grep
+brew install gawk # GNU awk
+brew install perl
+brew install python@3
+brew install python@2
+brew update; brew upgrade; brew cleanup  # run occasionally to update your software
+````
+
+# I install all github repositories (repos) in ~/src
+mkdir ~/src
+
+# Install linuxify to use GNU versions of sed, awk, and grep over the macOS versions. GNU grep, GNU sed, and GNU awk are installed with homebrew, but they are given different names (e.g. gsed, gawk, ggrep). However, the scripts use 'sed', 'grep', and 'awk'. To prioritise the GNU versions and to call them as sed, awk, and grep, i use 'Linuxify'
+# 1. install and run linuxify # https://github.com/fabiomaia/linuxify
+````
+     cd ~/src
+     git clone https://github.com/fabiomaia/linuxify.git
+     cd linuxify/
+     ./linuxify install # to install all the GNU versions
+          # cd ~/src/linuxify/;  ./linuxify uninstall # to remove all the GNU versions and the pathname changes
+          # manually remove '. ~/.linuxify' from my ~/.bashrc file
+     ls -al ~/src/linuxify/ # should see the file .linuxify
+     cp ~/src/linuxify/.linuxify ~/ # cp to root directory
+````
+# 2. to 'linuxify' a terminal session:  run the following at the beginning of a script or a session.
+````
+     . ~/.linuxify; awk; which sed; which grep
+          # awk # should return help page for gawk
+          # which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+          # which grep # should return: '/usr/local/opt/grep/libexec/gnubin/grep'\
+````
+# 3. OPTIONAL if i want to run linuxify automatically with each new shell
+````
+     # add this to my ~/.bashrc
+          . ~/.linuxify
+     # then add this to my .bash_profile
+          if [ -f ~/.bashrc ]; then
+              source ~/.bashrc
+          fi
+````
+# https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-bash-profile-and-bashrc
 
 - Processing of raw reads only  
   - bcl2fastq (v2.18)  
@@ -50,28 +87,51 @@ cd linuxify/
   - AdapterRemoval (v2.1.7)  
      * first install [miniconda](https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.pkg)  
 ````
-brew update; brew upgrade; brew cleanup  
-brew install python # installs python3  
-conda update -n base conda  
-conda install -c bioconda adapterremoval  
+     # brew install python@3 # installs python3 if you haven't done so already (see above)
+     conda update -n base conda  
+     conda install -c bioconda adapterremoval  
 ````
   - cutadapt (v2.3)  
   `brew install cutadapt`  
   - usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
-     * macOS binaries downloaded from [drive5](drive5.com) and moved to /usr/local/bin
 ````
-     cd /usr/local/bin/
-     # symlink to usearch and usearch11 aliases
-     ln -s usearch8.1.1861_i86osx32 usearch
-     ln -s usearch11.0.667_i86osx32 usearch11
-     # public (free) usearch binaries are 32-bit only and thus will only run on macOS up to v 10.14.
+     # go to https://drive5.com/usearch/
+     # register and download the 32-bit usearch11 binary for your OS
+     # install usearch binary downloaded from https://drive5.com/usearch/download.html
+     cd ~/Downloads
+     mv ~/Downloads/usearch11.0.667_i86osx32 /usr/local/bin
+     cd /usr/local/bin
+     ln -s usearch11.0.667_i86osx32 usearch11  # make symbolic link (symlink)
+     chmod 755 usearch11
+     usearch11 # should return something like the following
+     # usearch v11.0.667_i86osx32, 4.0Gb RAM (17.2Gb total), 8 cores
+     # (C) Copyright 2013-18 Robert C. Edgar, all rights reserved.
+     # https://drive5.com/usearch
+     #
+     # License: dougwyu@mac.com
+
+     # download and install usearch 8.1, also from https://drive5.com/usearch/download.html
+     mv ~/Downloads/v8.1.1861_i86osx32 /usr/local/bin
+     cd /usr/local/bin
+     ln -s v8.1.1861_i86osx32 usearch  # make symbolic link (symlink)
+     chmod 755 usearch
+     usearch # should return something like the following
+     # usearch v8.1.1861_i86osx32, 4.0Gb RAM (17.2Gb total), 8 cores
+     # (C) Copyright 2013-15 Robert C. Edgar, all rights reserved.
+     # http://drive5.com/usearch
+     #
+     # License: dougwyu@mac.com
 ````
+
 
 - Building databases and PROTAX  
   - R (v3.6.0)  
      * installed from binary downloaded from [CRAN](https://cran.rstudio.com)
-  - taxize (v0.9.8)
-     * if not available, install development version ≥0.9.7.9313: `remotes::install_github("ropensci/taxize")`  
+  - RStudio
+     * installed from binary downloaded from [RStudio](https://www.rstudio.com/products/rstudio/download/#download)
+  - taxize (v0.9.8) R package.
+     On the R command line:
+     `install.packages("taxize", dep=TRUE)`  
   - tabtk (r19)  
 ````
      cd ~/src/  
@@ -80,10 +140,6 @@ conda install -c bioconda adapterremoval
      make  
      mv tabtk /usr/local/bin/tabtk  
 ````
-  - seqtk (v1.3-r106)  
-     `brew install seqtk`  
-  - seqkit (v0.10.1)  
-     `brew install seqkit`  
   - Entrez Direct (v6.00 and v8.30)  
      * see installation instructions on [NIH](https://www.ncbi.nlm.nih.gov/books/NBK179288/)
 ````
@@ -98,6 +154,8 @@ conda install -c bioconda adapterremoval
      builtin exit
      export PATH=${PATH}:$HOME/edirect >& /dev/null || setenv PATH "${PATH}:$HOME/edirect"
      ./edirect/setup.sh # takes a long time
+
+     echo "export PATH=\$PATH:\$HOME/edirect" >> $HOME/.bash_profile
 ````
   - usearch (v8.1.1861_i86osx32, v11.0.667_i86osx32)  
      * see installation instructions above
@@ -116,9 +174,10 @@ conda install -c bioconda adapterremoval
 ````
   - seqbuddy (v1.3.0)  
 ````
-     pip3 install buddysuite # installs a bunch of software  
+     pip3 install buddysuite # installs a bunch of software, requires python3
+     # https://github.com/biologyguy/BuddySuite
      buddysuite -setup  
-     seqbuddy -h  
+     seqbuddy -h
 ````
   - last (926)  
      `brew install brewsci/bio/last`
