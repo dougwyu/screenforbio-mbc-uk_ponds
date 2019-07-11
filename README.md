@@ -135,9 +135,9 @@ https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-b
   - RStudio
      * installed from binary downloaded from [RStudio](https://www.rstudio.com/products/rstudio/download/#download)
   - taxize (v0.9.8) R package.
-     On the R command line:
+     On the R command line:  
      `install.packages("taxize", dep=TRUE)`  
-  - tabtk (r19)  
+- tabtk (r19)  
 ````
      cd ~/src/  
      git clone https://github.com/lh3/tabtk.git  
@@ -145,9 +145,9 @@ https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-b
      make  
      mv tabtk /usr/local/bin/tabtk  
 ````
-  - Entrez Direct (v6.00 and v8.30)  
+- Entrez Direct (v6.00 and v8.30)  
      * see installation instructions on [NIH](https://www.ncbi.nlm.nih.gov/books/NBK179288/)  
-  - sativa (v0.9-57-g8a99328)  
+- sativa (v0.9-57-g8a99328)  
 ````
      cd ~/src; git clone https://github.com/amkozlov/sativa  
      cd sativa
@@ -156,7 +156,7 @@ https://apple.stackexchange.com/questions/51036/what-is-the-difference-between-b
      echo 'export PATH="$HOME/src/sativa:${PATH}"' >> ~/.bash_profile  
      # source ~/.bash_profile # if you want to run immediately  
 ````
-  - seqbuddy (v1.3.0)  
+- seqbuddy (v1.3.0)  
 ````
      pip3 install buddysuite # installs a bunch of software, requires python3
      # https://github.com/biologyguy/BuddySuite
