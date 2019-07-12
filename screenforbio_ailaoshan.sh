@@ -142,7 +142,7 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no three Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
 # Success
 # Module 3 took ~ 5.7 hours for srRNA and lrRNA, using 4 threads (MIDORI 1.1)
-# Module 3 took ~ 12.02 hours for srRNA and lrRNA, using 5 threads (MIDORI 1.2)
+# Module 3 took ~ 13.15 hours for srRNA and lrRNA, using 6 threads (MIDORI 1.2)
 
 # Actions after Module 3 complete
 # Module 3 complete. Stopping now for manual inspection of mislabelled sequences in ./MIDORI_locus_sativa/MIDORI_locus.mis
@@ -157,8 +157,8 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 # archive an original version before changing it with the sativa suggestions
 cp Tetrapoda.final_taxonomy_sativa.txt Tetrapoda.final_taxonomy_sativa_orig.txt
 # then use this R code (delete_seqs_suggested_by_sativa.Rmd) to remove sequences that sativa identifies as incorrect
-     # I remove all sequences that sativa identifies as having an incorrect taxonomy above genus level, as such large errors are most likely to be database errors.
-     # I ignore sativa's proposed substitute taxonomies at genus and species ranks, because some unknown, possibly large, proportion of these are due to the *tree* being incorrect, since these are short seqs
+     # I remove all sequences that sativa identifies as having an incorrect taxonomy at family level and above, as such large errors are most likely to be database errors.
+     # I ignore sativa's proposed substitute taxonomies below family level (mostly genus and species), because some unknown, possibly large, proportion of these are due to the *tree* being incorrect, since these are short seqs
 
 # START AGAIN HERE to go over the species and genus-level sativa-flagged sequences to see if i can make useful corrections:  e.g. add Bufo to the ones with missing genus name
 
