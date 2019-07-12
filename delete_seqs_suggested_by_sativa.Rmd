@@ -16,15 +16,21 @@ library(tidyverse)
 
 Programming note:  readr can import only if the first set of lines is skipped and the column names are provided
 ```{r delete lrRNA sequences that sativa flags as wrong at family and above}
-MIDORI_lrRNA <- read_delim("~/src/screenforbio-mbc-ailaoshan/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
+MIDORI_lrRNA <- read_delim("~/src/screenforbio-mbc-ailaoshan/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis",
+                           "\t", escape_double = FALSE, 
+                           trim_ws = TRUE, 
+                           skip = 5, 
+                           col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel",
+"Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
 # the key is to skip the first set of lines
 names(MIDORI_lrRNA)
 MIDORI_lrRNA_sep <- MIDORI_lrRNA %>% 
     tidyr::separate(PerRankConfidence, sep = ";", into = c("domain_conf", "phylum_conf", "class_conf", "order_conf", "family_conf", "genus_conf", "species_conf"), remove = FALSE)
 
 # save file with SeqIDs of all sequences where sativa disagrees with its taxonomic designation at the ranks of class, order, family, or subtribe. To do this, i choose all rows where MislabeledLevel != Genus or Species. These are sequences to delete.
+unique(MIDORI_lrRNA_sep$MislabeledLevel) # use this to determine which levels to keep. Here, keep c("Class", "Order","Family")
 MIDORI_locus.mis_to_delete <- MIDORI_lrRNA_sep %>% 
-    filter(!MislabeledLevel %in% c("Genus", "Species")) %>% 
+    filter(MislabeledLevel %in% c("Class", "Order","Family")) %>% 
     select(SeqID)
 write_tsv(MIDORI_locus.mis_to_delete, "~/src/screenforbio-mbc-ailaoshan/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis_to_delete", col_names = FALSE)
 ```
@@ -53,15 +59,21 @@ Code to replace genus and species names with sativa-suggested names, but choosin
 
 
 ```{r delete srRNA sequences that sativa flags as wrong at family and above}
-MIDORI_srRNA <- read_delim("~/src/screenforbio-mbc-ailaoshan/MIDORI_srRNA_sativa/MIDORI_srRNA.mis", "\t", escape_double = FALSE, trim_ws = TRUE, skip = 5, col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
+MIDORI_srRNA <- read_delim("~/src/screenforbio-mbc-ailaoshan/MIDORI_srRNA_sativa/MIDORI_srRNA.mis", 
+                           "\t", 
+                           escape_double = FALSE, 
+                           trim_ws = TRUE, 
+                           skip = 5, 
+                           col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel","Confidence","OriginalTaxonomyPath","ProposedTaxonomyPath","PerRankConfidence"))
 # the key is to skip the first set of lines
 names(MIDORI_srRNA)
 MIDORI_srRNA_sep <- MIDORI_srRNA %>% 
     tidyr::separate(PerRankConfidence, sep = ";", into = c("domain_conf", "phylum_conf", "class_conf", "order_conf", "family_conf", "genus_conf", "species_conf"), remove = FALSE)
 
 # save file with SeqIDs of all sequences where sativa disagrees with its taxonomic designation at the ranks of class, order, family, or subtribe. To do this, i choose all rows where MislabeledLevel != Genus or Species. These are sequences to delete.
+unique(MIDORI_srRNA_sep$MislabeledLevel) # use this to determine which levels to keep. Here, keep c("Class", "Order","Epifamily","Family")
 MIDORI_locus.mis_to_delete <- MIDORI_srRNA_sep %>% 
-    filter(!MislabeledLevel %in% c("Genus", "Species")) %>% 
+    filter(MislabeledLevel %in% c("Class", "Order","Epifamily","Family")) %>% 
     select(SeqID)
 write_tsv(MIDORI_locus.mis_to_delete, "~/src/screenforbio-mbc-ailaoshan/MIDORI_srRNA_sativa/MIDORI_srRNA.mis_to_delete", col_names = FALSE)
 ```
