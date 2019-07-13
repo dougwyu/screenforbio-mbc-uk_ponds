@@ -17,7 +17,8 @@ library(tidyverse)
 Programming note:  readr can import only if the first set of lines is skipped and the column names are provided
 ```{r delete lrRNA sequences that sativa flags as wrong at family and above}
 MIDORI_lrRNA <- read_delim("~/src/screenforbio-mbc-ailaoshan/MIDORI_lrRNA_sativa/MIDORI_lrRNA.mis",
-                           "\t", escape_double = FALSE, 
+                           "\t", 
+                           escape_double = FALSE, 
                            trim_ws = TRUE, 
                            skip = 5, 
                            col_names = c("SeqID", "MislabeledLevel","OriginalLabel","ProposedLabel",
