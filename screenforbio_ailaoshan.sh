@@ -204,7 +204,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no four Tetrapoda ~/sr
 # unweighted
 # cd ~/src/screenforbio-mbc-ailaoshan/
 # . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-# bash ~/src/screenforbio-mbc-ailaoshan/train_protax.sh Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-ailaoshan/
+# bash ~/src/screenforbio-mbc-ailaoshan/train_protax.sh Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-ailaoshan
      # usage: bash train_protax.sh taxonomy screenforbio
      # where:
      # taxonomy is the final protax-formatted taxonomy file from get_sequences.sh (e.g. Tetrapoda.final_protax_taxonomy.txt)

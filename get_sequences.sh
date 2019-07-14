@@ -714,7 +714,7 @@ function module_one {
     awk '{print $1 "\t" $2}' MIDORI.final_id2acc2sp.txt > ${TAXON}.final_rename_seqs_sativa.txt
     echo "Generating master sativa taxonomy file..."
     join -1 3 -2 7 -o 1.2,2.2,2.3,2.4,2.5,2.6,2.7 <(sort -k3,3 MIDORI.final_id2acc2sp.txt) <(sort -k7,7 ${TAXON}.consensus_taxonomy.txt) | awk '{print $1 "\t" "Eukaryota;" $2 ";" $3 ";" $4 ";" $5 ";" $6 ";" $7}' | sed 's/_/ /g' | sort -u > ${TAXON}.final_taxonomy_sativa.txt
-    echo "Working on each locus seperately..."
+    echo "Working on each locus separately..."
     FILES=($(find . -mindepth 1 -maxdepth 1 -type f -name "MIDORI_*.final.fa" | sed 's/\.\///g'))
     for file in ${FILES[@]}
     do
