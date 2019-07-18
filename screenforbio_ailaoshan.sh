@@ -76,14 +76,14 @@ sed -i 's/\.[0-9].*\t/\t/g' MIDORI_UNIQUE_1.2_srRNA_RDP.fasta | head -n 40
      # cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=360){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Kocher primers
 # to use the Riaz primers (12S_primers_riaz.fa), in get_sequences.sh:
      # change the usearch -search_pcr line 179 to
-     # usearch11 -search_pcr2 ${label}.raw.fa -fwdprimer ACTGGGATTAGATACCCC -revprimer YRGAACAGGCTCCTCTAG -minamp 84 -maxamp 120 -strand both -maxdiffs 4 -fastaout ${label}.amp.fa # for 12S Riaz primers
+     # usearch11 -search_pcr2 ${label}.raw.fa -fwdprimer ACTGGGATTAGATACCCC -revprimer YRGAACAGGCTCCTCTAG -minamp 80 -maxamp 120 -strand both -maxdiffs 4 -fastaout ${label}.amp.fa # for 12S Riaz primers
      # change the usearch -fastx_truncate line 184 to
      # usearch -fastx_truncate ${label}.amp.fa -stripleft 0 -stripright 0 -fastaout ${label}.amp_only.fa # for Riaz 12S primers
      # change the awk line 189 to
-     # cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=84){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Riaz primers
+     # cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=80){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Riaz primers
 
-bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no one Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
-# the first no can be changed to yes to add the Salleh et al. 75 mitogenomes from GigaScience, which are in the files extra_12S.fa and extra_16S.fa (same content). The files were created with parse_Salleh_fasta_header.sh
+bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh yes no one Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
+# the first no is changed from no to yes to add the Salleh et al. 75 mitogenomes from GigaScience, which are in the files extra_12S.fa and extra_16S.fa (same content). The files were created with archived_files/parse_Salleh_fasta_header.sh
 # Successful
 # Module 1 took 0.58 hours (16Smam and 12SRiaz primers, Midori 1.1)
 # Module 1 took 0.81 hours (16Smam and 12SRiaz primers, Midori 1.2)
@@ -101,7 +101,7 @@ mv ./intermediate_files/MIDORI_srRNA.amp_blast.noN.mafft.fa ./MIDORI_srRNA.amp_b
 # Requires a taxon_ITIS_taxonomy.txt file (e.g. Tetrapoda_ITIS_taxonomy.txt file)
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no two Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
+bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh yes no two Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
 
 # Some species cause the taxize::classification() function inside get_sequences.sh to fail, throwing up the following error:
      # Retrieving data for taxon 'Zygogeomys trichopus'
