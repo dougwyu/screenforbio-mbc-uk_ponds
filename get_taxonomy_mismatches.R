@@ -18,7 +18,7 @@ message("Step 2: Import list of species")
 taxon<-args[1]
 mismatch<-read.table(paste0("MIDORI_",taxon,".ITIS_mismatch_sp.txt"),header=F,sep="\t", stringsAsFactors=FALSE)$V1
 message("")
-message("Step 3: Get CoL matches with classification()")
+message("Step 3: Get CoL matches with classification()") # retrieve taxonomic hierarchy of the species in mismatch
 #DY mismatch_class<-classification(mismatch,rank="species",db="col",return_id=FALSE,rows=1)
 # classification() doesn't take `rank="species"`
 mismatch_class<-classification(mismatch, db="col", return_id=FALSE, rows=1)
@@ -34,7 +34,8 @@ message("")
 message("Step 5: Get ITIS matches with classification()")
 col_unmatched <- mismatch_class[unlist(lapply(mismatch_class,function(x)is.logical(x[[1]])))]
 col_missing <- names(col_unmatched)
-missing_class<-classification(col_missing,rank="species",db="itis",return_id=FALSE,rows=1)
+# missing_class<-classification(col_missing,rank="species",db="itis",return_id=FALSE,rows=1)
+missing_class<-classification(col_missing,db="itis",return_id=FALSE,rows=1)
 message("")
 message("Step 6: Write failed lookups to file")
 itis_unmatched <- missing_class[unlist(lapply(missing_class,function(x)is.logical(x[[1]])))]
