@@ -20,7 +20,8 @@ seqkit seq -i --id-regexp "^([^\|]+)" Salleh2017GigaScience_72mitogenomes.fasta 
      seqkit replace -p "^([0-9, A-Z, a-z]*)_(\w+)" -r '$2 _ $1' | \
      seqkit replace -p " _ " -r '_' -o salleh_reformatted.fa  # remove spaces
 seqkit seq -g  salleh_reformatted.fa -o extra_12S.fa # remove gaps
-head extra_12S.fa
+rm salleh_reformatted.fa
+head -n 40 extra_12S.fa
 
 cp extra_12S.fa extra_16S.fa # these the input files to get_sequences.sh, where <extras> is 'yes'
 cp extra_12S.fa ~/src/screenforbio-mbc-ailaoshan/
