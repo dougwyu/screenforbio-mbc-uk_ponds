@@ -194,7 +194,7 @@ function module_one {
         # check for ambigs
         seqtk comp ${label}.amp_blast.fa | awk '{sum=0; for(i=7;i<=9; i++) {sum+=$i} {perc=100*sum/$2} if(perc==0.00) print $1}' - | seqtk subseq ${label}.amp_blast.fa - > ${label}.amp_blast.noN.fa
         # align
-        mafft --adjustdirection --retree 2 --reorder --thread 4 ${label}.amp_blast.noN.fa > ${label}.amp_blast.noN.mafft.fa
+        mafft --adjustdirection --retree 2 --reorder --thread 7 ${label}.amp_blast.noN.fa > ${label}.amp_blast.noN.mafft.fa
       else
         echo "  No sequences with matching primer sequences found, skipping..."
         echo ""
@@ -282,7 +282,7 @@ function module_one {
         # check for ambigs
         seqtk comp ${label}.amp_blast.fa | awk '{sum=0; for(i=7;i<=9; i++) {sum+=$i} {perc=100*sum/$2} if(perc==0.00) print $1}' - | seqtk subseq ${label}.amp_blast.fa - > ${label}.amp_blast.noN.fa
         # align
-        mafft --adjustdirection --retree 2 --reorder --thread 4 ${label}.amp_blast.noN.fa > ${label}.amp_blast.noN.mafft.fa
+        mafft --adjustdirection --retree 2 --reorder --thread 7 ${label}.amp_blast.noN.fa > ${label}.amp_blast.noN.mafft.fa
       else
         echo "  No sequences with matching primer sequences found, skipping..."
         echo ""
@@ -369,7 +369,7 @@ function module_one {
         # check for ambigs
         seqtk comp ${label}.amp_blast.fa | awk '{sum=0; for(i=7;i<=9; i++) {sum+=$i} {perc=100*sum/$2} if(perc==0.00) print $1}' - | seqtk subseq ${label}.amp_blast.fa - > ${label}.amp_blast.noN.fa
         # align
-        mafft --adjustdirection --retree 2 --reorder --thread 4 ${label}.amp_blast.noN.fa > ${label}.amp_blast.noN.mafft.fa
+        mafft --adjustdirection --retree 2 --reorder --thread 7 ${label}.amp_blast.noN.fa > ${label}.amp_blast.noN.mafft.fa
       else
         echo "  No sequences with matching primer sequences found, skipping..."
         echo ""
@@ -456,7 +456,7 @@ function module_one {
         # check for ambigs
         seqtk comp ${label}.amp_blast.fa | awk '{sum=0; for(i=7;i<=9; i++) {sum+=$i} {perc=100*sum/$2} if(perc==0.00) print $1}' - | seqtk subseq ${label}.amp_blast.fa - > ${label}.amp_blast.noN.fa
         # align
-        mafft --adjustdirection --retree 2 --reorder --thread 4 ${label}.amp_blast.noN.fa > ${label}.amp_blast.noN.mafft.fa
+        mafft --adjustdirection --retree 2 --reorder --thread 7 ${label}.amp_blast.noN.fa > ${label}.amp_blast.noN.mafft.fa
       else
         echo "  No sequences with matching primer sequences found, skipping..."
         echo ""
@@ -736,10 +736,10 @@ function module_one {
       label=($(echo ${file} | sed 's/.final_for_sativa.fa//g'))
       locus=($(echo ${label} | sed 's/*_//g'))
       mkdir ./${label}_sativa
-      #DY sativa -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 4 -n ${label} -o ./${label}_sativa
+      #DY sativa -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 7 -n ${label} -o ./${label}_sativa
       #DY to make it run with python2, have to invoke python2 and give full pathname
       #DY sativa only runs with python2
-      python2 ~/src/sativa/sativa.py -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 6 -n ${label} -o ./${label}_sativa
+      python2 ~/src/sativa/sativa.py -s ${file} -t ${label}.final_for_sativa.tax -x ZOO -T 7 -n ${label} -o ./${label}_sativa
       #cleanup
       mv ${label}.final.fa ./intermediate_files
       rm ${label}.final_for_sativa.tax
