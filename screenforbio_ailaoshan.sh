@@ -36,7 +36,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_taxonomy.sh Tetrapoda superclass ~/src
 # Success.
 # Fetching taxonomy of Tetrapoda took 8.14 hours on 20190526, using fast internet
 # output is Tetrapoda_ITIS_taxonomy.txt, a copy of which is in screenforbio-mbc-ailaoshan/archived_files/
-cp archived_files/Tetrapoda_ITIS_taxonomy_20190526.txt ./Tetrapoda_ITIS_taxonomy.txt
+cp archived_files/Tetrapoda_ITIS_taxonomy_20190512.txt ./Tetrapoda_ITIS_taxonomy.txt
 
 # format of the new file is different from the 20190512 version, so this needs to be tested
 # cp archived_files/Tetrapoda_ITIS_taxonomy_20190526.txt ./Tetrapoda_ITIS_taxonomy.txt
@@ -46,6 +46,7 @@ cp archived_files/Tetrapoda_ITIS_taxonomy_20190526.txt ./Tetrapoda_ITIS_taxonomy
 # usage: bash get_sequences.sh <extras> <gap-fill> <module> <taxon> <screenforbio>
 # where:
 # <extras> is 'yes' or 'no', indicating whether to add local FASTA format sequences. if 'yes', files must be in present directory labelled "extra_12S.fa", "extra_16S.fa", "extra_Cytb.fa", "extra_COI.fa", with headers in format Genus_species_uniqueID.
+     # We add sequences from the Salleh et al. (2017 GigaScience paper). To generate 'extra_12S.fa' and 'extra_16S.fa' run archived_files/parse_Salleh_fasta_header.sh
 # <gap-fill> is 'no' or a tab-delimited text file of species names to be targeted for gap-filling from NCBI, in format Genus_species.
 # <module> is 'one', 'two', 'three' or 'four' indicating whether the script is starting from scratch ('one'), restarting after checking the output of the mafft alignment ('two'), restarting after manual correction of failed taxonomy lookups ('three'), or restarting after manual checks of SATIVA output ('four'). see end of module messages for any requirements for the next module."
 # <taxon> is the taxon for which the taxonomy was downloaded with get_taxonomy.sh, e.g. Mammalia or Tetrapoda (all outputs should be in present directory).
