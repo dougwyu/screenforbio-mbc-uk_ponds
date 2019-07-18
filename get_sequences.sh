@@ -265,7 +265,8 @@ function module_one {
         echo "  No gap-filling requested, moving on..."
       fi
       # pcr - allow ~10% mismatch per primer
-      usearch -search_pcr ${label}.raw.fa -db ${SCRIPTS}/16S_primers.fa -strand both -maxdiffs 2 -minamp 130 -maxamp 140 -ampout ${label}.amp.fa
+      usearch -search_pcr ${label}.raw.fa -db ${SCRIPTS}/16S_primers.fa -strand both -maxdiffs 2 -minamp 122 -maxamp 190 -ampout ${label}.amp.fa
+      # usearch -search_pcr ${label}.raw.fa -db ${SCRIPTS}/16S_primers.fa -strand both -maxdiffs 2 -minamp 130 -maxamp 140 -ampout ${label}.amp.fa  # increased length of amplicon to 122 - 190
       if [ -s ${label}.amp.fa ]
       then
         # remove primers
@@ -273,7 +274,7 @@ function module_one {
         # blast
         makeblastdb -in ${label}.amp_only.fa -dbtype nucl
         blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 5
-        cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=90){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords
+        cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=82){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords
         # remove blastdb
         rm ${label}.amp_only.fa.n*
         # get amplicons
