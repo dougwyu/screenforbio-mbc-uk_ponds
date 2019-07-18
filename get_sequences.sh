@@ -184,7 +184,7 @@ function module_one {
         usearch -fastx_truncate ${label}.amp.fa -stripleft 0 -stripright 0 -fastaout ${label}.amp_only.fa # for Riaz 12S primers
         # blast
         makeblastdb -in ${label}.amp_only.fa -dbtype nucl
-        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 5
+        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 7
         # cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=360){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Kocher primers
         cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=80){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Riaz primers
         # remove blastdb
@@ -273,7 +273,7 @@ function module_one {
         usearch -fastx_truncate ${label}.amp.fa -stripleft 19 -stripright 21 -fastaout ${label}.amp_only.fa
         # blast
         makeblastdb -in ${label}.amp_only.fa -dbtype nucl
-        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 5
+        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 7
         cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=82){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords
         # remove blastdb
         rm ${label}.amp_only.fa.n*
@@ -360,7 +360,7 @@ function module_one {
         usearch -fastx_truncate ${label}.amp.fa -stripleft 30 -stripright 31 -fastaout ${label}.amp_only.fa
         # blast
         makeblastdb -in ${label}.amp_only.fa -dbtype nucl
-        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 5
+        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 7
         cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=300){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords
         # remove blastdb
         rm ${label}.amp_only.fa.n*
@@ -447,7 +447,7 @@ function module_one {
         usearch -fastx_truncate ${label}.amp.fa -stripleft 26 -stripright 19 -fastaout ${label}.amp_only.fa
         # blast
         makeblastdb -in ${label}.amp_only.fa -dbtype nucl
-        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 5
+        blastn -db ${label}.amp_only.fa -query ${label}.raw.fa -out ${label}.amp.blastn -task blastn -evalue 1e-20 -max_target_seqs 1 -outfmt 6 -num_threads 7
         cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=195){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords
         # remove blastdb
         rm ${label}.amp_only.fa.n*
