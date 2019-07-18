@@ -500,7 +500,7 @@ function module_one {
   echo "Enjoy :-)"
   echo ""
   }
-
+ 
   function module_two {
     echo "Starting with manually checked alignments..."
     echo ""

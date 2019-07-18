@@ -86,11 +86,12 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh yes no one Tetrapoda ~/sr
 # the first no is changed from no to yes to add the Salleh et al. 75 mitogenomes from GigaScience, which are in the files extra_12S.fa and extra_16S.fa (same content). The files were created with archived_files/parse_Salleh_fasta_header.sh
 # Successful
 # Module 1 took 0.58 hours (16Smam and 12SRiaz primers, Midori 1.1)
-# Module 1 took 0.81 hours (16Smam and 12SRiaz primers, Midori 1.2)
+# Module 1 took 1.3 hours (16Smam and 12SRiaz primers, Midori 1.2)
 
 # Actions after Module 1 complete
 # Module 1 complete. Stopping now for manual inspection of alignments *.mafft.fa inside ./intermediate_files.
 # Restart script when happy with alignments (save as *.mafft_edit.fa in present directory even if no edits are made).
+# It is not feasible to examine the alignment in detail. What you are looking for is a tree with clear groupings of the Tetrapoda classes:  Mammalia, Reptilia, Amphibia, and Aves. And also, no extremely long branches.
 # Input files have been moved to ./intermediate_files
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
@@ -111,7 +112,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh yes no two Tetrapoda ~/sr
      #  [63]
      # Calls: classification ... read_xml.character -> read_xml.raw -> doc_parse_raw
      # Execution halted
-# The developer of taxize has flagged this bug in the Catalogue of Life, to be dealt with in the next release of taxize (for 0.9.8). Update:  the problem appears to be in read_xml2, which is a separate module, which cannot read some non-standard ASCII characters in the names of some taxonomists. Update2: The development version of taxize has fixed the problem. The fix will be in version 0.9.8. The fix below is no longer needed.
+# The developer of taxize has flagged this bug in the Catalogue of Life, to be dealt with in the next release of taxize (for 0.9.8). UPDATE:  the problem appears to be in read_xml2, which is a separate module, which cannot read some non-standard ASCII characters in the names of some taxonomists. UPDATE: The 0.9.8 version of taxize has fixed the problem. The fix below is no longer needed.
      # To ID the species causing this error, open `classification_misbehavers_finder.Rmd`. This script loads "MIDORI_taxon.ITIS_mismatch_sp.txt", uses a tryCatch() loop to run taxize::classification() on each name in this file, and records the species that causes taxize::classification() to throw crashing errors.
      # We call these crashing species 'misbehavers,' and we remove them manually starting at line 532, which is before get_taxonomy_mismatches.R is run
           # remove misbehavers by deleting these species, like this:
