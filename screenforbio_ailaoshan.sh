@@ -35,8 +35,9 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 bash ~/src/screenforbio-mbc-ailaoshan/get_taxonomy.sh Tetrapoda superclass ~/src/screenforbio-mbc-ailaoshan/
 # Success.
 # Fetching taxonomy of Tetrapoda took 8.14 hours on 20190526, using fast internet
+# Some of the genus fields have NA in them, even though the Genus species is present (e.g. NA Bufo arabicus), so i manually added in the missing genus names
 # output is Tetrapoda_ITIS_taxonomy.txt, a copy of which is in screenforbio-mbc-ailaoshan/archived_files/
-cp archived_files/Tetrapoda_ITIS_taxonomy_20190512.txt ./Tetrapoda_ITIS_taxonomy.txt
+cp archived_files/Tetrapoda_ITIS_taxonomy_20190718.txt ./Tetrapoda_ITIS_taxonomy.txt
 
 # format of the new file is different from the 20190512 version, so this needs to be tested
 # cp archived_files/Tetrapoda_ITIS_taxonomy_20190526.txt ./Tetrapoda_ITIS_taxonomy.txt
@@ -52,6 +53,7 @@ cp archived_files/Tetrapoda_ITIS_taxonomy_20190512.txt ./Tetrapoda_ITIS_taxonomy
 # <taxon> is the taxon for which the taxonomy was downloaded with get_taxonomy.sh, e.g. Mammalia or Tetrapoda (all outputs should be in present directory).
 # <screenforbio> is the path to the screenforbio-mbc directory
 
+# Module 0 - OPTIONAL Create extra_12S.fa and extra_16S.fa files from the Salleh et al. (2017 GigaScience) mitogenome references. Created with /archived_files/parse_Salleh_fasta_header.sh
 
 # Module 1 - Extract subset of raw Midori database for query taxon and loci. Remove sequences with non-binomial species names, reduce subspecies to species labels. Add local sequences (optional). Check for relevant new sequences for list of query species on NCBI (GenBank and RefSeq) (optional). Select amplicon region and remove primers. Remove sequences with ambiguous bases. Align. End of module: optional check of alignments
 cd ~/src/screenforbio-mbc-ailaoshan/
@@ -83,10 +85,10 @@ sed -i 's/\.[0-9].*\t/\t/g' MIDORI_UNIQUE_1.2_srRNA_RDP.fasta | head -n 40
      # cat ${label}.amp.blastn | awk 'BEGIN{FS=OFS}($4>=80){print $1 OFS $7 OFS $8}' > ${label}.amp.blastn.coords # for 12S Riaz primers
 
 bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh yes no one Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
-# the first no is changed from no to yes to add the Salleh et al. 75 mitogenomes from GigaScience, which are in the files extra_12S.fa and extra_16S.fa (same content). The files were created with archived_files/parse_Salleh_fasta_header.sh
+# the first no is changed from no to yes to add the Salleh et al. 75 mitogenomes from GigaScience, which are in the files extra_12S.fa and extra_16S.fa (same content).
 # Successful
 # Module 1 took 0.58 hours (16Smam and 12SRiaz primers, Midori 1.1)
-# Module 1 took 1.3 hours (16Smam and 12SRiaz primers, Midori 1.2)
+# Module 1 took 1.06 hours (16Smam and 12SRiaz primers, Midori 1.2)
 
 # Actions after Module 1 complete
 # Module 1 complete. Stopping now for manual inspection of alignments *.mafft.fa inside ./intermediate_files.
@@ -97,6 +99,7 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 mv ./intermediate_files/MIDORI_lrRNA.amp_blast.noN.mafft.fa ./MIDORI_lrRNA.amp_blast.noN.mafft_edit.fa
 mv ./intermediate_files/MIDORI_srRNA.amp_blast.noN.mafft.fa ./MIDORI_srRNA.amp_blast.noN.mafft_edit.fa
+
 
 # Module 2 - Compare sequence species labels in the MIDORI fasta files with the ITIS taxonomy. Non-matching labels are queried against Catalogue of Life to check for known synonyms. Remaining mismatches kept if genus already exists in taxonomy, otherwise flagged for removal. End of module: optional check of flagged species labels.
 # Requires a taxon_ITIS_taxonomy.txt file (e.g. Tetrapoda_ITIS_taxonomy.txt file)
@@ -122,10 +125,18 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh yes no two Tetrapoda ~/sr
 
 # Success
 # Module 2 took 0.96 hours (MIDORI 1.1)
-# Module 2 took 3.63 hours (MIDORI 1.2)
+# Module 2 took 2.12 hours (MIDORI 1.2).
+# At the end of Step 5, there is a summary of the Results:
+# ══  Results  ═════════════════
+#
+# ● Total: 1186
+# ● Found: 11
+# ● Not Found: 1175
+# and then the program goes silent for a while while downloading the taxonomic hierarchies, followed by Steps 6 and 7.
 # There are two output files:
      # Tetrapoda.missing_sp_to_delete.txt
      # Tetrapoda.combined_taxonomy.txt
+     # Copies of these two files are in the archived/ folder after the 20190719 run
 
 # Actions after Module 2 complete
 # Module 2 complete. Stopping now for manual inspection of failed species lookups (in Tetrapoda.missing_sp_to_delete.txt).
@@ -141,10 +152,9 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh yes no two Tetrapoda ~/sr
 # requires file Tetrapoda.combined_taxonomy.txt from Module 2, or there is a copy in archived_files/
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no three Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
+bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh yes no three Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
 # Success
-# Module 3 took ~ 5.7 hours for srRNA and lrRNA, using 4 threads (MIDORI 1.1)
-# Module 3 took ~ 13.15 hours for srRNA and lrRNA, using 6 threads (MIDORI 1.2)
+# Module 3 took ~ 24.0 hours for srRNA and lrRNA, using 7 threads (MIDORI 1.2). About 12 hrs per gene.
 
 # Actions after Module 3 complete
 # Module 3 complete. Stopping now for manual inspection of mislabelled sequences in ./MIDORI_locus_sativa/MIDORI_locus.mis
@@ -158,16 +168,14 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 # archive an original version before changing it with the sativa suggestions
 cp Tetrapoda.final_taxonomy_sativa.txt Tetrapoda.final_taxonomy_sativa_orig.txt
-# then use this R code (delete_seqs_suggested_by_sativa.Rmd) to remove sequences that sativa identifies as incorrect
+# Then use this R code (delete_seqs_suggested_by_sativa.Rmd) to remove sequences that sativa identifies as incorrect
      # I remove all sequences that sativa identifies as having an incorrect taxonomy at family level and above, as such large errors are most likely to be database errors.
      # I ignore sativa's proposed substitute taxonomies below family level (mostly genus and species), because some unknown, possibly large, proportion of these are due to the *tree* being incorrect, since these are short seqs
-
-# START AGAIN HERE to go over the species and genus-level sativa-flagged sequences to see if i can make useful corrections:  e.g. add Bufo to the ones with missing genus name
 
 # Module 4 - Discard flagged sequences. Finalize consensus taxonomy and relabel sequences with correct species label and accession number. Select 1 representative sequence per haplotype per species.
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no four Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
+bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh yes no four Tetrapoda ~/src/screenforbio-mbc-ailaoshan/
 
 # sometimes Module 4 will fail because it reports an "F" in the sequence. This is because seqbuddy --clean_seq inserts "FTP error" messages in the within-species fasta files.  Check the uniq.fa and taxon.fa files in the working directory and see what the FTP error message is, which will be appended to the last sequence. Then go to get_sequences.sh module_four and modify or add to the sed -i lines where i remove these error messages (search on 'FTP error')
 # examples from line 788.  There are 4 pairs of such lines.
@@ -175,8 +183,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no four Tetrapoda ~/sr
      # sed -i '/FTP Error: \[Errno 8] nodename nor servname provided, or not known/d'  ${label}.final_clean_relabel.unalign.fa  ## \[ to escape the square bracket
 
 # Success
-# Module 4 took 5.67 hours (MIDORI 1.1)
-# Module 4 took 4.08 hours (MIDORI 1.2)
+# Module 4 took 9.07 hours (MIDORI 1.2)
 
 # Module 4 complete. You have reached the end of get_sequences.sh
 #
@@ -188,13 +195,33 @@ bash ~/src/screenforbio-mbc-ailaoshan/get_sequences.sh no no four Tetrapoda ~/sr
 #   - train_weighted_protax.sh for models weighted using a list of expected species
 
 
-# Actions after Module 4 complete:  If sativa is used to change genus and/or species names, some of the reference sequences in Tetrapoda.final_database.16S.fa and Tetrapoda.final_database.12S.fa will have a few sequences without species names (e.g. >_DQ158435) or starting with _TAXCLUSTER (e.g. >__TAXCLUSTER161__Spea_bombifrons_AY523786)
+# Actions after Module 4 complete:
+# make copies
+cp Tetrapoda.final_database.16S.fa Tetrapoda.final_database.16S_orig.fa
+cp Tetrapoda.final_database.12S.fa Tetrapoda.final_database.12S_orig.fa
+# remove any Homo_heidelbergensis sequences
+seqkit grep Tetrapoda.final_database.16S.fa -r -p Homo_heidelbergensis -v -o Tetrapoda.final_database.16S_new.fa
+mv Tetrapoda.final_database.16S_new.fa Tetrapoda.final_database.16S.fa
+seqkit grep Tetrapoda.final_database.12S.fa -r -p Homo_heidelbergensis -v -o Tetrapoda.final_database.12S_new.fa
+mv Tetrapoda.final_database.12S_new.fa Tetrapoda.final_database.12S.fa
+
+
+# If sativa is used to change genus and/or species names, it is possible that some of the reference sequences in Tetrapoda.final_database.16S.fa and Tetrapoda.final_database.12S.fa will have a few sequences without species names (e.g. >_DQ158435) or starting with _TAXCLUSTER (e.g. >__TAXCLUSTER161__Spea_bombifrons_AY523786)
+# These are created by sativa:
+     # WARNING: Following taxa share >60% indentical sequences und thus considered indistinguishable:
+     # Eukaryota;Chordata;Aves;Passeriformes;Turdidae;Turdus;Turdus ruficollis
+     # Eukaryota;Chordata;Aves;Passeriformes;Turdidae;Turdus;Turdus eunomus
+     # Eukaryota;Chordata;Aves;Passeriformes;Turdidae;Turdus;Turdus atrogularis
+     # Eukaryota;Chordata;Aves;Passeriformes;Turdidae;Turdus;Turdus naumanni
+     # For the purpose of mislabels identification, they were merged into one taxon:
+     # Eukaryota;Chordata;Aves;Passeriformes;Turdidae;Turdus;__TAXCLUSTER141__Turdus ruficollis
+
 # These should be removed because they interfere with PROTAX train (PROTAX needs sequences in the reference dataset to have the format >Ablepharus_kitaibelii_AY308325)
 # cd ~/src/screenforbio-mbc-ailaoshan/
 # . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 # seqkit grep Tetrapoda.final_database.12S.fa -r -p ^_ -v -o Tetrapoda.final_database.12S_new.fa
 # seqkit grep Tetrapoda.final_database.16S.fa -r -p ^_ -v -o Tetrapoda.final_database.16S_new.fa
-# check the new fasta files
+# visually check the new fasta files and then
 # mv Tetrapoda.final_database.12S_new.fa Tetrapoda.final_database.12S.fa # overwrites the pre-existing file
 # mv Tetrapoda.final_database.16S_new.fa Tetrapoda.final_database.16S.fa # overwrites the pre-existing file
 
