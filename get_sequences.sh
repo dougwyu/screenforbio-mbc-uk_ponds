@@ -500,7 +500,7 @@ function module_one {
   echo "Enjoy :-)"
   echo ""
   }
- 
+
   function module_two {
     echo "Starting with manually checked alignments..."
     echo ""
@@ -785,6 +785,11 @@ function module_one {
         # rename
         sed 's/;/\t/g' ${TAXON}.final_taxonomy_sativa.txt | cut -f1,8 | sed 's/ /_/g' | awk '{print $1 "\t" $2 "_" $1}' > ${TAXON}.final_rename_seqs_protax.txt
         seqkit replace -p '(.+)$' -r '{kv}' -k ${TAXON}.final_rename_seqs_protax.txt ${label}.final_clean.fa --keep-key > ${label}.final_clean_relabel.fa
+
+        #DY there is an upstream bug that i cannot find that creates duplicates of some sequences (e.g. Axis_porcinus_KY117537 gets 81 copies). This really slows down collapsetypes, so i remove these duplicated sequences here
+        seqkit rmdup -n ${label}.final_clean_relabel.fa > ${label}.final_clean_relabel_rmdup.fa
+        mv ${label}.final_clean_relabel_rmdup.fa ${label}.final_clean_relabel.fa
+
         seqbuddy ${label}.final_clean_relabel.fa --clean_seq > ${label}.final_clean_relabel.unalign.fa
                #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${label}.final_clean_relabel.unalign.fa
                #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
@@ -830,6 +835,11 @@ function module_one {
         # rename
         sed 's/;/\t/g' ${TAXON}.final_taxonomy_sativa.txt | cut -f1,8 | sed 's/ /_/g' | awk '{print $1 "\t" $2 "_" $1}' > ${TAXON}.final_rename_seqs_protax.txt
         seqkit replace -p '(.+)$' -r '{kv}' -k ${TAXON}.final_rename_seqs_protax.txt ${label}.final_clean.fa --keep-key > ${label}.final_clean_relabel.fa
+
+        #DY there is an upstream bug that i cannot find that creates duplicates of some sequences (e.g. Axis_porcinus_KY117537 gets 81 copies). This really slows down collapsetypes, so i remove these duplicated sequences here
+        seqkit rmdup -n ${label}.final_clean_relabel.fa > ${label}.final_clean_relabel_rmdup.fa
+        mv ${label}.final_clean_relabel_rmdup.fa ${label}.final_clean_relabel.fa
+
         seqbuddy ${label}.final_clean_relabel.fa --clean_seq > ${label}.final_clean_relabel.unalign.fa
              #DY seqbuddy has a python error that adds "FTP Error: got more than 8192 bytes" to the end of ${label}.final_clean_relabel.unalign.fa
              #DY add this line to remove any instances of "FTP Error: got more than 8192 bytes"
