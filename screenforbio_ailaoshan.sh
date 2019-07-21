@@ -230,7 +230,7 @@ mv Tetrapoda.final_database.12S_new.fa Tetrapoda.final_database.12S.fa
 #   - *check_protax_training.sh* (makes bias-accuracy plots)
 #   - *choose between weighted or unweighted.  I use weighted because we have a species list for Ailaoshan
 
-# The unweighted and weighted training can probably be run in parallel in separate terminal sessions.
+# The unweighted and weighted training can be run in parallel in separate terminal sessions. Each job only uses one core.
 
 # unweighted
 cd ~/src/screenforbio-mbc-ailaoshan/
@@ -242,10 +242,16 @@ bash ~/src/screenforbio-mbc-ailaoshan/train_protax.sh Tetrapoda.final_protax_tax
      # uses fasta files output from module_four of get_sequences.sh:  taxon.final_database.locus.fa (e.g. Tetrapoda.final_database.12S.fa)
      # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
 
+# End of train_protax.sh
+# Success
+# This took a total of 4.7 hours (MIDORI 1.2)
+
+
 # weighted by Ailaoshan species list:  splist (birds, herps, mammals)
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 # copy the species list from the archive directory to the screenforbio directory
+     # or substitute another Tetrapoda-limited species list. Check that your species are in the Tetrapoda.final_protax_taxonomy.txt file
 cp ~/src/screenforbio-mbc-ailaoshan/archived_files/splist_20190516.csv ./splist.csv
 bash ~/src/screenforbio-mbc-ailaoshan/train_weighted_protax.sh splist.csv Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-ailaoshan/
      # usage: bash train_weighted_protax.sh splist taxonomy screenforbio
@@ -256,9 +262,9 @@ bash ~/src/screenforbio-mbc-ailaoshan/train_weighted_protax.sh splist.csv Tetrap
      # note: will take the taxon from the protax taxonomy file name
      # note: assumes curated database FASTA files are in current directory and labelled with format taxon.final_database.locus.fa (e.g. Tetrapoda.final_database.12S.fa)
 
-# End of train_protax.sh
+# End of train_weighted_protax.sh
 # Success
-# This took a total of 4.3 hours (MIDORI 1.2)
+# This took a total of 4.0 hours (MIDORI 1.2)
      # weighted_protax_training.R is hardcoded to run through all four loci (12S, 16S, Cytb, COI), so if one or more loci is missing (i.e. no Tetrapoda.final_database.Cytb.fa), the script is halted and generates an error message, but the previous loci do complete successfully.
      # example error message when Cytb is not included. Just ignore this and go to the next step (select mcmc iterations)
           # Working on Cytb in folder ./w_model_Cytb/
@@ -285,12 +291,12 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 MOD1CHOSEN12S="mcmc1b"
 MOD2CHOSEN12S="mcmc2d"
 MOD3CHOSEN12S="mcmc3c"
-MOD4CHOSEN12S="mcmc4b"
-     16S
+MOD4CHOSEN12S="mcmc4d"
+     # 16S
 MOD1CHOSEN16S="mcmc1d"
-MOD2CHOSEN16S="mcmc2b"
-MOD3CHOSEN16S="mcmc3c"
-MOD4CHOSEN16S="mcmc4d"
+MOD2CHOSEN16S="mcmc2c"
+MOD3CHOSEN16S="mcmc3d"
+MOD4CHOSEN16S="mcmc4c"
 mv ./model_12S/${MOD1CHOSEN12S} ./model_12S/mcmc1
 mv ./model_12S/${MOD2CHOSEN12S} ./model_12S/mcmc2
 mv ./model_12S/${MOD3CHOSEN12S} ./model_12S/mcmc3
@@ -302,23 +308,23 @@ mv ./model_16S/${MOD4CHOSEN16S} ./model_16S/mcmc4
 
 # weighted
      # 12S
-MOD1CHOSEN12S="w_mcmc1c"
-MOD2CHOSEN12S="w_mcmc2a"
-MOD3CHOSEN12S="w_mcmc3c"
-MOD4CHOSEN12S="w_mcmc4c"
+w_MOD1CHOSEN12S="w_mcmc1c"
+w_MOD2CHOSEN12S="w_mcmc2a"
+w_MOD3CHOSEN12S="w_mcmc3c"
+w_MOD4CHOSEN12S="w_mcmc4c"
      # 16S
-MOD1CHOSEN16S="w_mcmc1b"
-MOD2CHOSEN16S="w_mcmc2b"
-MOD3CHOSEN16S="w_mcmc3b"
-MOD4CHOSEN16S="w_mcmc4b"
-mv ./w_model_12S/${MOD1CHOSEN12S} ./w_model_12S/w_mcmc1
-mv ./w_model_12S/${MOD2CHOSEN12S} ./w_model_12S/w_mcmc2
-mv ./w_model_12S/${MOD3CHOSEN12S} ./w_model_12S/w_mcmc3
-mv ./w_model_12S/${MOD4CHOSEN12S} ./w_model_12S/w_mcmc4
-mv ./w_model_16S/${MOD1CHOSEN16S} ./w_model_16S/w_mcmc1
-mv ./w_model_16S/${MOD2CHOSEN16S} ./w_model_16S/w_mcmc2
-mv ./w_model_16S/${MOD3CHOSEN16S} ./w_model_16S/w_mcmc3
-mv ./w_model_16S/${MOD4CHOSEN16S} ./w_model_16S/w_mcmc4
+w_MOD1CHOSEN16S="w_mcmc1b"
+w_MOD2CHOSEN16S="w_mcmc2b"
+w_MOD3CHOSEN16S="w_mcmc3b"
+w_MOD4CHOSEN16S="w_mcmc4b"
+mv ./w_model_12S/${w_MOD1CHOSEN12S} ./w_model_12S/w_mcmc1
+mv ./w_model_12S/${w_MOD2CHOSEN12S} ./w_model_12S/w_mcmc2
+mv ./w_model_12S/${w_MOD3CHOSEN12S} ./w_model_12S/w_mcmc3
+mv ./w_model_12S/${w_MOD4CHOSEN12S} ./w_model_12S/w_mcmc4
+mv ./w_model_16S/${w_MOD1CHOSEN16S} ./w_model_16S/w_mcmc1
+mv ./w_model_16S/${w_MOD2CHOSEN16S} ./w_model_16S/w_mcmc2
+mv ./w_model_16S/${w_MOD3CHOSEN16S} ./w_model_16S/w_mcmc3
+mv ./w_model_16S/${w_MOD4CHOSEN16S} ./w_model_16S/w_mcmc4
 
 # Next step: Check model training with check_protax_training.sh
 # usage: bash check_protax_training.sh modeldir taxon locus screenforbio
@@ -336,31 +342,34 @@ bash check_protax_training.sh model_16S Tetrapoda 16S ~/src/screenforbio-mbc-ail
 bash check_protax_training.sh w_model_12S Tetrapoda 12S ~/src/screenforbio-mbc-ailaoshan/
 bash check_protax_training.sh w_model_16S Tetrapoda 16S ~/src/screenforbio-mbc-ailaoshan/
 
-# Each model check took ~0.02 hours
+# Each model check took ~.11 hours (~7 mins)
 # Plots can be found in model_12S/checktrain/unweighted_Tetrapoda_12S_biasaccuracy.pdf
 # Plots can be found in model_16S/checktrain/unweighted_Tetrapoda_16S_biasaccuracy.pdf
+# Plots can be found in w_model_12S/checktrain/weighted_Tetrapoda_12S_biasaccuracy.pdf
+# Plots can be found in w_model_16S/checktrain/weighted_Tetrapoda_16S_biasaccuracy.pdf
 
 
 # 5. Classify query sequences (reads or OTUs) with PROTAX
 #   - Process raw data with read_preprocessing.sh (experimental design must follow that described in the manuscript) and classify the output with protax_classify.sh or weighted_protax_classify.sh as appropriate
 #   - Classify OTUs with protax_classify_otus.sh or weighted_protax_classify_otus.sh as appropriate
 
-# these are my pathnames to my Ailaoshan OTU representative sequences
+# these are the pathnames to my Ailaoshan OTU representative sequences
 OTUS12S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_swarm_lulu.fa"
-OTUS12S_USEARCH="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_usearchderep_lulu.fa"
 OTUS16S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_16S_20180321_otu_table_swarm_lulu.fa"
+# OTUS12S_USEARCH="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_usearchderep_lulu.fa"
 echo ${OTUS12S_SWARM}
-echo ${OTUS12S_USEARCH}
 echo ${OTUS16S_SWARM}
+# echo ${OTUS12S_USEARCH}
 
 # unweighted
      # move protax output files to a single folder
 # mkdir protaxmodels/
-# mv model_12S protaxmodels/
-# mv model_16S protaxmodels/
-# bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm
+mkdir protaxmodels/
+mv model_12S protaxmodels/
+mv model_16S protaxmodels/
+bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm
+bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm
 # bash protax_classify_otus.sh ${OTUS12S_USEARCH} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_usearch
-# bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm
      # usage: bash protax_classify_otus.sh otus locus protaxdir screenforbio outdir
      # where:
      # otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
@@ -370,13 +379,13 @@ echo ${OTUS16S_SWARM}
      # outdir is the name to give an output directory (inside current) (no slash at end)
 
 # weighted
-     # move weighted protax output files to a single folder
-mkdir w_protaxmodels/
-mv w_model_12S w_protaxmodels/
-mv w_model_16S w_protaxmodels/
-bash weighted_protax_classify_otus.sh ${OTUS12S_SWARM} 12S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm
-bash weighted_protax_classify_otus.sh ${OTUS12S_USEARCH} 12S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_usearch
-bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm
+     # move weighted protax output files to a single folder where the weighting is for ailaoshan
+mkdir w_protaxmodels_ailaoshan/
+mv w_model_12S w_protaxmodels_ailaoshan/
+mv w_model_16S w_protaxmodels_ailaoshan/
+bash weighted_protax_classify_otus.sh ${OTUS12S_SWARM} 12S w_protaxmodels_ailaoshan ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm
+bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels_ailaoshan ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm
+# bash weighted_protax_classify_otus.sh ${OTUS12S_USEARCH} 12S w_protaxmodels_ailaoshan ~/src/screenforbio-mbc-ailaoshan w_protaxout_usearch
      # usage: bash weighted_protax_classify_otus.sh otus locus protaxdir screenforbio outdir
      # where:
      # otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
@@ -403,18 +412,20 @@ bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels ~/src/
 # 5.1 Use combine_protax_output_tables.Rmd to combine the protax output files. The script is written to process w_protaxout_swarm_12S, w_protaxout_swarm_16S, w_protaxout_usearch_12S
 
 
-# 6. To assign taxonomies to new a new set of OTUs
-# these are my pathnames to my Ailaoshan OTU representative sequences
+# 6. To assign taxonomies to a new set of OTUs
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 
-# set pathnames to OTU sequences
+# Cai_443_Ponds dataset, 12S, unweighted
 OTUS12S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Cai_443_Ponds/OTUs/table_500ponds2_12sv5_97.fas.blast.fas"
-OTUS16S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/16S_otu_table_swarm_lulu_20190624.fas"
 echo ${OTUS12S_SWARM}; head ${OTUS12S_SWARM}
-echo ${OTUS16S_SWARM}
-bash weighted_protax_classify_otus.sh ${OTUS12S_SWARM} 12S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm_20190704
-bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm_20190624
+bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm_20190704
+
+# Ailaoshan leeches dataset, 16S, unweighted, 20190624 OTUs
+OTUS16S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/16S_otu_table_swarm_lulu_20190624.fas"
+echo ${OTUS16S_SWARM}; head ${OTUS16S_SWARM}
+bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels_ailaoshan ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm_20190624
+bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm_20190624
      # usage: bash weighted_protax_classify_otus.sh otus locus protaxdir screenforbio outdir
      # where:
      # otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
