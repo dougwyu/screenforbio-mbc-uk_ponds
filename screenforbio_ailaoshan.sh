@@ -230,23 +230,23 @@ mv Tetrapoda.final_database.12S_new.fa Tetrapoda.final_database.12S.fa
 #   - *check_protax_training.sh* (makes bias-accuracy plots)
 #   - *choose between weighted or unweighted.  I use weighted because we have a species list for Ailaoshan
 
+# The unweighted and weighted training can probably be run in parallel in separate terminal sessions.
+
 # unweighted
-# cd ~/src/screenforbio-mbc-ailaoshan/
-# . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-# bash ~/src/screenforbio-mbc-ailaoshan/train_protax.sh Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-ailaoshan
+cd ~/src/screenforbio-mbc-ailaoshan/
+. ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+bash ~/src/screenforbio-mbc-ailaoshan/train_protax.sh Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-ailaoshan
      # usage: bash train_protax.sh taxonomy screenforbio
      # where:
      # taxonomy is the final protax-formatted taxonomy file from get_sequences.sh (e.g. Tetrapoda.final_protax_taxonomy.txt)
      # uses fasta files output from module_four of get_sequences.sh:  taxon.final_database.locus.fa (e.g. Tetrapoda.final_database.12S.fa)
      # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
 
-
 # weighted by Ailaoshan species list:  splist (birds, herps, mammals)
 cd ~/src/screenforbio-mbc-ailaoshan/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-
-cp ~/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/species_lists/splist_20190516.csv ./splist.csv
-
+# copy the species list from the archive directory to the screenforbio directory
+cp ~/src/screenforbio-mbc-ailaoshan/archived_files/splist_20190516.csv ./splist.csv
 bash ~/src/screenforbio-mbc-ailaoshan/train_weighted_protax.sh splist.csv Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-ailaoshan/
      # usage: bash train_weighted_protax.sh splist taxonomy screenforbio
      # where:
@@ -260,7 +260,7 @@ bash ~/src/screenforbio-mbc-ailaoshan/train_weighted_protax.sh splist.csv Tetrap
 # Success
 # This took a total of 4.3 hours (MIDORI 1.2)
      # weighted_protax_training.R is hardcoded to run through all four loci (12S, 16S, Cytb, COI), so if one or more loci is missing (i.e. no Tetrapoda.final_database.Cytb.fa), the script is halted and generates an error message, but the previous loci do complete successfully.
-     # example error message when Cytb is not included. Just ignore this and go to the next step
+     # example error message when Cytb is not included. Just ignore this and go to the next step (select mcmc iterations)
           # Working on Cytb in folder ./w_model_Cytb/
           # Working on level1
           # Error in file(file, "rt") : cannot open the connection
@@ -270,10 +270,10 @@ bash ~/src/screenforbio-mbc-ailaoshan/train_weighted_protax.sh splist.csv Tetrap
           #   cannot open file './w_model_Cytb/train.w1.xdat': No such file or directory
           # Execution halted
 
-# Select an mcmc iteration for each of the four levels for each marker (e.g. ./w_model_16S/w_mcmc1a-d, ./w_model_16S/w_mcmc2a-d, etc.) based on the training plots (labelled ./w_model_16S/weighted_training_plot_16S_level1a_MCMC.pdf, etc). Chains should be well-mixed and acceptance ratio as close to 0.44 as possible. Relabel the selected model as ./w_model_16S/mcmc1 ./w_model_16S/mcmc2 etc.
+# Select an mcmc iteration for each of the four levels for each model and each marker (e.g. ./w_model_16S/w_mcmc1a-d, ./w_model_16S/w_mcmc2a-d, etc.) based on the training plots (labelled ./w_model_16S/weighted_training_plot_16S_level1a_MCMC.pdf, etc). Chains should be well-mixed and acceptance ratio as close to 0.44 as possible. Relabel the selected model as ./w_model_16S/mcmc1 ./w_model_16S/mcmc2 etc.
 
 # For an example of how to choose the model, go to archived_files/protax_training_mcmc_output_16S_example/. There are 4 PDF files (training_plot_16S_level4{a,b,c,d}_MCMC.pdf). To choose amongst these, Panu Somervuo wrote:
-     # "In all four cases a-d, the highest logposterior is very similar (around -7912) and also the coefficients corresponding to it (red dot) among a-d are very close to each other (i.e. mislabeling probability around 0.25 , beta1 around 0, beta2 around -40, beta3 around 4 and beta4 around -80, so I would say that all of them would give very similar classification results. Of course, when looking the traceplot of a, it seems that the MCMC has not converged properly, since in the beginning of the plot it is in a different regime, however, the parameter values corresponding to the largest posterior are similar as in b,c,d. I think if taking any one from b,c,or d, they would give very similar (or even identical) classification results."
+     # "In all four cases a-d, the highest log posterior is very similar (around -7912), and also the coefficients corresponding to it (red dot) among a-d are very close to each other (i.e. mislabeling probability around 0.25 , beta1 around 0, beta2 around -40, beta3 around 4 and beta4 around -80, so I would say that all of them would give very similar classification results. Of course, when looking the traceplot of a, it seems that the MCMC has not converged properly, since in the beginning of the plot it is in a different regime. However, the parameter values corresponding to the largest posterior are similar as in b,c,d. I think if taking any one from b,c,or d, they would give very similar (or even identical) classification results."
      # The traceplots of 'mcmc a' are seen to wander by looking at the traceplots themselves and also at the histograms, which are skewed.
      # Acceptance ratio is on the second page of the PDFs
 
@@ -282,35 +282,35 @@ cd ~/src/screenforbio-mbc-ailaoshan/
 
 # unweighted
      # 12S
-# MOD1CHOSEN12S="mcmc1c"
-# MOD2CHOSEN12S="mcmc2a"
-# MOD3CHOSEN12S="mcmc3d"
-# MOD4CHOSEN12S="mcmc4b"
-     # 16S
-# MOD1CHOSEN16S="mcmc1d"
-# MOD2CHOSEN16S="mcmc2b"
-# MOD3CHOSEN16S="mcmc3c"
-# MOD4CHOSEN16S="mcmc4d"
-# mv ./model_12S/${MOD1CHOSEN12S} ./model_12S/mcmc1
-# mv ./model_12S/${MOD2CHOSEN12S} ./model_12S/mcmc2
-# mv ./model_12S/${MOD3CHOSEN12S} ./model_12S/mcmc3
-# mv ./model_12S/${MOD4CHOSEN12S} ./model_12S/mcmc4
-# mv ./model_16S/${MOD1CHOSEN16S} ./model_16S/mcmc1
-# mv ./model_16S/${MOD2CHOSEN16S} ./model_16S/mcmc2
-# mv ./model_16S/${MOD3CHOSEN16S} ./model_16S/mcmc3
-# mv ./model_16S/${MOD4CHOSEN16S} ./model_16S/mcmc4
+MOD1CHOSEN12S="mcmc1b"
+MOD2CHOSEN12S="mcmc2d"
+MOD3CHOSEN12S="mcmc3c"
+MOD4CHOSEN12S="mcmc4b"
+     16S
+MOD1CHOSEN16S="mcmc1d"
+MOD2CHOSEN16S="mcmc2b"
+MOD3CHOSEN16S="mcmc3c"
+MOD4CHOSEN16S="mcmc4d"
+mv ./model_12S/${MOD1CHOSEN12S} ./model_12S/mcmc1
+mv ./model_12S/${MOD2CHOSEN12S} ./model_12S/mcmc2
+mv ./model_12S/${MOD3CHOSEN12S} ./model_12S/mcmc3
+mv ./model_12S/${MOD4CHOSEN12S} ./model_12S/mcmc4
+mv ./model_16S/${MOD1CHOSEN16S} ./model_16S/mcmc1
+mv ./model_16S/${MOD2CHOSEN16S} ./model_16S/mcmc2
+mv ./model_16S/${MOD3CHOSEN16S} ./model_16S/mcmc3
+mv ./model_16S/${MOD4CHOSEN16S} ./model_16S/mcmc4
 
 # weighted
      # 12S
-MOD1CHOSEN12S="w_mcmc1d"
-MOD2CHOSEN12S="w_mcmc2d"
-MOD3CHOSEN12S="w_mcmc3b"
-MOD4CHOSEN12S="w_mcmc4d"
+MOD1CHOSEN12S="w_mcmc1c"
+MOD2CHOSEN12S="w_mcmc2a"
+MOD3CHOSEN12S="w_mcmc3c"
+MOD4CHOSEN12S="w_mcmc4c"
      # 16S
-MOD1CHOSEN16S="w_mcmc1c"
-MOD2CHOSEN16S="w_mcmc2c"
+MOD1CHOSEN16S="w_mcmc1b"
+MOD2CHOSEN16S="w_mcmc2b"
 MOD3CHOSEN16S="w_mcmc3b"
-MOD4CHOSEN16S="w_mcmc4c"
+MOD4CHOSEN16S="w_mcmc4b"
 mv ./w_model_12S/${MOD1CHOSEN12S} ./w_model_12S/w_mcmc1
 mv ./w_model_12S/${MOD2CHOSEN12S} ./w_model_12S/w_mcmc2
 mv ./w_model_12S/${MOD3CHOSEN12S} ./w_model_12S/w_mcmc3
@@ -329,8 +329,8 @@ mv ./w_model_16S/${MOD4CHOSEN16S} ./w_model_16S/w_mcmc4
 # screenforbio is the path to the screenforbio-mbc directory (must contain subdirectory protaxscripts)
 
 # unweighted
-# bash check_protax_training.sh model_12S Tetrapoda 12S ~/src/screenforbio-mbc-ailaoshan/
-# bash check_protax_training.sh model_16S Tetrapoda 16S ~/src/screenforbio-mbc-ailaoshan/
+bash check_protax_training.sh model_12S Tetrapoda 12S ~/src/screenforbio-mbc-ailaoshan/
+bash check_protax_training.sh model_16S Tetrapoda 16S ~/src/screenforbio-mbc-ailaoshan/
 
 # weighted
 bash check_protax_training.sh w_model_12S Tetrapoda 12S ~/src/screenforbio-mbc-ailaoshan/
