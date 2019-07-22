@@ -1,4 +1,4 @@
-# ScreenForBio metabarcoding pipeline for Ailaoshan
+# ScreenForBio metabarcoding pipeline for the UK_Ponds project
 
 A fork of the ScreenForBio metabarcoding pipeline originally published in:
 
@@ -7,7 +7,7 @@ Axtner, J., Crampton-Platt, A., Hoerig, L.A., Xu, C.C.Y., Yu, D.W., Wilting, A. 
 Preprint available from [bioRxiv](https://www.biorxiv.org/content/early/2018/06/12/345082).  
 Paper available from [GigaScience](https://academic.oup.com/gigascience/article/doi/10.1093/gigascience/giz029/5450733).  
 
-This fork is customised to the Ailaoshan leech iDNA dataset, and updated to take advantage of the MIDORI_UNIQUE_20180221 datasets that are now available. There are some bug fixes and additional R utilities. However, if you have some knowledge of bash and R scripting, then you can easily adapt this pipeline for your paired-end Illumina metabarcoding, from processing of twin-tagged raw reads through to taxonomic classification with *PROTAX*.
+This fork is customised to the UK_Ponds leech iDNA dataset, and updated to take advantage of the MIDORI_UNIQUE_20180221 datasets that are now available. There are some bug fixes and additional R utilities. However, if you have some knowledge of bash and R scripting, then you can easily adapt this pipeline for your paired-end Illumina metabarcoding, from processing of twin-tagged raw reads through to taxonomic classification with *PROTAX*.
 
 The pipeline steps that will be of most use to other projects are those related to *PROTAX*: generating curated reference databases and associated taxonomic classification; training *PROTAX* models (weighted or unweighted); and classification of OTUs with *PROTAX*.
 
@@ -181,7 +181,7 @@ Download from Douglas Chesters' [sourceforge page](https://sourceforge.net/proje
 ### Usage
 All steps in the pipeline are implemented via bash scripts with similar parameter requirements. Each script includes commented usage instructions at the start and displays the same instructions if run without any or an incorrect number of parameters.
 
-For the Ailaoshan fork, the full command history is in `screenforbio_ailaoshan.sh`. Although formatted as a shell script, it should be run command by command, instead of as a single bash script file, because there are multiple choices to be made during the pipeline.
+For the UK_Ponds fork, the full command history is in `screenforbio_ailaoshan.sh`. Although formatted as a shell script, it should be run command by command, instead of as a single bash script file, because there are multiple choices to be made during the pipeline.
 
 Some of the bash scripts used within are primarily wrappers for R scripts, all of which are assumed to be in the ***screenforbio-mbc-ailaoshan*** directory.  
 
