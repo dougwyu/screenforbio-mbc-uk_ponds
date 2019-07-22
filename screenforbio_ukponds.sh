@@ -36,7 +36,7 @@ bash ~/src/screenforbio-mbc-uk_ponds/get_taxonomy.sh Tetrapoda superclass ~/src/
 # Success.
 # Fetching taxonomy of Tetrapoda took 8.14 hours on 20190526, using fast internet
 # Some of the genus fields have NA in them, even though the Genus species is present (e.g. NA Bufo arabicus), so i manually added in the missing genus names
-# output is Tetrapoda_ITIS_taxonomy.txt, a copy of which is in screenforbio-mbc-ailaoshan/archived_files/
+# output is Tetrapoda_ITIS_taxonomy.txt, a copy of which is in screenforbio-mbc-uk_ponds/archived_files/
 cp archived_files/Tetrapoda_ITIS_taxonomy_20190718.txt ./Tetrapoda_ITIS_taxonomy.txt
 
 # format of the new file is different from the 20190512 version, so this needs to be tested
@@ -58,15 +58,16 @@ cp archived_files/Tetrapoda_ITIS_taxonomy_20190718.txt ./Tetrapoda_ITIS_taxonomy
 # Module 1 - Extract subset of raw Midori database for query taxon and loci. Remove sequences with non-binomial species names, reduce subspecies to species labels. Add local sequences (optional). Check for relevant new sequences for list of query species on NCBI (GenBank and RefSeq) (optional). Select amplicon region and remove primers. Remove sequences with ambiguous bases. Align. End of module: optional check of alignments
 cd ~/src/screenforbio-mbc-uk_ponds/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-# copy MIDORI files that i want to process to the working directory: screenforbio-mbc-ailaoshan/
-cp archived_files/MIDORI_UNIQUE_20180221_lrRNA_RDP.fasta.gz ./MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz; gunzip MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz
+# copy MIDORI files that i want to process to the working directory: screenforbio-mbc-uk_ponds/
+# cp archived_files/MIDORI_UNIQUE_20180221_lrRNA_RDP.fasta.gz ./MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz; gunzip MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta.gz
 cp archived_files/MIDORI_UNIQUE_20180221_srRNA_RDP.fasta.gz ./MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz; gunzip MIDORI_UNIQUE_1.2_srRNA_RDP.fasta.gz
 
 # The 20180221 versions of MIDORI have more complex headers, which interfere with the `get_sequences.sh` code.
 # V 1.1:  `>AF382008	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`
 # V 20180221:  `>AF382008.3.649.1602	root;Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens`
-sed -i 's/\.[0-9].*\t/\t/g' MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta | head -n 40
-sed -i 's/\.[0-9].*\t/\t/g' MIDORI_UNIQUE_1.2_srRNA_RDP.fasta | head -n 40
+# sed -i 's/\.[0-9].*\t/\t/g' MIDORI_UNIQUE_1.2_lrRNA_RDP.fasta | head -n 40
+sed -i 's/\.[0-9].*\t/\t/g' MIDORI_UNIQUE_1.2_srRNA_RDP.fasta
+head -n 40 MIDORI_UNIQUE_1.2_srRNA_RDP.fasta
 
 # there are two 12S_primers files:  12S_primers_kocher.fa and 12S_primers_riaz.fa. Duplicate the one that you want to use and change its filename to 12S_primers.fa, and this will be the pair used to pull out 12S amplicons from the Midori reference database
 # to use the Kocher primers (12S_primers_kocher.fa), in get_sequences.sh:
@@ -97,7 +98,7 @@ bash ~/src/screenforbio-mbc-uk_ponds/get_sequences.sh yes no one Tetrapoda ~/src
 # Input files have been moved to ./intermediate_files
 cd ~/src/screenforbio-mbc-uk_ponds/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-mv ./intermediate_files/MIDORI_lrRNA.amp_blast.noN.mafft.fa ./MIDORI_lrRNA.amp_blast.noN.mafft_edit.fa
+# mv ./intermediate_files/MIDORI_lrRNA.amp_blast.noN.mafft.fa ./MIDORI_lrRNA.amp_blast.noN.mafft_edit.fa
 mv ./intermediate_files/MIDORI_srRNA.amp_blast.noN.mafft.fa ./MIDORI_srRNA.amp_blast.noN.mafft_edit.fa
 
 
@@ -124,7 +125,6 @@ bash ~/src/screenforbio-mbc-uk_ponds/get_sequences.sh yes no two Tetrapoda ~/src
           # sed -i '$a\Hemidactylus_adensis\' MIDORI_${TAXON}.missing_sp.txt
 
 # Success
-# Module 2 took 0.96 hours (MIDORI 1.1)
 # Module 2 took 2.12 hours (MIDORI 1.2).
 # At the end of Step 5, there is a summary of the Results:
 # ══  Results  ═════════════════
@@ -145,7 +145,7 @@ bash ~/src/screenforbio-mbc-uk_ponds/get_sequences.sh yes no two Tetrapoda ~/src
 # If no failed lookups can be resolved, do not create Tetrapoda.missing_sp_taxonomy.txt, leave Tetrapoda.missing_sp_to_delete.txt as it is.
 # Restart script when happy.
 
-# I looked through Tetrapoda.missing_sp_to_delete.txt, and all the species are not ones found in Ailaoshan, so rather than look up and add their full taxonomic pathways, i left them in the file and proceeded to module_three.
+# I looked through Tetrapoda.missing_sp_to_delete.txt, and all the species are not ones found in uk_ponds, so rather than look up and add their full taxonomic pathways, i left them in the file and proceeded to module_three.
 
 
 # Module 3 - Discard flagged sequences. Update taxonomy key file for sequences found to be incorrectly labelled in Module 2. Run SATIVA. End of module: optional check of putatively mislabelled sequences
@@ -197,11 +197,11 @@ bash ~/src/screenforbio-mbc-uk_ponds/get_sequences.sh yes no four Tetrapoda ~/sr
 
 # Actions after Module 4 complete:
 # make copies
-cp Tetrapoda.final_database.16S.fa Tetrapoda.final_database.16S_orig.fa
+# cp Tetrapoda.final_database.16S.fa Tetrapoda.final_database.16S_orig.fa
 cp Tetrapoda.final_database.12S.fa Tetrapoda.final_database.12S_orig.fa
 # remove any Homo_heidelbergensis sequences
-seqkit grep Tetrapoda.final_database.16S.fa -r -p Homo_heidelbergensis -v -o Tetrapoda.final_database.16S_new.fa
-mv Tetrapoda.final_database.16S_new.fa Tetrapoda.final_database.16S.fa
+# seqkit grep Tetrapoda.final_database.16S.fa -r -p Homo_heidelbergensis -v -o Tetrapoda.final_database.16S_new.fa
+# mv Tetrapoda.final_database.16S_new.fa Tetrapoda.final_database.16S.fa
 seqkit grep Tetrapoda.final_database.12S.fa -r -p Homo_heidelbergensis -v -o Tetrapoda.final_database.12S_new.fa
 mv Tetrapoda.final_database.12S_new.fa Tetrapoda.final_database.12S.fa
 
@@ -217,8 +217,9 @@ mv Tetrapoda.final_database.12S_new.fa Tetrapoda.final_database.12S.fa
      # Eukaryota;Chordata;Aves;Passeriformes;Turdidae;Turdus;__TAXCLUSTER141__Turdus ruficollis
 
 # These should be removed because they interfere with PROTAX train (PROTAX needs sequences in the reference dataset to have the format >Ablepharus_kitaibelii_AY308325)
-# cd ~/src/screenforbio-mbc-uk_ponds/
-# . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+cd ~/src/screenforbio-mbc-uk_ponds/
+. ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
+grep -c "TAXCLUSTER" Tetrapoda.final_database.12S.fa # chk if TAXCLUSTER is in the final database
 # seqkit grep Tetrapoda.final_database.12S.fa -r -p ^_ -v -o Tetrapoda.final_database.12S_new.fa
 # seqkit grep Tetrapoda.final_database.16S.fa -r -p ^_ -v -o Tetrapoda.final_database.16S_new.fa
 # visually check the new fasta files and then
@@ -228,14 +229,14 @@ mv Tetrapoda.final_database.12S_new.fa Tetrapoda.final_database.12S.fa
 # 4. Train PROTAX models for target amplicon(s)
 #   - *train_protax.sh* (unweighted) or *train_weighted_protax.sh* (weighted)
 #   - *check_protax_training.sh* (makes bias-accuracy plots)
-#   - *choose between weighted or unweighted.  I use weighted because we have a species list for Ailaoshan
+#   - *choose between weighted or unweighted.  I use weighted because we have a species list for uk_ponds
 
 # The unweighted and weighted training can be run in parallel in separate terminal sessions. Each job only uses one core.
 
 # unweighted
 cd ~/src/screenforbio-mbc-uk_ponds/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
-bash ~/src/screenforbio-mbc-uk_ponds/train_protax.sh Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-ailaoshan
+bash ~/src/screenforbio-mbc-uk_ponds/train_protax.sh Tetrapoda.final_protax_taxonomy.txt ~/src/screenforbio-mbc-uk_ponds
      # usage: bash train_protax.sh taxonomy screenforbio
      # where:
      # taxonomy is the final protax-formatted taxonomy file from get_sequences.sh (e.g. Tetrapoda.final_protax_taxonomy.txt)
@@ -247,7 +248,7 @@ bash ~/src/screenforbio-mbc-uk_ponds/train_protax.sh Tetrapoda.final_protax_taxo
 # This took a total of 4.7 hours (MIDORI 1.2)
 
 
-# weighted by Ailaoshan species list:  splist (birds, herps, mammals)
+# weighted by uk_ponds species list:  splist (birds, herps, mammals)
 cd ~/src/screenforbio-mbc-uk_ponds/
 . ~/.linuxify; which sed # should show /usr/local/opt/gnu-sed/libexec/gnubin/sed
 # copy the species list from the archive directory to the screenforbio directory
@@ -353,7 +354,7 @@ bash check_protax_training.sh w_model_16S Tetrapoda 16S ~/src/screenforbio-mbc-u
 #   - Process raw data with read_preprocessing.sh (experimental design must follow that described in the manuscript) and classify the output with protax_classify.sh or weighted_protax_classify.sh as appropriate
 #   - Classify OTUs with protax_classify_otus.sh or weighted_protax_classify_otus.sh as appropriate
 
-# these are the pathnames to my Ailaoshan OTU representative sequences
+# these are the pathnames to my uk_ponds OTU representative sequences
 OTUS12S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_swarm_lulu.fa"
 OTUS16S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_16S_20180321_otu_table_swarm_lulu.fa"
 # OTUS12S_USEARCH="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/data/OTU_representative_sequences/all_12S_20180317_otu_table_usearchderep_lulu.fa"
@@ -367,9 +368,9 @@ echo ${OTUS16S_SWARM}
 mkdir protaxmodels/
 mv model_12S protaxmodels/
 mv model_16S protaxmodels/
-bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm
-bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm
-# bash protax_classify_otus.sh ${OTUS12S_USEARCH} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_usearch
+bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-uk_ponds protaxout_swarm
+bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-uk_ponds protaxout_swarm
+# bash protax_classify_otus.sh ${OTUS12S_USEARCH} 12S protaxmodels ~/src/screenforbio-mbc-uk_ponds protaxout_usearch
      # usage: bash protax_classify_otus.sh otus locus protaxdir screenforbio outdir
      # where:
      # otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
@@ -379,13 +380,13 @@ bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbi
      # outdir is the name to give an output directory (inside current) (no slash at end)
 
 # weighted
-     # move weighted protax output files to a single folder where the weighting is for ailaoshan
-mkdir w_protaxmodels_ailaoshan/
-mv w_model_12S w_protaxmodels_ailaoshan/
-mv w_model_16S w_protaxmodels_ailaoshan/
-bash weighted_protax_classify_otus.sh ${OTUS12S_SWARM} 12S w_protaxmodels_ailaoshan ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm
-bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels_ailaoshan ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm
-# bash weighted_protax_classify_otus.sh ${OTUS12S_USEARCH} 12S w_protaxmodels_ailaoshan ~/src/screenforbio-mbc-ailaoshan w_protaxout_usearch
+     # move weighted protax output files to a single folder where the weighting is for uk_ponds
+mkdir w_protaxmodels_uk_ponds/
+mv w_model_12S w_protaxmodels_uk_ponds/
+mv w_model_16S w_protaxmodels_uk_ponds/
+bash weighted_protax_classify_otus.sh ${OTUS12S_SWARM} 12S w_protaxmodels_uk_ponds ~/src/screenforbio-mbc-uk_ponds w_protaxout_swarm
+bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels_uk_ponds ~/src/screenforbio-mbc-uk_ponds w_protaxout_swarm
+# bash weighted_protax_classify_otus.sh ${OTUS12S_USEARCH} 12S w_protaxmodels_uk_ponds ~/src/screenforbio-mbc-uk_ponds w_protaxout_usearch
      # usage: bash weighted_protax_classify_otus.sh otus locus protaxdir screenforbio outdir
      # where:
      # otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
@@ -419,13 +420,13 @@ cd ~/src/screenforbio-mbc-uk_ponds/
 # Cai_443_Ponds dataset, 12S, unweighted
 OTUS12S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Cai_443_Ponds/OTUs/table_500ponds2_12sv5_97.fas.blast.fas"
 echo ${OTUS12S_SWARM}; head ${OTUS12S_SWARM}
-bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm_20190704
+bash protax_classify_otus.sh ${OTUS12S_SWARM} 12S protaxmodels ~/src/screenforbio-mbc-uk_ponds w_protaxout_swarm_20190704
 
 # Ailaoshan leeches dataset, 16S, unweighted, 20190624 OTUs
-OTUS16S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/16S_otu_table_swarm_lulu_20190624.fas"
-echo ${OTUS16S_SWARM}; head ${OTUS16S_SWARM}
-bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels_ailaoshan ~/src/screenforbio-mbc-ailaoshan w_protaxout_swarm_20190624
-bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-ailaoshan protaxout_swarm_20190624
+# OTUS16S_SWARM="/Users/Negorashi2011/Dropbox/Working_docs/Ji_Ailaoshan_leeches/2018/16S_otu_table_swarm_lulu_20190624.fas"
+# echo ${OTUS16S_SWARM}; head ${OTUS16S_SWARM}
+# bash weighted_protax_classify_otus.sh ${OTUS16S_SWARM} 16S w_protaxmodels_ailaoshan ~/src/screenforbio-mbc-uk_ponds w_protaxout_swarm_20190624
+# bash protax_classify_otus.sh ${OTUS16S_SWARM} 16S protaxmodels ~/src/screenforbio-mbc-uk_ponds protaxout_swarm_20190624
      # usage: bash weighted_protax_classify_otus.sh otus locus protaxdir screenforbio outdir
      # where:
      # otus is the (path to) the OTU fasta to be processed (suffix should be ".fa")
